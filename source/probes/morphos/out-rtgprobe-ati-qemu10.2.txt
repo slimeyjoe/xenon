@@ -1,0 +1,40 @@
+rtgprobe: mode 0x00008004, ModeNotAvailable 0
+screen mode 0x41120000
+  screen: bm 0x18920474 depth 8 (attr 8) 640x480 flags 0x2 bpr 81 planes[0] 0x18d91f60
+step 1: RectFill pen 17 (red) on the screen RastPort, x 0..199, no ScreenBuffers yet
+  screen pens: (10,10)=1 (47,21)=0 (84,32)=0 (121,43)=0
+step 2: AllocScreenBuffer x2
+  sb0 0x17b21fe8 sb1 0x1898dce8
+  sb0: bm 0x18920474 depth 8 (attr 8) 640x480 flags 0x2 bpr 81 planes[0] 0x18d91f60
+  sb1: bm 0x189af69c depth 8 (attr 8) 640x480 flags 0x2 bpr 81 planes[0] 0x199b5330
+  sb0 bitmap IS the screen bitmap
+  sb0 pens: (10,10)=1 (47,21)=0 (84,32)=0 (121,43)=0
+  sb1 pens: (10,10)=0 (47,21)=0 (84,32)=0 (121,43)=0
+step 3: RectFill pen 18 (green) into sb0's bitmap, x 200..399 (no flip yet)
+  sb0 pens: (210,10)=1 (247,21)=0 (284,32)=0 (321,43)=0
+  screen pens: (210,10)=1 (247,21)=0 (284,32)=0 (321,43)=0
+step 4: dummy flips as the game does: sb1, WaitTOF, sb0, WaitTOF
+  ChangeScreenBuffer(sb1) = 1
+  ChangeScreenBuffer(sb0) = 1
+  screen now: bm 0x18920474 depth 8 (attr 8) 640x480 flags 0x2 bpr 81 planes[0] 0x18d91f60
+  sb0 pens: (10,10)=1 (47,21)=0 (84,32)=0 (121,43)=0
+  sb0 pens: (210,10)=1 (247,21)=0 (284,32)=0 (321,43)=0
+step 5: RectFill pen 20 (blue) into sb0's bitmap, x 400..639 (after the flips)
+  sb0 pens: (410,10)=1 (447,21)=0 (484,32)=0 (521,43)=0
+  src: bm 0x18d8c6fc depth 8 (attr 8) 640x400 flags 0x0 bpr 80 planes[0] 0x18dde388
+  src ReadPixel (0,0)=16 (45,0)=17 (600,0)=31 (expect 16 17 31)
+step 6: BltBitMap 8-plane planar fast-RAM source -> sb0 bitmap, rows 200..399, all columns
+  BltBitMap = 255
+  sb0 pens: (5,210)=0 (42,221)=0 (79,232)=0 (116,243)=0
+step 7: BltBitMap the same source -> the screen's RastPort bitmap, rows 0..99, x 0..319
+  BltBitMap = 255
+  screen pens: (5,10)=1 (42,21)=0 (79,32)=0 (116,43)=0
+step 8: WritePixel-free check: BltBitMap 4-plane view of the source -> sb0, rows 100..199
+  BltBitMap = 15
+  sb0 pens: (5,110)=0 (42,121)=0 (79,132)=0 (116,143)=0
+step 9: draw into sb1 (pen 19 yellow everywhere + bars at the bottom) and flip to it
+  ChangeScreenBuffer(sb1) = 1
+  sb1 pens: (5,10)=0 (42,21)=0 (79,32)=0 (116,43)=0
+  sb1 pens: (5,310)=0 (42,321)=0 (79,332)=0 (116,343)=0
+step 10: flip back to sb0 and close
+done

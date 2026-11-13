@@ -1,0 +1,704 @@
+0000:0000	_c0_startup	C0 entry: DGROUP@@, INT21/30 version, PSP/env/heaptop, SaveVectors, env scan, _stklen min 200h, AH=4Ah shrink, zero BSS 128E-229D, _nfile>20 -> AH=67h, Initialize(_INIT_ 1276-128D), main(argc,argv,envp), exit [V] c0.asm structure
+0000:013F	__cleanup	run #pragma exit table (ExitStart..ExitEnd = 128E..128E, empty) via Cleanup [V] c0.asm
+0000:0152	__checknull	empty (retf) in far-data models [V] c0.asm
+0000:0153	__terminate	INT 21h AH=4Ch AL=status [V] c0.asm
+0000:015C	ZeroDivision	INT 0 handler (installed by SaveVectors, cs:015C): _ErrorMessage("Divide error\r\n" DS:002F), _exit(3) [V] not in listing as function (inside __terminate)
+0000:0171	SaveVectors	near: save INT 0/4/5/6 into DS:003E/0042/0046/004A, INT 0 -> ZeroDivision [V] c0.asm
+0000:01B4	__restorezero	restore INT 0/4/5/6 from DS:003E..004D [V] c0.asm
+0000:01E1	Initialize	near: run _INIT_ records (es:si..di, 6 bytes {type 0=near/1=far, prio, off, seg}) in ascending priority, mark FFh [V] c0.asm
+0000:0225	Cleanup	near: run _EXIT_ records in descending priority [V] c0.asm
+0000:026A	abort	_ErrorMessage("Abnormal program termination\r\n" DS:0B7E), _exit(3); also c0's out-of-memory exit [V]
+0000:0281	atexit	register far fn in DS:2166[32], count DS:0B9E; returns 1 when full [V] no callers
+0000:02AE	_chdrive	_dos_setdrive(d) then _dos_getdrive; 0 if it took effect else -1 [V] no callers
+0000:02E3	_getdrive	returns current drive 1-based via _dos_getdrive [V]
+0000:02FC	__DOScmd	near pascal (char far **argv): build DOS command tail (len byte, ' '-separated, CR) in farmalloc'd buffer, max 7Fh [V] spawn module
+0000:03FF	__DOSenv	near pascal (envp, pathname, void far **envsave): build paragraph-aligned env block + word 1 + program path, <2000h bytes [V] spawn module
+0000:0561	_dos_getfileattr	INT 21h AX=4300h, *attrib=CX; error -> __DOSerror [V]
+0000:0581	_dos_setfileattr	INT 21h AX=4301h [V] no callers
+0000:059E	findfirst	INT 21h 2Fh/1Ah/4Eh/1Ah (DTA swap) [V]
+0000:05D1	findnext	INT 21h 4Fh with DTA swap [V] no callers
+0000:05FE	_dos_getdrive	INT 21h AH=19h, *drive = AL+1 [V]
+0000:0610	_dos_setdrive	INT 21h AH=0Eh DL=drive-1, *ndrives = AL [V]
+0000:0626	getvect	INT 21h AH=35h (identical copy at 0753; which object is which is arbitrary) [V]
+0000:0635	setvect	INT 21h AH=25h (identical copy at 0762) [V]
+0000:0646	_ErrorMessage	_write(2, msg, strlen(msg)) [V] used by abort/ZeroDivision
+0000:066B	_dummy_exithook	retf; initial value of _exitbuf/_exitfopen/_exitopen (DS:0CA2/0CA6/0CAA = 0000:066B) [V]
+0000:066C	__exit	near (errcode,[bp+6]=dontexit,[bp+8]=quick) ret 6: !quick -> atexit fns (reverse), __cleanup, (*_exitbuf)(); always __restorezero, __checknull; !dontexit -> (!quick: _exitfopen,_exitopen) __terminate [V] exit.c
+0000:06C3	exit	__exit(status, 0, 0) [V]
+0000:06D2	_exit	__exit(status, 0, quick=1) [V]
+0000:06E4	_cexit	__exit(0, dontexit=1, 0) [V] no callers
+0000:06F2	_c_exit	__exit(0, 1, 1) [V] not in listing
+0000:06FE	SCOPY@	far struct copy: cx bytes from [bp+6] src to [bp+0Ah] dest, retf 8 (Borland large-model F_SCOPY@); was N_SCOPY_far [V]
+0000:071A	getdisk	_dos_getdrive - 1 (0-based) [V]
+0000:0734	setdisk	_dos_setdrive(d+1), returns number of drives [V]
+0000:0753	_dos_getvect	INT 21h AH=35h (second copy of getvect) [V]
+0000:0762	_dos_setvect	INT 21h AH=25h (second copy of setvect) [V]
+0000:0773	N_LXLSH@	near-call entry (pop bx/push cs/push bx) of LXLSH@ (0776): long dx:ax <<= cl [V]
+0000:0794	N_PADD@	near entry of PADD@ (0797): huge ptr dx:ax + long cx:bx, normalised (seg += carry*1000h, off &= 0Fh) [V]
+0000:07C3	N_PSUB@	near entry of PSUB@ (07C6): huge ptr dx:ax - long cx:bx (negates and shares PADD@ code) [V] not in listing
+0000:07F4	N_PSBP@	near entry of PSBP@ (07F7): huge ptr difference dx:ax - cx:bx as long [V]
+0000:081C	N_SPUSH@	near entry of SPUSH@: push cx-byte struct from dx:ax onto the stack [V] not in listing
+0000:0822	F_SPUSH@	far: copy cx bytes from dx:ax into a stack hole below the return address (pass struct by value, e.g. pal_fade_to's 48-byte palette); was N_SCOPY@ [V]
+0000:0843	__IOerror	pascal(doserr): map DOS error (or -errno) via _dosErrorToSV DS:0E6E, set _doserrno DS:0E6C and errno DS:0062, return -1 [V]
+0000:087C	__DOSerror	pascal(doserr): __IOerror(doserr), return doserr [V]
+0000:088E	isatty	IOCTL AX=4400h, DX & 80h [V]
+0000:089F	__longtoa	pascal (long val, char far *buf, int radix 2..36, char maybeSigned, char hexStyle): ascii conversion, returns buf [V]
+0000:0921	__utoa	pascal (unsigned, buf): __longtoa(v, buf, 10, 0, 'a') [V]
+0000:0941	lseek	(fd, long ofs, whence): clear O_EOF (200h) in _openfd, INT 21h AH=42h, error -> -1L [V]
+0000:096A	__mkname	pascal (num, pfx, buf): buf (default DS:21E6) = pfx (default "TMP") + __utoa(num) + ".$$$" [V] tmpnam module
+0000:09C7	__tmpnam	pascal (buf, unsigned far *num): next unused temp name (loop while _dos_getfileattr succeeds) [V] no callers
+0000:0A20	N_LXMUL@	near long multiply dx:ax * cx:bx -> dx:ax (plain near ret; used by fread/fwrite/calloc) [V]
+0000:0A37	N_PCMP@	near huge-pointer compare dx:ax vs cx:bx (normalise to seg:0..F, compare), flags out [V]
+0000:0A58	_read	raw read: O_WRONLY(2) in _openfd -> error 5, INT 21h AH=3Fh [V]
+0000:0A87	__searchpath_copy	near pascal (src, dst): copy string, upper-casing single-byte chars via _ctype (bit 8 -> toupper), SJIS pairs copied untouched; returns end [I] searchpath helper
+0000:0B05	__getcurdir_raw	far pascal (buf, drive): INT 21h AH=47h, returns 0 or DOS error [I] searchpath helper
+0000:0B20	__searchpath_try	near pascal: build "D:\curdir\dir\name.ext" (using _getdrive/__getcurdir_raw/_mbsbtype) and findfirst it (attr 27h or 37h); 0 = found [I] searchpath helper
+0000:0C69	__searchpath_core	near (char far *pathOrVar, int mode, char far *file): fnsplit file; mode&1: getenv(var) as PATH list, mode&4: use string as path list, mode&2: also try .COM/.EXE; result in DS:224B [I] Borland __searchpath internals; buffers DS:21F4/21FA/2204/2247
+0000:0E35	__searchpath	near pascal (mode, file): __searchpath_core("PATH", mode, file) — used by _LoadProg [I]
+0000:0E4D	_searchenv	(file, varname, buf): __searchpath_core(varname, 1, file) -> strcpy or "" [V] no callers
+0000:0E91	_searchstr	(file, ipath, buf): __searchpath_core(ipath, 4, file) [V] no callers
+0000:0ED5	segread	store ES, caller CS, SS, DS into struct SREGS [V]
+0000:0EF5	_setupio	#pragma startup (prio 2): init _openfd/_streams for handles 5.._nfile-1; stdin/stdout: clear _F_TERM if !isatty, setvbuf(stdin/stdout, NULL, line/unbuffered if tty else full, 512) [V] not in listing (only reached via init table DS:1276)
+0000:0FAF	toupper	_ctype (DS:0BA1) bit 8 (_IS_LOW) -> c-20h; EOF passes [V]
+0000:0FDB	unlink	INT 21h AH=41h [V] (remove)
+0000:0FF3	__vprinter_hex4	near: dx -> 4 hex digits at es:di (for %p) [V] vprinter fragment
+0000:0FFA	__vprinter_hex2	near: al -> 2 hex digits [V] vprinter fragment
+0000:1003	__vprinter_hex1	near: nibble -> hex digit (add 90h/daa/adc 40h/daa) [V] vprinter fragment
+0000:100B	__vprinter	printf engine (fmt, args, putter fn near ptr, dest); 80-byte stack buffer; jump table 149E (24 entries), class table DS:0EEB [V]
+0000:1025	__vprinter_strlen	near: strlen of es:di into cx [V] vprinter fragment
+0000:1032	__vprinter_putc	near: store al in buffer, flush when 80 bytes [V] vprinter fragment
+0000:103B	__vprinter_flush	near: call putter([bp+0Eh]) with buffered bytes, count total, set error flag [V] vprinter fragment
+0000:14CE	stpcpy	(dst, src): memcpy(strlen+1), return dst+len [V] (_fstpcpy)
+0000:1502	chkctype	(unsigned char c, int prevtype): Japanese RTL: prev==1(lead) -> 2 if trail-valid (_mbctype bit 8) else -1; else 1 if lead (bit 4), 0 if ANK/kana, -1 illegal [V] structure (MS-C/Borland-J chkctype = _mbbtype)
+0000:1562	nthctype	(char far *s, int n): type (0 ANK, 1 kanji lead, 2 trail, -1) of byte n by chkctype scan [V] (= _mbsbtype)
+0000:159A	hantozen	ASCII 20h-7Eh -> SJIS via DS:104E, half-width kana A1h-DFh -> SJIS via DS:110C, else unchanged [V] no callers
+0000:15D5	zentohan_body	SJIS -> single byte: 8340-8396 katakana via DS:118C, hiragana 829F-82F1 mapped to katakana first, 8140.. via reverse DS:104E search, punctuation via DS:11E3/11F5; else unchanged [V] not in listing as function (reached by 4502 jmp)
+0000:1665	calloc	(n, size): N_LXMUL@, >FFFFh -> NULL, malloc, setmem 0 [V]
+0000:16C2	coreleft	far thunk to farcoreleft 0000:2018 (large-model coreleft returns unsigned long); was named farcoreleft [I] which of the two carries which name
+0000:16C8	_fpnotlinked_printf	"printf : floating point formats not linked" to stderr, then abort; default _RealCvtVector DS:126E [V]
+0000:16CD	_fpnotlinked_scanf	same message with "scanf" (dx=1203h), shares code at 16D0; default for DS:1270/1272/1274 [V] not in listing
+0000:184E	_exec	near spawner for spawnl(P_OVERLAY) (ptr 184Eh): open file, build PSP cmd tail/FCBs, size memory, copy __exec_stub, load .COM/.EXE overlay [V] not in listing
+0000:1A89	FreeLastBlock	far heap (farheap.asm): free the last block, shrink heap via __brk [V]
+0000:1AEC	FreeInnerBlock	far heap: mark free, merge with previous/next free block, else InsertFreeBlock [V]
+0000:1B5D	PullFreeBlock	far heap: unlink block DS from the circular free list (fields 4=prev,6=next) [V]
+0000:1B86	InsertFreeBlock	far heap: insert DS into free list at __rover [V]
+0000:1BBD	farfree	free/farfree (large model same entry): ignores offset, segment = block [V]
+0000:1BE6	CreateHeap	far heap: first allocation: __sbrk align to paragraph, __sbrk(size), __first=__last [V]
+0000:1C4A	ExtendHeap	far heap: grow by __sbrk, new __last [V]
+0000:1CCD	AllocatePartialBlock	far heap: split requested size off the end of a free block [V]
+0000:1CF0	malloc	malloc(size_t) = farmalloc(0:size) entry (xor dx,dx; jmp 1D03); was named farmalloc — all engine callers push one word [V]
+0000:1CFA	farmalloc	farmalloc(unsigned long): round up (+13h, /16), search free list from __rover, else Create/ExtendHeap [V]
+0000:1D77	ReallocMove	far heap realloc: farmalloc new size (CS:1A85/1A87), copy paragraphs, farfree old [I] (Borland "GrowBlock")
+0000:1DF3	ShrinkBlock	far heap realloc: split tail off and free it (or __brk if last) [V]
+0000:1E57	realloc	realloc(far ptr, size_t): dx=0 then common farrealloc code [V] no callers
+0000:1E5E	farrealloc	farrealloc(far ptr, unsigned long) entry [V] not in listing
+0000:1ED8	__brk_setblock	near pascal (far addr): resize program block (setblock(_psp, n*40h paras), cache failures in DS:1230), update _heaptop / _brklvl [I] brk module helper
+0000:1F4E	__brk	near (void far *addr): heapbase <= addr <= heaptop, then __brk_setblock; 0 / -1 [V]
+0000:1F8D	__sbrk	near (long incr): new brklvl = _brklvl+incr (< 1 MB), range check, returns old brklvl or -1L [V]
+0000:2018	farcoreleft	_heaptop - _brklvl - 16, rounded down to paragraph (unsigned long) [V]
+0000:2068	getch	ungetch buffer DS:1232/1233, else INT 21h AH=07h [V]
+0000:2081	int86	segread + int86x [V]
+0000:20B2	int86x	builds "push bp; int n; pop bp; retf" on the stack (INT 25h/26h: pops flags), REGS/SREGS in/out, cflag, __IOerror on CF [V]
+0000:214B	intr	intr(int, struct REGPACK far*): builds "mov bp,[bp-22h]; int n; retf 2" on stack, all regs incl. BP/DS/ES/flags (r_ax+0 .. r_flags+12h); was int86x_like [V]
+0000:2191	__intr_iret	single IRET used by intr to reload flags (push cs/call) [V] fragment
+0000:21EF	ioctl	(fd, func, void far *argdx, argcx): INT 21h AH=44h; func 0 returns DX [V]
+0000:2218	kbhit	ungetch pending -> 1, else INT 21h AH=0Bh [V] not in listing (dead)
+0000:222A	_LoadProg	near (spawner, path, argv, envp, usepath): __searchpath(mode|2), __DOScmd, __DOSenv (default environ DS:1244), (*_exitbuf)(), spawner(path, cmd, env); errno 2/8 [V]
+0000:22F9	__realcvt	jmp [DS:126E] (_RealCvtVector) for %e/%f/%g in __vprinter [V]
+0000:22FF	_setargv	#pragma startup (prio 10h): parse PSP:80h command tail (quotes, SJIS-aware backslash), argv[0] from env (DOS 3+), build far argv on stack; _argc DS:1234, _argv DS:1236, __C0argc/__C0argv DS:004E/0050 [V] not in listing
+0000:2397	__setargv_nextch	near helper of _setargv 0000:22FF: store char, count args, read next command-tail char (quote / SJIS-lead / backslash-quote handling); the code after its ret (23DD-2447) is the tail of _setargv [V]
+0000:2448	setblock	INT 21h AH=4Ah (seg, paras): -1 ok, else max available [V]
+0000:2464	_setenvp	#pragma startup (prio 10h): build environ[] (far ptrs) from env segment with malloc(_envSize); environ DS:1244, __C0environ DS:0054 [V] not in listing
+0000:24BC	setjmp	store SP,SS,FLAGS,CS,IP,BP,DI,ES,SI,DS into jmp_buf [V]
+0000:24F2	longjmp	restore jmp_buf and IRET to saved CS:IP with AX=val (0->1) [V]; 2522-2529: unreachable tail + CS words used by _spawn (2526 SP, 2528 SS)
+0000:252A	_spawn	near spawner for spawnl(P_WAIT) (ptr 252Ah): parse FCBs (AX=2901h), copy cmd tail to PSP:80h, INT 21h AX=4B00h, AH=4Dh exit code [V] not in listing
+0000:25EC	spawnl	mode 0 P_WAIT -> _LoadProg(_spawn), 2 P_OVERLAY -> _LoadProg(_exec), else errno=19 [V]
+0000:263D	_crtinit	#pragma startup (prio 10h), PC-98 conio init: _video DS:1248-1258 from BIOS 0000:0712/0714/071D/0501/0458/0459/0632 (rows, attr, text VRAM A000h/E000h, hi-res flag) [V] not in listing
+0000:26C3	__update_rows	PC-98 conio: _video.screenheight (DS:1251) = BIOS 0000:0712 + 1 [V]
+0000:26D0	__update_rows_clip	as 26C3 but returns min(rows, winbottom DS:124B) [V] not in listing (dead)
+0000:26E7	__dc_puts	near pascal (char far *s): each char via INT DCh CL=10h AH=00h (DOS console direct output) [V] PC-98 conio
+0000:2701	__gdc_csrform	near pascal (shape): text GDC CSRFORM cmd 4Bh (port 62h) + 3 params (port 60h) after VSYNC; BIOS 053Bh blink bit [V] PC-98 conio
+0000:2727	__io_wait	out 5Fh,al twice (PC-98 I/O recovery) [V]
+0000:275B	__bios_cursor	near pascal (shape): INT 18h AX=1E80h (cursor form) then AH=11h (show) or 12h (hide) [I] PC-98 conio
+0000:2779	_setcursortype	PC-98 conio: ESC[>5h / ESC[>5l via __dc_puts, then cursor shape by __bios_cursor (newer BIOS, DS:1257) or __gdc_csrform; rows >25/20 select shape [V]
+0000:281A	__delay_gdc	near: delay loop counting text GDC status (port 60h bit 6) toggles; calibration by BIOS 0501h bit3, 054Ch bit5, 0459h bit3, 053Ch bit7 [V] PC-98 delay
+0000:288F	__delay_artic	near: delay by the ARTIC timestamp counter (ports 5Ch/5Eh, 307.2 kHz) [V] PC-98 delay (used when 0458h bit7 or 045Bh bit2)
+0000:28FF	delay	PC-98 delay(ms): selects __delay_artic or __delay_gdc [V]
+0000:2928	__fnkey_esc	near pascal (c): print CS-resident "ESC[>1" (2934) + c via INT DCh CL=10h; was pc98_esc_seq [V]
+0000:294C	fnkey_line_on	ESC[>1l: show function-key row [V]
+0000:2953	fnkey_line_off	ESC[>1h: hide function-key row [V]
+0000:295A	fnkey_line_shown	returns BIOS 0000:0711 != 0 (function-key row displayed) [I] not in listing (dead)
+0000:2968	sound	PC-98 beeper: 8253 ch1 (3FDFh mode 76h... value 7Eh, 3FDBh count from 2.4576/1.9968 MHz by 0501h bit7), port 37h<-06h on [V]
+0000:29C7	nosound	port 37h <- 07h [V]
+0000:29CC	_chmod	(path, func, attr): INT 21h AH=43h, returns CX [V] (used by open)
+0000:29E9	close	range check _nfile, clear _openfd, _close [V]
+0000:2A11	_close	INT 21h AH=3Eh, clear _openfd [V]
+0000:2A2F	eof	O_EOF flag or IOCTL device / position==length [V]
+0000:2AA6	fclose	[V]
+0000:2B5E	fflush	NULL -> flushall [V]
+0000:2C2B	filelength	INT 21h 4201h/4202h/4200h [V]
+0000:2C6C	flushall	fflush every open stream of _streams[_nfile], return count [V]
+0000:2CAE	fnsplit	far wrapper calling _fnsplit 3EFE with the same 5 far pointers [V]; identical dead copy at 4128
+0000:2CD9	__fopen_mode	near pascal (type, int far *oflag, int far *pmode): parse "r/w/a[+][t/b]", default _fmode DS:0E68; sets _exitfopen DS:0CA6 = 0000:448D (_xfclose) [I] Borland fopen internals (name not standard)
+0000:2D95	__openfp	near pascal (shflag, type, filename, fp): mode parse, open(), isatty -> _F_TERM, setvbuf(512) [V]
+0000:2E66	__getfp	near: first _streams entry with fd < 0, or NULL [V]
+0000:2EB0	fopen	__getfp + __openfp [V]
+0000:2EE5	fprintf	__vprinter with __fputn [V]
+0000:2F01	__fgetn	near pascal (fp, n, buf): bulk read via _read when unbuffered/large, else per-char _fgetc; sets EOF/err flags [I] fread helper
+0000:2FF5	fread	(buf, size, n, fp): single __fgetn if size*n < 64K else per item [V]
+0000:3083	__fbufcnt	near pascal (fp): characters held in the buffer, counting '\n' twice in text mode (for ftell/fseek) [I]
+0000:3105	fseek	fflush, adjust SEEK_CUR by buffered count, reset buffer, lseek [V]
+0000:3185	ftell	lseek(fd,0,1) +/- buffered bytes (append mode: via SEEK_END) [V] no callers
+0000:3265	fwrite	__fputn per item or whole [V]
+0000:32F0	__flushterm	near: fflush all streams with _F_TERM|_F_LBUF (300h) before a terminal read [I]
+0000:332E	_ffill	near pascal (fp): refill buffer via read(); 0 ok, -1 EOF/error [I]
+0000:33A6	_fgetc	getc() slow path: level++ then fgetc [V]
+0000:33BB	__fgetc_near	near-call entry thunk (pop ax/push cs/push ax) into fgetc [V] not in listing
+0000:33BE	fgetc	[V]
+0000:34B0	getchar	fgetc(stdin DS:0CAE) [V] not in listing (dead)
+0000:34BC	getenv	scan environ (DS:1244) for "name=" [V]
+0000:352C	memcpy	far, word moves [V]
+0000:3550	setmem	(dest, len, value) word stores [V]
+0000:3574	memset	(dest, c, n) -> setmem(dest, n, c), returns dest [V]
+0000:3593	movmem	(src, dest, len) overlap-safe (std when src < dest) [V]
+0000:35E5	memmove	(dest, src, n) -> movmem [V] no callers
+0000:3606	__dos_creat	near pascal (attrib, path): INT 21h AH=3Ch [I] open helper
+0000:3621	__dos_trunc	near pascal (fd): INT 21h AH=40h CX=0 (truncate at position) [I] open helper
+0000:3633	open	(path, oflag, pmode): O_CREAT/O_EXCL/O_TRUNC handling via _chmod/__dos_creat/_open/ioctl, sets _openfd [V]
+0000:37A2	_open	INT 21h AH=3Dh with access/share bits, _openfd[fd] [V]
+0000:37F1	printf	__vprinter(stdout DS:0CC2, __fputn) [V]
+0000:380C	_fputc	putc() slow path: level-- then fputc [V]
+0000:3828	fputc	[V] static char DS:229C
+0000:39BD	putchar	fputc(c, stdout) [V] no callers
+0000:39D1	__fputn	near pascal (fp, n, buf): buffered/unbuffered write with '\n'->CRLF in text mode [V]
+0000:3BD4	puts	write string + '\n' to stdout (DS:0CC2); returns 0Ah or -1; was perror_like [V]
+0000:3C2C	read	text-mode read: _read, strip CR, stop at ^Z (sets O_EOF) [V]
+0000:3CFD	setvbuf	[V] sets _exitbuf DS:0CA2 = 0000:44CA (_xfflush)
+0000:3E1A	CopyIt	near pascal (dst, src, maxlen): fnsplit component copy (strncpy + NUL or strcpy) [V] fnsplit module
+0000:3E73	DotFound	near pascal: fnsplit "." / ".." test (switch table 3EEE: 0,'/',':','\\') [V] fnsplit module
+0000:3EFE	_fnsplit	fnsplit body (skip blanks, 80-char copy, backward scan with switch table 4106: 0,'*','.','/',':','?','\\'), SJIS-aware via nthctype; returns WILDCARDS/EXTENSION/FILENAME/DIRECTORY/DRIVE flags [V]
+0000:4128	fnsplit_2	second identical far wrapper around _fnsplit [V] not in listing (dead duplicate)
+0000:414C	__sputn	near pascal sprintf putter: memcpy into *(char far **)dest, advance, NUL-terminate [V]
+0000:418C	sprintf	[V]
+0000:41AE	vsprintf	[V] no callers
+0000:41CF	strcat	[V]
+0000:420E	strcpy	[V]
+0000:4237	stricmp	case-insensitive compare (folds 'a'..'z'); was named strcmp. Callers: op_disk_change, op_load (x4), music_load -> those comparisons ignore case [V]
+0000:4278	strlen	[V]
+0000:4297	strncmp	(s1, s2, n): compares min(n, strlen(s2)+1) bytes [V]
+0000:42CF	strncpy	copy up to n, pad with NUL [V]
+0000:4300	write	text-mode write: '\n' -> CRLF through 80h-byte stack buffer, else _write; append -> lseek end [V]
+0000:4451	_write	raw INT 21h AH=40h; O_RDONLY(1) -> error 5; sets O_CHANGED (1000h) [V]
+0000:448D	_xfclose	exit hook (_exitfopen): fclose every open stream [V]
+0000:44CA	_xfflush	exit hook (_exitbuf): fflush the first 4 streams [V]
+0000:4502	zentohan	far entry (near jmp) to zentohan_body 0000:15D5: full-width SJIS -> single byte; engine op_disk_change uses it for 'Ｂ'->'B' [V] Japanese RTL (MS-C/Borland-J zentohan)
+0450:0005	main	main(argc, argv): no arg -> HDD mode (DS:0072=1); "F"/"f" -> floppy mode (DS:0074=1)
+0456:0004	gdt_decode	far cdecl (far *blob): decode DA1 image into the 4 plane segments set by gdt_set_planes
+0456:001D	gdt_set_planes	far cdecl (seg0,seg1,seg2,seg3): destination segments for planes B,R,G,I (stored at CS:0015..001B)
+0456:003E	gdt_set_planes_vram	(no caller; not in listing) set decoder destination CS:0015..001B to VRAM A800/B000/B800/E000, retf
+0456:00D5	gdt_decode_impl	near, DS:SI=blob: copy header to CS:008C, skip palette, set plane ptrs, run columns
+0456:015C	gdt_decode_pairs	near: decode CS:00D4 column pairs (2-byte codec, or 2x1-byte if flags&0x4000)
+0456:019A	gdt_read_plane_sizes	near: 4 x u16 plane sizes -> CS:00B6..00BC
+0456:01AF	gdt_plane_ptrs	near: compute normalized far ptrs of the 4 plane streams -> CS:00C2..00D0
+0456:01F0	norm_si_dx	near: normalize DX:SI (SI&=15)
+0456:01FB	gdt_col2_planes	near: one 16-px column pair for planes 0..3 (2-byte codec)
+0456:0240	gdt_col2	near: 2-byte codec column-pair interpreter; jump table 0456:0258 (256 words), unrolled blocks 0456:0B53..38A2
+0456:38A5	gdt_col1_planes	near: one 8-px column for planes 0..3 (1-byte codec)
+0456:38EA	gdt_col1	near: 1-byte codec column interpreter; jump table 0456:3902 (256 words)
+0456:3E64	gdt_align_plane_ptrs	near: round the 4 stream ptrs up to even address before 2-byte codec
+0456:3EA9	align_even_dsax	near helper for gdt_align_plane_ptrs
+0456:3EBD	norm_ds_si	(no caller; not in listing) near: normalise DS:SI so SI<16
+0843:0000	drive_to_daua	DOS drive letter -> PC-98 DA/UA (INT DCh CL=12h/13h; MEGDOS fallback A..D -> 90h..93h)
+0843:0119	count_dos_drives	INT 21h AH=52h LoL / DOS<3 fallback
+0843:0178	disk_sense	INT 1Bh AH=04h sense on DA/UA (90h..93h only); returns status & F0h (60h = not ready, 10h = write protected)
+0843:01B2	find_file_any_drive	scan drives A.. for path with findfirst; returns drive index or -1
+0843:026E	find_drive_by_label	(far char *pattern) (no caller; not in listing) for each DOS drive: class via drive_to_daua (switch 0843:0316), FDD must sense ready, findfirst("%c:%s", FA_LABEL); returns drive index or -1
+0843:032A	cur_drive_ready	current drive DA/UA ready check
+0843:035D	fopen_if_ready	fopen only if current drive ready
+0843:0384	xfopen	fopen(name) in cwd, else on the first drive that has the file ("%c:%s")
+0843:0404	get_volume_label	findfirst("X:\_?DISK_", FA_LABEL) on drive n -> label string; waits while drive not ready
+0843:0490	peek_byte	far peek (seg, off)
+088D:0000	cc_load	load "<name>[.cc]" (fnsplit/strcat ".cc"), LCZ header ignored, u16 size @0x14, Okumura LZSS (ring zero-filled) into farmalloc'd DS:00A8
+088D:029A	cc_run	interpreter main loop: setjmp(DS:12D4); start at first 01 (or DS:12FC after LOAD); run pages until DS:1290 (FILE) or DS:13A6 (EXIT)
+088D:030E	cc_free	farfree script buffer DS:00A8
+088D:0328	cc_find_byte	cc_find_byte(pos, byte): token-wise scan for a token whose first byte == byte; -1 if none
+088D:035A	cc_run_page	execute one page at pos: expects 01 FB n ("debug1"/"debug2"), sets DS:1294; runs body to PEND or to SEN marker 1B then menu
+088D:04A7	cc_skip_stmt	skip one statement: 13 -> to after 14; 06/07/0C/0E -> 2 tokens; else 1 token
+088D:0514	cc_skip_token	skip one token: FB/FE/FF=3 bytes, FD=scan to NUL (from len byte), other=1
+088D:0559	cc_error	fprintf(stderr,"%s page=%d, LABEL=D%d, %s"); DS:13A6=DS:13A8=1; longjmp(DS:12D4)
+088D:05D2	cc_get_u16	read little-endian word at script offset
+088D:05FC	cc_exec	cc_exec(pos, terminator): dispatch statements (table 088D:094C/09B6, 53 entries) until byte==terminator; returns pos after terminator (or new pos after JMP/FILE/IF-true/LOAD)
+088D:063C	op13_if	opcode 13 IF handler (inside cc_exec)
+088D:06E4	op06_jmp	opcode 06 JMP handler: DS:1292=1, pos=cc_find_page(n)
+088D:071A	op07_file	opcode 07 FILE handler: DS:1290=1, strcpy(DS:137E, name)
+088D:0745	opFD_msg	opcode FD message handler: text_print(str, !kana_lock)
+088D:08DE	opFE_set	opcode FE flag assignment handler
+088D:090C	op1F_exit	opcode 1F EXIT: DS:13A6=1
+088D:0A20	cc_menu	top-level SEN: build options, select_menu, run case, loop until JMP/FILE/EXIT/LOAD; setjmp(DS:12E8)
+088D:0B99	cc_submenu	nested SEN inside a case (recursive, cursor memory DS:12FE[8][8]); ends with longjmp(DS:12E8)
+088D:0DFB	cc_skip_block	skip a false IF body up to matching 0B (nested IF aware; error 13 on 0A/FF)
+088D:0ECD	cc_find_page	find "01 FB n" token-wise from 0; error 9 if absent
+088D:0F2E	cc_find_label	find case "FF id" between SENEND(05) and PEND(02); -1 if absent
+088D:0F9C	op_disk_change	opcode 0x1D: floppy mode only - wait until drive B: holds volume "_<L>DISK_"
+088D:108D	cc_assign	FE f 12 FB v: v!=0 -> flag_set(f) else flag_clear(f)
+088D:1104	cc_eval_cond	13 (FE f 12 FB v)(15 ...)* 14: AND of (flag_test(f)==v)
+088D:11C3	flag_set	DS:00F2[f/8] |= 1<<(f&7); error 8 if f>=0x800
+088D:11F1	flag_clear	DS:00F2[f/8] &= ~(1<<(f&7))
+088D:1221	flag_test	returns 0/1
+088D:1258	flags_clear_all	memset(DS:00F2,0,0x100) (new game, called from 0ABA:039F)
+088D:126A	op_save	opcode 0x19: write "<name>.dat" save slot
+088D:13DF	error_box	beep 500Hz/500ms, centered red text on text layer, wait key
+088D:1441	op_load	opcode 0x1C: read "<name>.dat"; restore vars, script, page, gfx, music
+088D:1710	op0C_g_load	G_LOAD name -> 0C2A:0315
+088D:1755	op28_g_load_ovl	name -> 0C2A:00DB(name,1)
+088D:179C	op16_g_sabun_load	G_SABUN_LOAD name -> 0C2A:04AB
+088D:17E1	op0D_g_disp	-> 0C2A:0649
+088D:17F3	op26_graph_off	-> 0DCA:00D9 (INT 18h AH=41h)
+088D:1805	op27_graph_on	-> 0DCA:00BF (INT 18h AH=40h)
+088D:1817	op43_vram_wpage	FB n -> 0DCA:0150(n!=0) out A6h
+088D:1865	op44_vram_dpage	FB n -> 0DCA:0162(n!=0) out A4h
+088D:18B3	op24_g_effect	FB n -> n ? 0C2A:075E : 0C2A:0690
+088D:1901	op11_window	FB n -> n ? 0C2A:07F0 (waku2 frame) : 0DCA:04E3 (GRCG clear); DS:1422[0]=0
+088D:1954	op32_g_scroll	FB n -> 0B7D:0A68(n): graphics GDC SCROLL start line n (shake effect)
+088D:1999	op2A_adt_load	FD name -> 0ED8:0078
+088D:19DC	op2B_adt_free	-> 0ED8:0217
+088D:19EE	op2D_adt_play	-> 0ED8:0001
+088D:1A00	op2E_anim_start	6x FB -> 0ED8:036F(a,b,c,d,e,f)
+088D:1A6B	op2F_anim_stop	-> 0ED8:03CB
+088D:1A7D	op38_textpos	4x FB -> DS:07D8,07DA,07E0,07E2
+088D:1AE6	op33_g_load_buf	FD name -> 0C2A:00DB(name,0) (same as op 28)
+088D:1B2B	op34_g_load_parts	FD name -> 0C2A:0142
+088D:1B6E	op35_g_parts_copy	-> 0C2A:01F9
+088D:1B80	op36_palette	4x FB idx,r,g,b -> DS:13EC[idx*3]=rgb; 0DCA:0200(idx,rgb)
+088D:1C19	op_set_progress	opcode 0x37 <int n>: XEN.GDT |= 1<<(n-1)
+088D:1D32	op40_msg_clear	-> 0B7D:0783
+088D:1D44	op39_textcolor	2x FB -> DS:07DC, DS:07DE
+088D:1DA1	op0E_music_load	MUSIC_LOAD name -> 0B2C:01C4
+088D:1DE6	op0F_music_play	-> 0B2C:02E5
+088D:1DF8	op10_music_stop	-> 0B2C:033C
+088D:1E0A	op45_se_play	FB n -> 0B2C:043C(n)
+088D:1E4F	op46_se_stop	-> 0B2C:0461
+088D:1E61	op48_music_wait	FB n -> 0B2C:04D8(n)
+088D:1EA6	op3A_music_vol	FB n -> 0B2C:0482(n)
+088D:1EEB	op30_music_fade	FB n -> 0B2C:0386(n)
+088D:1F30	op23_g_clear	-> 0C2A:05B2
+088D:1F42	op20_wait	FB n -> 0DCA:0012(n)
+088D:1F87	op21_fadein	[FB n=1] -> 0DCA:02F7(DS:13EC palette by value, n)
+088D:1FD5	op22_fadeout	[FB n=1] -> 0DCA:0445(n)
+088D:2014	op42_fadewhite	[FB n=1] -> 0DCA:0494(n)
+088D:2053	op29_opening	[FB n=1] -> 0E31:04AE(n)
+088D:2092	cc_build_options	parse SEN 04..05 into DS:1298 (far char*[10]) / DS:12C0 (ids[10]); returns last index; error 12 if >9
+088D:223D	cc_system_menu	cancel menu: Cancel / Return to title (DS:13A6=1) / Quit (confirm; DS:13A8=DS:13A6=1)
+088D:22C0	op03_clear_lower	-> 0B7D:0852
+088D:22C6	bitmask8	1<<(n&7)
+0ABA:0005	omake_locked_notice	shows "please enjoy after finishing the game"
+0ABA:0056	title_menu_hilite	XOR-invert title/omake menu bar #n (4 planes, 14 words x 32 lines)
+0ABA:00BD	omake_cg_gallery	if (DS:06E8&0x7F)==0x7F run "k" else notice
+0ABA:00D9	omake_music_mode	if (DS:06E8&0x7F)==0x7F run "m" else notice
+0ABA:00F5	omake_menu	shows menu2.gdt, 2 items, returns 0/1/-1
+0ABA:0190	title_menu_select	3 items (start / load / omake)
+0ABA:01DC	game_main	title screen loop + script run loop
+0AF8:000A	isr_null	INT 05h/06h replacement (COPY / STOP keys): push all, iret
+0AF8:0022	kbd_hook_copy_stop	save INT 05h/06h vectors (DS:13BC/13B8), point both to 0AF8:000A
+0AF8:0061	kbd_unhook_copy_stop	restore INT 05h/06h
+0AF8:0086	bios500_set_bit5	save BIOS 0000:0500, set bit 5 (restored by 0AF8:00A2)
+0AF8:00A2	bios500_restore	restore 0000:0500 if saved
+0AF8:00BD	kbd_getch_nowait	DOS 06h DL=FFh; ctrl/cursor keys get AH = INT18h-02h shift bits & 19h; BS key -> 0Fh
+0AF8:0108	kbd_kana_locked	INT 18h AH=02h bit2 (KANA lock) -> 1
+0AF8:0133	kbd_flush	loop kbd_getch_nowait until 0
+0AF8:013C	kbd_read_cmd	BIOS key buffer -> command code (0 cancel,1 up,2 down,3 left,4 right,5 ok,6 other,7 none,8 HELP,9-13 f1-f5 (also SHIFT/CTRL+f),14 BS)
+0AF8:0254	wait_ok_key	flush, wait until ok/cancel (kbd/mouse); CTRL held = skip; XFER+ROLLUP+ROLLDOWN = emergency quit
+0AF8:02AB	kbd_ctrl_held	0000:053A & 10h (CTRL)
+0AF8:02B9	kbd_shift_held	(no caller; not in listing) BIOS 0000:053A bit 0 (SHIFT)
+0AF8:02C7	input_get_cmd	blocking: keyboard command, else mouse (delta from (100,100) >20px -> dir, L=5, R=0)
+0B2C:000B	snd_detect_mmd	getvect(61h)+2 == "MMD" -> 1 (MIDI driver resident)
+0B2C:003D	snd_detect_pmd	getvect(60h)+2 == "PMD" -> 1 (near)
+0B2C:006F	snd_init	snd_init(mode): 1=PMD(INT60h) 2=MMD(INT61h)+PUTCM6 LITRA; gets music buf (AH=06) + FM-effect buf (AH=0Bh), loads XEN_SE.EFC; only called with 1
+0B2C:019B	snd_clear_efc_hook	UNUSED: PMD AH=14h DS:DX=0:0 (clear effect-interrupt hook)
+0B2C:01C4	music_load	music_load(far name): same name -> no-op (sets g_music_started=1); else stop, fopen "%s.M"/"%s.MMD", fread whole file to PMD music buffer (AH=06 address = data-1)
+0B2C:02DF	music_get_name	returns far ptr DS:13C8 (current music name)
+0B2C:02E5	music_play	if loaded && !g_music_started: g_music_started=1; INT AH=00h (mstart)
+0B2C:033C	music_stop	INT AH=01h (mstop) repeated while returned AH==FFh (driver busy); clears name
+0B2C:0386	music_fade	music_fade(speed): INT AH=02h AL=speed (fade out)
+0B2C:03D4	music_get_fadevol	INT AH=08h -> AL (fade-out volume, FFh = fully faded); -1 if no driver/no music
+0B2C:0427	music_fade_stop_wait	fade(25), busy-wait until fadevol==FFh, then music_stop
+0B2C:043C	se_play	se_play(n): PMD INT60h AH=0Ch AL=n (FM sound effect from XEN_SE.EFC)
+0B2C:0461	se_stop	PMD INT60h AH=0Dh (FM effect off)
+0B2C:0482	music_set_fadevol	music_set_fadevol(v): PMD AH=19h AL=v (0=full volume .. FFh=silent)
+0B2C:04AD	pmd_board_present	PMD AH=09h; returns 0 if AL==FFh (no FM board) (near)
+0B2C:04D8	music_wait_status	music_wait_status(n): if board present, loop while PMD AH=0Ah status1 (set by MML ~ / ~+) == n
+0B2C:050F	snd_msg_tone_xfer	printf "音色データーを転送中です" (near)
+0B7D:000C	text_print_big	draw text inside 0x03 ... 0x03 escape (double size); also called for '@' insert
+0B7D:019B	text_print	main message printer (window at DS:07D8/07DA, 4x60)
+0B7D:048C	select_menu	generic choice menu (far char* array, NULL-terminated, initial index) -> index / -1 cancel / -2
+0B7D:05E0	menu_draw_all	draw all options and highlight initial
+0B7D:0627	menu_draw_item	sprintf("%-*s") + draw at row y = DS:07E2 + i*18
+0B7D:066B	menu_hilite	XOR-invert menu row (4 planes, 16 lines)
+0B7D:06D2	menu_draw_item_near	(no caller; not in listing) near copy of menu_draw_item
+0B7D:0716	menu_clear	clear option area in all 4 planes
+0B7D:0783	text_window_clear	clear message window rows (4 planes, 62 bytes x 72 lines)
+0B7D:07DF	msg_box	print message on text layer at row 22 col 24, wait key, clear
+0B7D:0808	prompt_insert_disk	"<X>ディスクをドライブ２へセットして下さい"
+0B7D:0852	clear_lower_screen	clear 80-byte rows y=0x128.. in 4 planes
+0B7D:08A5	pal_set_all_black	(no caller; not in listing) pal_set_all(48 zero bytes)
+0B7D:08EA	gdt_unpack_palette_2	(far *gdt, far *dst48) no caller; duplicate of gdt_unpack_palette 0C2A:0514
+0B7D:0988	text_cursor_show	(int on) no caller; on==1 -> "\e[>5l" (cursor on) else "\e[>5h"
+0B7D:09A5	text_gdc_csrform	(int ignored) text GDC CSRFORM (cmd 4Bh): cursor not displayed, 16-line rows, blink rate 5
+0B7D:0A0A	fnkey_line_show	(int on) no caller; on==1 -> "\e[>1l" (function-key row on) else "\e[>1h"
+0B7D:0A27	text_layer_clear	printf("\e*") - clear text VRAM
+0B7D:0A34	text_locate	printf("\e[%d;%dH", row, col) (args: col, row)
+0B7D:0A4B	gdc_vsync_spin	(no caller; not in listing) near: loop DS:13DA += 4 until graphic GDC status (port A0h) bit 2 = VSYNC
+0B7D:0A68	gdc_scroll	(int line) G_SCROLL op 32h: graphic GDC SCROLL (70h): SAD1=line*40 words, LEN1=400-line, SAD2=0, LEN2=line
+0C2A:0008	gfx_get_state_ptr	returns DX:AX = DS:1422 (g_gfx_state, saved in save games)
+0C2A:000E	gfx_alloc_buffers	calloc 4 x 0x7D10 off-screen plane buffers ("da_data"), normalize -> DS:13DC
+0C2A:009B	gfx_free_buffers	free the 4 plane buffers
+0C2A:00DB	gdt_load_buf	(far char *name, int unused): load name.gdt, decode into plane buffers; no palette, no display-rect update; strcpy(g_gfx_state,name)
+0C2A:0142	gdt_load_page1	(far char *name): access page 1, decode name.gdt straight into VRAM page 1, remember rect at DS:1431, access page 0
+0C2A:0199	gdt_decode_vram	(far *blob, int keep_rect): decode blob into VRAM (A800/B000/B800/E000); if keep_rect==0 store rect -> DS:1431..1435
+0C2A:01F9	gfx_merge_page1	merge rect DS:1431 from VRAM page 1 into plane buffers; colour 8 = transparent
+0C2A:0315	gdt_load	(far char *name): G_LOAD: decode into buffers, palette -> DS:13EC, display rect -> DS:141C, set hardware palette; strcpy(g_gfx_state,name)
+0C2A:0388	gdt_read_file	(far char *name): sprintf "%s.gdt", open (0843:0384), malloc(filelength), fread whole file; returns far ptr or NULL
+0C2A:0437	gdt_decode_buf	(far *blob, int keep): decode into plane buffers; if keep==0 also unpack palette -> DS:13EC and set display rect DS:141C..1420
+0C2A:04AB	gdt_load_diff	(far char *name): decode into buffers (rect kept); if flags byte==0xCF unpack+set palette
+0C2A:0514	gdt_unpack_palette	near (far *blob, far *out48): 24-byte packed palette -> 16 x (R,G,B)
+0C2A:05B2	gfx_clear_buffers	memset the 4 plane buffers to 0
+0C2A:05E6	gfx_copy_row	near (int off, int wbytes): copy one row of all 4 planes buffer->VRAM (current access page)
+0C2A:0649	gfx_show	G_DISP: copy display rect (DS:141C/141E/1420) buffers -> VRAM
+0C2A:0690	fx_blind	interlaced wipe: rows 0,1,4,5 of each 8 top->bottom, then 7,6,3,2 bottom->top, 1 vsync per 8-row band
+0C2A:073F	fmemcpy_n	near (dstoff,dstseg,srcoff,srcseg,len)
+0C2A:075E	fx_center_open	vertical wipe from centre outwards, 8 rows per vsync
+0C2A:07F0	fx_waku2_close	load waku2 into buffers and shutter-wipe the CG area (40,4,560x296) from top+bottom to centre, 8 rows/vsync
+0C2A:087B	fx_dissolve_cell	near: copy one 4x1 nibble of an 8x8 cell (order table DS:0966) buffer->VRAM
+0C2A:0962	fx_dissolve	full-screen 16-step ordered-dither dissolve buffer->VRAM, 1 vsync per step (opening only)
+0C2A:0F04	lalf_opn_init_regs	dead LALF driver: OPN regs 80h..8Fh=0Fh, 10 fixed reg/value pairs (CS:052B), operator regs from a table
+0C2A:0F77	lalf_reset_work	dead LALF driver: copy channel-work template (CS:0004 -> CS:02BE, 7 x 3Eh bytes)
+0C2A:0FA3	lalf_start	dead LALF driver far entry (far *song): set up 7 channels from the song header
+0C2A:10BD	lalf_set_volume	dead LALF driver far entry (int v): CS:022C = v (added to TL), CS:0246 = 1
+0C2A:10FC	lalf_set_param	dead LALF driver far entry (int v): CS:022E = v (meaning not traced)
+0C2A:1108	lalf_tick	dead LALF driver far entry: per-tick update of the 7 channels (calls lalf_channel_step)
+0C2A:1151	lalf_set_channel_flag	dead LALF driver far entry (int ch, int on): channel work +3Ch = on!=0
+0C2A:128A	lalf_channel_step	dead LALF driver: one sequencer step for the channel at DI
+0C2A:12F5	lalf_update_volume	dead LALF driver: FM total-level regs 40h+ch by algorithm (table CS:08C5)
+0C2A:139F	lalf_ssg_envelope	dead LALF driver: software envelope (attack/decay/sustain/release states 1..4)
+0C2A:1429	lalf_update_freq	dead LALF driver: FM A4h/A0h F-number + key-on (28h) / SSG tone regs
+0C2A:14BE	lalf_read_commands	dead LALF driver: bytecode reader: >=C0h -> command table CS:026A, else octave/note -> F-number (CS:0A6E FM, CS:0A86 SSG)
+0C2A:15B4	lalf_lfo_step	dead LALF driver: pitch LFO / vibrato step
+0C2A:15FA	lalf_key_off	dead LALF driver: FM key-off (reg 28h) / SSG release
+0C2A:19A1	lalf_opn_write	dead LALF driver: write OPN register DH=reg, DL=value via ports 188h/18Ah (busy-wait on status bit 7)
+0DCA:0004	ctrl_held	0000:053A & 10h
+0DCA:0012	wait_vsync	wait_vsync(n): n VSYNC edges via port 60h bit5 (text GDC); returns early while CTRL held
+0DCA:0041	video_init	16-colour mode, INT18h 42h(CH=C0h) 4Ah(CH=06h), port 6Ah <- 83h,41h, pages 0/0
+0DCA:006C	gdc_wait_vsync_idle	port A0h: wait VSYNC (bit2) then drawing idle (bit3=0) (near)
+0DCA:008B	text_on	UNUSED: INT 18h AH=0Ch
+0DCA:00A5	text_off	UNUSED: INT 18h AH=0Dh
+0DCA:00BF	graph_on	INT 18h AH=40h (graphics display start)
+0DCA:00D9	graph_off	INT 18h AH=41h (graphics display stop)
+0DCA:00F3	gdc_mode_4a_16	UNUSED: INT 18h AH=4Ah CH=16h
+0DCA:0112	gdc_mode_4a_06	INT 18h AH=4Ah CH=06h
+0DCA:0131	graph_mode_640x400	INT 18h AH=42h CH=C0h (640x400 colour)
+0DCA:0150	set_access_page	out A6h (draw page), DS:1468
+0DCA:0162	set_display_page	out A4h (display page), DS:146A
+0DCA:0174	set_pages_vsync	UNUSED: GDC wait then set access+display page
+0DCA:0196	get_pages	UNUSED: *a=DS:1468, *d=DS:146A
+0DCA:01AD	set_modeff2	out 6Ah, v
+0DCA:01B9	pal_set	pal_set(i, r, g, b): ports A8h/ACh(r)/AAh(g)/AEh(b) + shadow DS:1438[i*3]
+0DCA:0200	pal_set_rgb	pal_set_rgb(i, struct{r,g,b} by value)
+0DCA:023A	pal_get_rgb	UNUSED: copy shadow entry i (3 bytes) to far ptr
+0DCA:0258	pal_set_all	pal_set_all(far rgb[16])
+0DCA:0288	pal_set_all_but8	UNUSED: like pal_set_all but skips colour 8
+0DCA:02E0	pal_get_all	copy 48-byte shadow palette to far ptr
+0DCA:02F7	pal_fade_to	pal_fade_to(rgb[16] by value, delay): step every component by 1 toward target, wait_vsync(delay) per step
+0DCA:0445	pal_fade_black	pal_fade_to(all 0, delay)
+0DCA:0494	pal_fade_white	pal_fade_to(all 15, delay)
+0DCA:04E3	gvram_clear	GRCG TDW (7Ch=80h, tiles 0) fill A800:0000 32000 bytes -> clears 4 planes of access page
+0E1A:0001	check_free_memory	farcoreleft() < 0x6C278 -> "550KB needed" + exit(1)
+0E1A:0041	check_dipsw_gdc	UNUSED (no callers): DIP SW 2-8 / GDC 5MHz warning
+0E1A:007F	engine_init	init sequence called from main
+0E1A:011C	engine_shutdown	restore hardware / drivers, exit path
+0E31:000E	seq_fmemcpy	near (far dst, far src, n): rep movsw/movsb copy
+0E31:002D	seq_slide_up_iplane	near (off, w, h, step, full): rows 0..k of buffer plane 3 (I) to VRAM rows h-1-k..h-1, k += step per vsync; full==1: then copy all 4 planes of the rect
+0E31:0110	seq_slide_up	near (off, w, h, step): like seq_slide_up_iplane but all 4 planes, k < h
+0E31:01D5	logo_show_mark	near: palette = ROGO palette with entries 5-7,9,10 black; black-out; copy rect off 17h, 17 bytes x 249 lines; pal_fade_to(.,6)
+0E31:02E0	logo_flash_white	near: pal_fade_to(ROGO palette with 5-7,9,10 = white, 1), then pal_fade_to(ROGO palette, 1)
+0E31:038F	logo_show_top	near: copy rect off 28h, 14 bytes x 75 lines (all planes)
+0E31:03FA	opening_logo	"rogo" logo sequence (custom palette/plane reveals), inferred
+0E31:04AE	opening_title	0100b dissolve + 0100B.ADT + xenon2/0100bb title (script op 0x29), inferred
+0E31:05D2	staff_roll	st00..st09 staff roll (script op 0x47), inferred
+0E9B:000F	mouse_init	limits Y 0..399 X 0..639, 8255 mode 93h, BFDBh=1, hook INT 15h -> 0E9B:009C, enable
+0E9B:005D	mouse_shutdown	disable, BFDBh=0, restore INT 15h
+0E9B:007C	mouse_irq_enable	8255 PC4=0 (7FDFh<-08h), unmask slave PIC IR5 (port 0Ah bit5) (near)
+0E9B:008C	mouse_irq_disable	writes 09h to port 7FD7h (sic, probably typo for 7FDFh), mask slave IR5 (near)
+0E9B:009C	isr_mouse	INT 15h: read dx/dy nibbles (7FDDh/7FD9h), clamp pos, button edges -> DS:0AFA/0AFB
+0E9B:010E	mouse_read_deltas	near (from isr_mouse): read X/Y nibbles via 7FDDh/7FD9h into DS:1682/1684, latch, add+clamp DS:0AF2/0AF4, button edges -> DS:0AFA/0AFB
+0E9B:024B	mouse_get_pos	(far int *x, far int *y) <- DS:0AF2/0AF4
+0E9B:0262	mouse_set_pos	(x, y)
+0E9B:0273	mouse_get_buttons	UNUSED: current L/R state
+0E9B:02A0	mouse_left_clicked	consume DS:0AFA
+0E9B:02B4	mouse_right_clicked	consume DS:0AFB
+0E9B:02C8	mouse_set_limits	(x0, y0, x1, y1) no caller; not in listing: sorted into DS:1670/166C/1672/166E
+0ECB:0001	isr_vsync	INT 0Ah (CRTV): EOI, ++DS:0AFE (dword), call hook DS:168A, out 64h re-arm
+0ECB:004F	vsync_irq_install	mask IR2, save INT 0Ah, set 0ECB:0001, unmask, out 64h
+0ECB:0090	vsync_irq_remove	mask IR2, restore INT 0Ah (IR2 left masked)
+0ECB:00B5	vsync_get_ticks	no caller; not in listing: returns DX:AX = DS:0B00:DS:0AFE
+0ECB:00BD	vsync_set_hook	vsync_set_hook(far fn) (NULL = none)
+0ED8:0001	adt_play	play loaded ADT, alternating VRAM pages 1,0,1..; blocking
+0ED8:0078	adt_load	(far char *name): read name.adt: header + up to 120 frame blobs (malloc each)
+0ED8:0217	adt_free	free frame blobs
+0ED8:0251	fmemcpy_n2	near (dstoff,dstseg,srcoff,srcseg,len)
+0ED8:0270	blink_tick	vsync callback: copy blink-strip frame from buffers to VRAM per DS:0B14 timing
+0ED8:036F	blink_start	(sx,sy,dx,dy,wbytes,h): set params, install vsync, callback=blink_tick
+0ED8:03CB	blink_stop	reset state, callback=0, uninstall vsync
+0F16:0009	font_ank_cache_init	once (DS:0B7C): port 68h<-0Bh, 96x INT 18h AH=14h DX=2920h+i -> 16-byte 8x16 glyphs at DS:1B66+i*16 (chars 20h..7Fh), 68h<-0Ah
+0F16:0077	sjis_to_jis	near (far *hi, far *lo): Shift-JIS -> JIS in place
+0F16:00D0	kanji_rom_read	(sjis_hi, sjis_lo, far *dst32): 68h<-0Bh, A3h<-jis_hi-20h, A1h<-jis_lo; BIOS 054Dh bit6 ? 32 bytes from A400:0000 : 16x (A5h<-line|20h, in A9h; A5h<-line, in A9h); 68h<-0Ah
+0F16:0170	glyph16_bold	(far *g16): per row: g |= g<<1 except where the source has a 1-pixel gap (101 pattern)
+0F16:01B1	glyph16_double_height	near (far *dst64, far *src32): duplicate every row (16x16 -> 16x32)
+0F16:0200	glyph16_to_32	near (far *dst128, far *src32): 16x16 -> 32x32 (double height, each bit doubled horizontally)
+0F16:02CE	glyph16_or	near (far *dst, far *src): 16 words dst |= src
+0F16:02EE	glyph16_andnot	near (far *dst, far *src): 16 words dst &= ~src
+0F16:0310	vram_put16	near (far *src, seg, off): 16 rows x 2 bytes to seg:off, stride 80
+0F16:0335	vram_put32	near (far *src, seg, off): 32 rows x 4 bytes to seg:off, stride 80
+0F16:0369	vram_put_glyph16	near (far *planes[4][32], off, wait): wait_vsync(wait), vram_put16 per plane (segments DS:09AA)
+0F16:03A0	vram_put_glyph32	near (far *planes[4][128], off, wait): wait_vsync(wait), vram_put32 per plane
+0F16:03D7	kanji_draw	(x_bytes, y, fg, bg, sjis_hi, sjis_lo, wait): opaque 16x16 cell: bg colour, bold ROM glyph in fg; wait_vsync(wait) first
+0F16:051D	kanji_draw_big	(x_bytes, y, fg(unused), sjis_hi, sjis_lo, wait): 32x32 double-size bold glyph at (x, y-16), always colour 15 on 0
+0F16:05AA	glyph8_bold	(far *g8x16): row |= row<<1
+0F16:05C9	vram_andnot8	(seg, off, far *src16): 16 rows: VRAM &= ~src, stride 80
+0F16:05EE	vram_or8	(seg, off, far *src16): 16 rows: VRAM |= src, stride 80
+0F16:0611	vram_put_glyph8	(off, colour, far *g16): per plane: colour bit ? OR : AND NOT
+0F16:06BC	ank_draw	(x_bytes, y, fg, bg, ch): opaque 8x16 cell; glyph from DS:1966+ch*16 (cache valid for 20h..7Fh only), bold; no wait
+0F16:07D5	text_draw_string	(x_bytes, y, fg, bg, far char *s, wait): SJIS via kanji_draw, other bytes via ank_draw (menus)
+0F16:0841	gaiji_define	(seg, off, code): INT 18h AH=1Ah DX=code BX:CX=seg:off (user-defined character)
+0F16:0871	fill32	near (far *dst, int value): memset(dst, value, 32)
+0F9F:0072	g_hdd_mode	1 when started without arguments
+0F9F:0074	g_floppy_mode	1 when started as "AGS F" (STARTUP.COM on floppy A)
+0F9F:0076	s_bad_option	string: "The option is wrong" (main, bad command line)
+0F9F:0092	s_label_pattern	string: volume-label wildcard for findfirst(FA_LABEL)
+0F9F:009A	s_drive_file_fmt	string: "X:name" path built while searching drives
+0F9F:00A0	s_drive_root_fmt	string: "X:\name" (root of drive X)
+0F9F:00A8	g_script_buf	far ptr to decompressed bytecode
+0F9F:00AC	g_menu_result_pos	script position returned from a (nested) case body, used after longjmp
+0F9F:00AE	g_resume_load	1 = start at DS:12FC instead of first page (set by LOAD)
+0F9F:00B0	g_cc_errmsg	far char* [16] script error messages (codes 0..15)
+0F9F:00F0	g_menu_cursor	top-level SEN cursor memory (reset to 0 when the menu is left)
+0F9F:00F2	g_flags	2048 one-bit flags (0x100 bytes); saved in save files
+0F9F:01F2	g_disk_labels	"_ADISK_".."_EDISK_" (5 x 8 bytes)
+0F9F:021A	g_xen_default	initial value (0) of the 1-byte read buffer in op_set_progress (a missing XEN.GDT gives an error box, not this default)
+0F9F:021C	g_sysmenu_items	far char*[4] "キャンセル/最初に戻る/ゲーム終了"
+0F9F:022C	g_quitconfirm_items	far char*[3] "このままゲームを続ける/本当にゲームを終了する"
+0F9F:0238	s_dot_cc	".cc"
+0F9F:023C	s_mode_rb	string: fopen mode (shared by cc_load, op_load, op_set_progress)
+0F9F:023F	s_err_cmdfile_large	string: script file > 64 KB
+0F9F:0267	s_alloc_failed_cc	string: "Memory allocation failed"
+0F9F:0280	s_alloc_failed_src	string: (sic "alocate") second line of the allocation error
+0F9F:02A4	s_cmdfile_not_loaded	string: "The command FILE has not been LOADed" (cc_run with g_script_buf == NULL)
+0F9F:02C1	s_debug1	string: page does not start with 01
+0F9F:02C8	s_debug2	string: page number not FB
+0F9F:02CF	s_cc_err00	string: error 0: "The syntax is wrong, boss"
+0F9F:02EE	s_cc_err01	string: error 1: "Give every page a proper page number!"
+0F9F:0318	s_cc_err02	string: error 2: "END and PEND are not matched properly"
+0F9F:0340	s_cc_err03	string: error 3: "Syntax error between SEN and SENEND, boss"
+0F9F:036C	s_cc_err04	string: error 4: "The IF construct is a bit odd. Check it!"
+0F9F:0398	s_cc_err05	string: error 5: "Don't forget the FILE name after MUSIC_LOAD!"
+0F9F:03BA	s_cc_err06	string: error 6: "G_SABUN_LOAD needs a FILE name"
+0F9F:03DF	s_cc_err07	string: error 7: "G_LOAD needs a file name"
+0F9F:0402	s_cc_err08	string: error 8: "The flag assignment is a bit odd!"
+0F9F:0428	s_cc_err09	string: error 9: "JMP command, but the target page cannot be found (T_T)"
+0F9F:045D	s_cc_err10	string: error 10: "There is no PEND. Please add it"
+0F9F:047E	s_cc_err11	string: error 11: "The label given between SEN and SENEND cannot be found"
+0F9F:04B0	s_cc_err12	string: error 12: "Too many choices between SEN and SENEND"
+0F9F:04D4	s_cc_err13	string: error 13: "The next block started before the block ended"
+0F9F:0503	s_cc_err14	string: error 14: "Labels and END do not correspond one-to-one, boss"
+0F9F:0537	s_cc_err15	string: error 15: "The JMP target is a bit odd" (never raised)
+0F9F:0561	s_cc_errfmt_label	string: script error line with label
+0F9F:057C	s_cc_errfmt	string: script error line without label
+0F9F:058C	s_insert_disk_drv2	string: "Please insert disk %s into drive 2"
+0F9F:05B1	s_label_fmt	string: builds "_BDISK_" etc.
+0F9F:05BA	s_set_disk	string: "Please insert a disk" (drive not ready)
+0F9F:05D5	s_write_protected	string: "Cannot write to the disk"
+0F9F:05F4	s_dot_dat	string: save extension
+0F9F:05F9	s_mode_wb	string: fopen mode (op_save, op_set_progress)
+0F9F:05FC	s_errbox_fmt	string: reverse red text (error_box)
+0F9F:060A	s_save_fmt	string: save file name
+0F9F:0611	s_not_saved	string: "No data has been saved"
+0F9F:062E	s_not_game_disk	string: "This is not a game disk"
+0F9F:064B	s_wrong_disk	string: "Wrong disk"
+0F9F:065E	s_xen_gdt_w	string: progress file (op_set_progress)
+0F9F:0666	s_cannot_open	string: "Cannot open the file"
+0F9F:0683	s_sys_cancel	string: system menu: "Cancel"
+0F9F:0692	s_sys_restart	string: system menu: "Return to the beginning"
+0F9F:06A1	s_sys_quit	string: system menu: "Quit the game"
+0F9F:06B0	s_sys_continue	string: quit menu: "Continue the game."
+0F9F:06CB	s_sys_reallyquit	string: quit menu: "Really quit the game."
+0F9F:06E6	g_force_load	if 1, cc_exec executes opcode 1C (LOAD) instead of the current op (never set in known code)
+0F9F:06E8	g_progress	XEN.GDT byte (completion bitmask)
+0F9F:06EA	g_name_insert	string inserted by '@' in message text (default " ") - never written
+0F9F:06F7	g_title_menu_rows	int[3], 6 B: y (pixel rows) of the title-menu highlight bar: 176, 224, 272 (title_menu_hilite 0ABA:0056 [bx+06F7])
+0F9F:06FD	g_xen_read_default	int, 2 B: constant 0: initialiser of game_main's local read buffer (0ABA:0241) — used when XEN.GDT exists but is empty. A *missing* file skips the read and keep
+0F9F:06FF	s_omake_locked	string: "Please enjoy this after finishing the game" (omake_locked_notice)
+0F9F:072C	s_menu2	string: omake menu image
+0F9F:0732	s_xen_gdt_r	string: progress file (game_main)
+0F9F:073A	s_mode_rb2	string: fopen mode (game_main)
+0F9F:073D	s_menu1	string: title menu image
+0F9F:0743	s_s00	string: first prologue script
+0F9F:0747	s_s00b	string: prologue after DREAM_01
+0F9F:074C	s_s00c	string: prologue after DREAM_02 + a DREAM_03 end
+0F9F:0751	s_l	string: load-menu script L.CC
+0F9F:0753	s_k	string: CG gallery script K.CC
+0F9F:0755	s_m	string: music-mode script M.CC
+0F9F:0758	g_msg_game_end	far ptr -> "GAME END"
+0F9F:075C	g_bios500_saved	saved 0000:0500
+0F9F:075D	g_bios500_flag	1 = 0000:0500 modified
+0F9F:075F	s_game_end	string: emergency-exit message (via g_msg_game_end)
+0F9F:0768	g_se_file	far ptr -> "XEN_SE.EFC"
+0F9F:076C	g_sound_mode	0=none 1=PMD 2=MMD(MIDI)+PMD
+0F9F:076D	s_xen_se_efc	string: sound-effect file (via g_se_file)
+0F9F:0777	s_empty	string: "" (spawnl argv[0]); it is the terminating NUL of "XEN_SE.EFC" (string tail shared) [I]
+0F9F:0778	s_mmd	string: MIDI driver signature (INT 61h vector+2)
+0F9F:077C	s_pmd	string: PMD signature (INT 60h vector+2)
+0F9F:0780	s_putcm6	string: MIDI tone-upload program
+0F9F:0787	s_litra	string: its argument (tone bank)
+0F9F:078D	s_mode_rb3	string: fopen mode (snd_init, music_load)
+0F9F:0790	s_se_open_failed	string: "Cannot open the sound-effect file"
+0F9F:07B3	s_music_fmt	string: PMD song file
+0F9F:07B8	s_mmd_fmt	string: MIDI song file
+0F9F:07BF	s_tone_xfer	string: "Transferring tone data"
+0F9F:07D8	g_textwin_x	message window x in byte columns (10 = 80px)
+0F9F:07DA	g_textwin_y	message window y in pixels (313)
+0F9F:07DC	g_text_color	text colour (15)
+0F9F:07DE	g_text_bg	int, 2 B: second TEXTCOLOR argument = background colour of the opaque glyph cells (font.md) (always 0 in the scripts)
+0F9F:07E0	g_menuwin_x	menu x (10)
+0F9F:07E2	g_menuwin_y	menu y (313)
+0F9F:07E4	g_disk_names	char[5][41], 205 B: "Ａディスク".."Ｅディスク" (disk A..E), copied by prompt_insert_disk 0B7D:0808 (push 0x7e4, mov cx,0xcd = 205 bytes) and indexed by disk letter — *initialiser i
+0F9F:08B1	s_page_cursor	string: blinking page-overflow cursor: SJIS EB9Fh = user character 7621h (Return-key symbol, DS:09B2)
+0F9F:08BF	s_not_digit	string: "not a digit: error" (0x04 code followed by a non-digit; printf)
+0F9F:08D2	s_end_cursor	string: blinking ▼ end-of-message cursor
+0F9F:08E0	s_menu_no_items	string: "menu: there are no items to choose"
+0F9F:08FC	s_menu_item_fmt	string: left-justified option text (menu_draw_item)
+0F9F:0901	s_set_in_drive2	string: "... please put into drive 2" (prompt_insert_disk)
+0F9F:0920	s_esc_cursor_on	string: PC-98 console: show text cursor
+0F9F:0926	s_esc_cursor_off	string: PC-98 console: hide text cursor
+0F9F:092C	s_esc_fnkey_on	string: PC-98 console: show function-key row
+0F9F:0932	s_esc_fnkey_off	string: PC-98 console: hide function-key row
+0F9F:0938	s_esc_cls	string: PC-98 console: clear screen (text_layer_clear)
+0F9F:093B	s_esc_locate	string: cursor position (text_locate)
+0F9F:0944	g_gfxbuf_raw	4 far ptrs: calloc'd plane buffers (0x7D10 bytes each)
+0F9F:0956	g_vram_planes	4 far ptrs A800:0,B000:0,B800:0,E000:0
+0F9F:0966	g_dissolve_order	16 bytes 00 0A 04 0E 08 02 0C 06 0D 07 01 0B 05 0F 09 03
+0F9F:0976	s_alloc_failed_gfx	string: "Memory allocation failed" (gfx_alloc_buffers, gdt_read_file)
+0F9F:098F	s_da_data	string: second line of the buffer-allocation error
+0F9F:099A	s_gdt_fmt	"%s.gdt"
+0F9F:09A1	s_mode_rb4	string: fopen mode (gdt_read_file)
+0F9F:09A4	s_waku2	"waku2"
+0F9F:09AA	g_plane_segs	unsigned[4], 8 B: A800h, B000h, B800h, E000h — plane segments used by the font renderer (0F16:0369, 0F16:03A0 [bx+09AA])
+0F9F:09B2	g_gaiji_7621	byte[34], 34 B: user-defined character pattern for JIS 7621h (SJIS EB9Fh): 2 header bytes + 16 rows x 16 bits; passed by engine_init (0E1A:00DD..00F3, BX:CX = DS:09B2
+0F9F:09D4	s_alloc_failed_init	string: "Memory allocation failed" (check_free_memory, printed first)
+0F9F:09ED	s_need_550kb	string: "About 550 KB of free memory is required."
+0F9F:0A17	s_dipsw	string: "Please set DIP switch 2-8 to OFF." (dead check_dipsw_gdc)
+0F9F:0A3A	s_gdc_5mhz	string: "Operation with a 5 MHz GDC clock is not guaranteed." (dead)
+0F9F:0A6A	g_staff_names	char far*[9], 36 B: -> "st01".."st09" (staff_roll 0E31:05DD copies the table to the stack) — *initialiser image of a local array*, copied to the stack with N_SCOPY_far (0
+0F9F:0A8E	s_rogo	string: logo image ROGO.GDT
+0F9F:0A93	s_0100b	string: opening image/animation 0100B
+0F9F:0A99	s_xen_03a	string: opening music 1
+0F9F:0AA1	s_xen_03b	string: opening music 2
+0F9F:0AA9	s_0100bb	string: opening image 0100BB
+0F9F:0AB0	s_xenon2	string: title image XENON2.GDT
+0F9F:0AB7	s_st01	string: staff roll image (via g_staff_names)
+0F9F:0ABC	s_st02	string: staff roll image (via g_staff_names)
+0F9F:0AC1	s_st03	string: staff roll image (via g_staff_names)
+0F9F:0AC6	s_st04	string: staff roll image (via g_staff_names)
+0F9F:0ACB	s_st05	string: staff roll image (via g_staff_names)
+0F9F:0AD0	s_st06	string: staff roll image (via g_staff_names)
+0F9F:0AD5	s_st07	string: staff roll image (via g_staff_names)
+0F9F:0ADA	s_st08	string: staff roll image (via g_staff_names)
+0F9F:0ADF	s_st09	string: staff roll image (via g_staff_names)
+0F9F:0AE4	s_xenon_02	string: staff-roll music
+0F9F:0AED	s_st00	string: first staff-roll image
+0F9F:0AF2	g_mouse_x	mouse x (0..639)
+0F9F:0AF4	g_mouse_y	mouse y (0..399)
+0F9F:0AFA	g_mouse_lclick	left press latched
+0F9F:0AFB	g_mouse_rclick	right press latched
+0F9F:0AFC	g_mouse_isr_busy	ISR reentrancy guard
+0F9F:0AFE	g_vsync_ticks	32-bit VSYNC counter (counts only while the blink animator has INT 0Ah installed; never read - vsync_get_ticks 0ECB:00B5 is dead)
+0F9F:0B02	g_vsync_isr_busy	reentrancy guard
+0F9F:0B04	g_adt_magic	3 bytes "ADT" (not checked)
+0F9F:0B08	g_adt_loop_start	u16
+0F9F:0B0C	g_adt_cur	u16 current frame
+0F9F:0B12	g_adt_loaded	u16 flag
+0F9F:0B14	g_blink_table	14 x u16 ticks: 0,1,1,6,3,300,1,6,3,3,1,6,3,300
+0F9F:0B30	g_blink_frame	strip frame 0..2
+0F9F:0B32	g_blink_step	index into g_blink_table (wraps 13->2)
+0F9F:0B34	g_blink_tick	tick counter
+0F9F:0B36	g_blink_dir	1 = frame++ else frame--
+0F9F:0B38	s_adt_fmt	string: ADT file name
+0F9F:0B3F	s_mode_rb5	string: fopen mode (adt_load)
+0F9F:0B42	s_adt_not_found	string: (sic "fount") ADT open failure
+0F9F:0B58	s_alloc_failed_adt	string: "Memory allocation failed" (adt_load)
+0F9F:0B71	s_adt_buffer_fmt	string: printed with the frame index when a frame malloc fails
+0F9F:0B7C	g_font_cache_ready	byte, 1 B: 1 once 0F16:0009 has read the 96 ANK glyphs into g_ank_font (checked at 0F16:000E and by the ANK renderer 0F16:06C5)
+0F9F:128E	g_script_size	decompressed script size (u16)
+0F9F:1290	g_file_jump	set by FILE (07)
+0F9F:1292	g_page_jump	set by JMP (06)
+0F9F:1294	g_cur_page	current page number (saved)
+0F9F:1296	g_cur_label	current case label D<n> (-1 outside cases)
+0F9F:1298	g_menu_texts	far char*[10] option texts for select_menu
+0F9F:12C0	g_menu_ids	int[10] option label ids
+0F9F:12D4	g_jmp_run	jmp_buf for cc_run (errors)
+0F9F:12E8	g_jmp_menu	jmp_buf for cc_menu (nested-menu exit)
+0F9F:12FC	g_resume_pos	script offset to resume at after LOAD
+0F9F:12FE	g_submenu_cursor	int[8][8] nested SEN cursor memory
+0F9F:137E	g_cur_script	current script name (40 bytes; FILE target; saved)
+0F9F:13A6	g_leave_script	1 = stop interpreter (EXIT, errors, system menu)
+0F9F:13A8	g_quit_game	1 = quit to DOS
+0F9F:13AA	g_title_flag_13aa	int, 2 B: write-only: cleared together with g_leave_script by game_main (0ABA:03A9); no reader
+0F9F:13AC	g_load_name	save-slot name passed from load menu when DS:06E6==1
+0F9F:13B6	g_input_from_mouse	1 = last input_get_cmd result came from mouse (menus clamp instead of wrap); 0 = keyboard
+0F9F:13B8	g_old_int06	saved INT 06h (STOP) vector
+0F9F:13BC	g_old_int05	saved INT 05h (COPY) vector
+0F9F:13C0	g_pmd_music_buf	far ptr from PMD AH=06h (music data - 1)
+0F9F:13C4	g_pmd_efc_buf	far ptr from PMD AH=0Bh (FM effect buffer)
+0F9F:13C8	g_music_name	current music name (~15 B buffer); the 40 bytes saved also cover g_music_started (DS:13D7) and following globals
+0F9F:13D7	g_music_started	1 = play already issued for current name (also set when load of same name/NULL)
+0F9F:13DA	g_vsync_spin_count	byte; only written by dead gdc_vsync_spin 0B7D:0A4B
+0F9F:13DC	g_gfxbuf	4 far ptrs (seg:0) off-screen plane buffers B,R,G,I (80x400 each)
+0F9F:13EC	g_gdt_palette	16xRGB palette of the last loaded GDT (48 bytes), passed by value to pal_fade_to
+0F9F:141C	g_disp_off	display rect: VRAM offset y*80+x (bytes)
+0F9F:141E	g_disp_wbytes	display rect width in bytes
+0F9F:1420	g_disp_h	display rect height
+0F9F:1422	g_gfx_state	40-byte graphics state (current base GDT name first; saved)
+0F9F:1431	g_p1_off	rect of last gdt_load_page1 (offset)
+0F9F:1433	g_p1_wbytes	rect width bytes
+0F9F:1435	g_p1_h	rect height
+0F9F:1438	g_pal_shadow	16 x {r,g,b} (0..15)
+0F9F:1468	g_access_page	current access page
+0F9F:146A	g_display_page	current display page
+0F9F:146C	g_mouse_isr_stack	byte[512], 512 B: private stack of isr_mouse (SS = DGROUP, SP = 166Ch at 0E9B:00C7)
+0F9F:166C	g_mouse_ymin	(also top of ISR private stack)
+0F9F:166E	g_mouse_ymax	399
+0F9F:1670	g_mouse_xmin	0
+0F9F:1672	g_mouse_xmax	639
+0F9F:1676	g_mouse_lbtn	byte, 1 B: left button state from the last interrupt (0E9B:01DA)
+0F9F:1677	g_mouse_rbtn	byte, 1 B: right button state (0E9B:01EC)
+0F9F:1678	g_mouse_lbtn_prev	byte, 1 B: previous left state (edge detection, 0E9B:01C2)
+0F9F:1679	g_mouse_rbtn_prev	byte, 1 B: previous right state
+0F9F:167A	g_mouse_saved_ss	unsigned, 2 B: interrupted SS saved by isr_mouse
+0F9F:167C	g_mouse_saved_sp	unsigned, 2 B: interrupted SP
+0F9F:167E	g_old_int15	saved mouse vector
+0F9F:1682	g_mouse_dx	int, 2 B: X delta assembled from the two 4-bit reads (0E9B:0124/013A)
+0F9F:1684	g_mouse_dy	int, 2 B: Y delta (0E9B:0154/016A)
+0F9F:1686	g_old_int0a	saved INT 0Ah vector
+0F9F:168A	g_vsync_hook	far fn called from isr_vsync
+0F9F:1792	g_adt_count	u16
+0F9F:1794	g_adt_sizes	120 x u16
+0F9F:1884	g_adt_loop	u16
+0F9F:1886	g_adt_delays	120 x u16 vsyncs
+0F9F:1976	g_adt_frames	120 far ptrs
+0F9F:1B56	g_blink_sx	blink params: sx,sy,dx,dy (bytes/lines) at 1B56,1B58,1B5A,1B5C
+0F9F:1B58	g_blink_sy	int, 2 B: blink source y (lines)
+0F9F:1B5A	g_blink_dx	int, 2 B: blink destination x (bytes)
+0F9F:1B5C	g_blink_dy	int, 2 B: blink destination y (lines)
+0F9F:1B5E	g_blink_w	width bytes
+0F9F:1B60	g_blink_h	frame height
+0F9F:1B62	g_blink_src	sy*80+sx
+0F9F:1B64	g_blink_dst	dy*80+dx
+0F9F:1B66	g_ank_font	byte[96][16], 1536 B: ANK glyph cache: 96 glyphs (8x16) for characters 20h..7Fh, read from the kanji ROM as codes 2920h+i (INT 18h AH=14h) by 0F16:0009; glyph for c at 1B66

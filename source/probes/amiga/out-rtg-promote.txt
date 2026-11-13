@@ -1,0 +1,86 @@
+% Version
+Kickstart 40.68, Workbench 40.42
+% Avail
+Type  Available    In-Use   Maximum   Largest
+chip    2058880     37248   2096128   2058072
+fast   25232304    457808  25690112  16318464
+total  27291184    495056  27786240  16318464
+% List DEVS:Monitors LIBS:Picasso96
+Directory "DEVS:Monitors" on Sunday 08-Nov-26
+PAL.info                     356 ----rwed Today     02:43:54
+PAL                         2936 ----rwed Today     02:43:54
+uaegfx.info                  550 ----rwed Today     02:43:54
+uaegfx                      2720 ----rwed Today     02:43:54
+4 files - 19 blocks used
+
+Directory "LIBS:Picasso96" on Sunday 08-Nov-26
+emulation.library          39652 ----rwed Today     02:43:54
+uaegfx.card                 1704 ----rwed Today     02:43:54
+fastlayers.library          1460 ----rwed Today     02:43:54
+rtg.library               216548 ----rwed Today     02:43:54
+4 files - 512 blocks used
+% C:sbprobe 0x8004 promote
+sbprobe: intuition 40.85 graphics 40.24 ChipRevBits0=0x1f
+sbprobe: AvailMem chip=2058880 fast=25198096
+sbprobe: rtg.library (Picasso96) is loaded
+sbprobe: timer.device open, E-clock 709379 Hz
+sbprobe: Delay(50) = 1011 ms E-clock, 51 VERTB interrupts
+sbprobe: opening screen mode 0x00008004 640x400x4 tag=promote
+sbprobe: mode name "FakeNative:HighRes-Lace"
+source bitmap: InitBitMap 640x400x4 BytesPerRow=80 Planes[0]=0x400786a0 TypeOfMem=0x405 FAST
+source: bm=0x4006a334 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+source: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+source: Planes[0]=0x400786a0 TypeOfMem=0x405 FAST
+source: Planes[1]=0x400803a0 TypeOfMem=0x405 FAST
+source: Planes[2]=0x400880a0 TypeOfMem=0x405 FAST
+source: Planes[3]=0x4008fda0 TypeOfMem=0x405 FAST
+screen opened: 640x400, ViewPort modes 0xc004, GetVPModeID=0x00008004, BitMap 0x4001bf2c
+screen: bm=0x4001bf2c BMA_FLAGS=0x0 !STANDARD BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+screen: struct: BytesPerRow=640 Rows=400 Flags=0x0 Depth=4 pad=0xf8c1
+screen: Planes[0]=0x41000000 TypeOfMem=0x0 (not RAM)
+screen: Planes[1]=0x40097d34 TypeOfMem=0x405 FAST
+screen: Planes[2]=0x40097d34 TypeOfMem=0x405 FAST
+screen: Planes[3]=0 TypeOfMem=0x0 (not RAM)
+LoadRGB32 done
+AllocScreenBuffer: sb[0]=0x4001bfb4 (SB_SCREEN_BITMAP) sb[1]=0x4001cfd4 (0)
+sb[0]: sb_BitMap=0x4001bf2c (== screen bitmap) sb_DBufInfo=0x400d65d8
+sb[0]: bm=0x4001bf2c BMA_FLAGS=0x0 !STANDARD BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+sb[0]: struct: BytesPerRow=640 Rows=400 Flags=0x0 Depth=4 pad=0xf8c1
+sb[0]: Planes[0]=0x41000000 TypeOfMem=0x0 (not RAM)
+sb[0]: Planes[1]=0x40097d34 TypeOfMem=0x405 FAST
+sb[0]: Planes[2]=0x40097d34 TypeOfMem=0x405 FAST
+sb[0]: Planes[3]=0 TypeOfMem=0x0 (not RAM)
+sb[1]: sb_BitMap=0x400d668c (!= screen bitmap) sb_DBufInfo=0x400d6630
+sb[1]: bm=0x400d668c BMA_FLAGS=0x0 !STANDARD BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+sb[1]: struct: BytesPerRow=640 Rows=400 Flags=0x0 Depth=4 pad=0xf8c1
+sb[1]: Planes[0]=0x4104b010 TypeOfMem=0x0 (not RAM)
+sb[1]: Planes[1]=0x400d67dc TypeOfMem=0x405 FAST
+sb[1]: Planes[2]=0x400d67dc TypeOfMem=0x405 FAST
+sb[1]: Planes[3]=0 TypeOfMem=0x0 (not RAM)
+(a) BltBitMap(FAST source -> sb[1]) done
+verify (a) hidden sb[1] before flip: ReadPixel 0/324 sampled pixels differ -> OK
+(a) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (a) BltBitMap from FAST: first mismatch at 3,2 got 0 expected 15
+verify (a) BltBitMap from FAST: ReadPixel 319/324 sampled pixels differ -> WRONG
+SHOT 1 (after BltBitMap from FAST + ChangeScreenBuffer: stripes, rect colour 9 (orange)): requesting DH0:shot_promote_1.req
+SHOT 1: ack after 27 polls
+(b) sb[0] is NOT BMF_STANDARD: skipped CPU plane copy, used BltBitMap from FAST instead
+(b) ChangeScreenBuffer(sb[0]) ok=1, zero-returns before success=0
+verify (b) BltBitMap from FAST: ReadPixel 0/324 sampled pixels differ -> OK
+SHOT 2 (after second BltBitMap+flip: rect colour 5 (yellow)): requesting DH0:shot_promote_2.req
+SHOT 2: ack after 32 polls
+(c) BltBitMap(CHIP source -> sb[1]) done
+(c) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (c) BltBitMap from CHIP: ReadPixel 0/324 sampled pixels differ -> OK
+SHOT 3 (after BltBitMap from CHIP + flip: rect colour 3 (green)): requesting DH0:shot_promote_3.req
+SHOT 3: ack after 32 polls
+flip test (no ports): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 3 ms, 0 VERTB
+flip test (SafeMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 safe messages, 3 ms, 0 VERTB
+flip test (DispMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 disp messages, 3 ms, 0 VERTB
+flip test (WaitTOF after each): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 337 ms, 20 VERTB
+verify end state: ReadPixel 0/324 sampled pixels differ -> OK
+SHOT 4 (end state: sb[1] displayed again (rect colour 3, green)): requesting DH0:shot_promote_4.req
+SHOT 4: ack after 30 polls
+FreeScreenBuffer done
+CloseScreen done
+sbprobe: done

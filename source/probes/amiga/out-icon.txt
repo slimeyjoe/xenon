@@ -1,0 +1,27 @@
+% C:iconprobe
+icon.library 40.1
+type 3 stack 8192 pos -2147483648,-2147483648 gadget 64x21 flags 0x4 select complement
+image 64x21 depth 3 planepick 0x7
+default tool: (none)
+tooltype  0: AUDIO=paula
+tooltype  1: RATE=11025
+tooltype  2: AUDIOCPU=75
+tooltype  3: OPN=lite
+tooltype  4: PRELOAD=auto
+tooltype  5: MODE=0x8004
+tooltype  6: (LANG=en)
+tooltype  7: (PAK=PROGDIR:xenon.pak)
+tooltype  8: (AUDIOBUF=1024)
+tooltype  9: (AHIUNIT=0)
+tooltype 10: (PAULA14)
+tooltype 11: (QUIET)
+FindToolType(AUDIO) = "paula"
+FindToolType(RATE) = "11025"
+FindToolType(LANG) = NULL
+FindToolType(PAULA14) = NULL
+FindToolType(QUIET) = NULL
+FindToolType((LANG) = "en)"
+screen depth 3, pens: 0=aaaaaa 1=000000 2=ffffff 3=6688bb 4=ee4444 5=55dd55 6=0044dd 7=ee9900
+AddAppIcon: ok (Workbench draws the icon)
+SHOT 1: requesting DH0:shot_icon_1.req
+SHOT 1: ack after 38 polls

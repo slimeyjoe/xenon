@@ -1,0 +1,67 @@
+7. CREDITS AND COPYRIGHT
+========================
+
+Xenon ~Mugen no Shitai~
+  Copyright (C) 1994 C's Ware. The story, text, pictures, music and sound
+  effects are the work of C's Ware and remain their property.
+
+  This is an unofficial fan port. It is not affiliated with or endorsed by
+  C's Ware or any successor.
+
+English translation
+  From the Xenon PC-98 translation project,
+  https://github.com/OldCorpo/Xenon-PC98-Tools
+    OldCorpo     translation completion, tools
+    dvo          proofreading and translation improvements
+    Laukku       proofreading
+    Asterix      proofreading
+    Xanderzone   testing, support
+    Fuzion       testing, support
+  based on the original work of HempTL, siriusxiv, esperknight,
+  MulletDonkey and OmBadai.
+  This port uses a revised copy of that translation with later
+  corrections. The menus of DATA LOAD, LADY'S ROOM and MUSIC MODE and the
+  system menu, which the project did not translate, were translated for
+  this port.
+
+Polish translation
+  Translated for this port from the Japanese original. The menus and
+  the system menu were translated for this port as well.
+
+The engine
+  A new program written from scratch for this port. It reproduces
+  the behaviour of the original PC-98 engine, AGS.EXE, which was studied
+  by reverse engineering. None of the original program code is used.
+  The music player is a new implementation that plays the game's songs,
+  which are in the format of PMD, the PC-98 music driver by M. Kajihara
+  (KAJA). The FM and SSG sound chip emulation is also new and written
+  for the 68040.
+
+Fonts
+  The text is drawn with the X11 bitmap fonts "jiskan16" (from JIS
+  X 9051-1984, by permission to use), "8x16rk" and "8x16" (Sony). The
+  Polish letters were drawn for this port in the style of "8x16". The
+  PC-98's built-in kanji font is not used. The Sony fonts come with
+  this notice:
+
+    Copyright 1989 by Sony Corp.
+
+    Permission to use, copy, modify, and distribute this software and
+    its documentation for any purpose and without fee is hereby
+    granted, provided that the above copyright notices appear in all
+    copies and that both those copyright notices and this permission
+    notice appear in supporting documentation, and that the name of
+    Sony Corp. not be used in advertising or publicity pertaining to
+    distribution of the software without specific, written prior
+    permission. Sony Corp. makes no representations about the
+    suitability of this software for any purpose. It is provided
+    "as is" without express or implied warranty.
+
+    SONY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+    INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
+    NO EVENT SHALL SONY BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+    CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+    OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+    CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+

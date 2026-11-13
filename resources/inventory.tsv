@@ -1,0 +1,307 @@
+name	size	mtime	floppy	kind	md5	location
+0010.GDT	23208	1994-11-09 15:59	A	image (DA1 compressed planar)	17775a14c979b505759bc036236a26e2	game
+0010_2.GDT	23456	1994-11-08 20:08	A	image (DA1 compressed planar)	63c88523db083a942a01ae5f677aae53	game
+0020.GDT	22214	1994-11-16 14:37	A	image (DA1 compressed planar)	277a4ed4cff26518403ed7c41424a4da	game
+0030.GDT	22205	1994-11-16 14:37	A	image (DA1 compressed planar)	45c3fd00bb84da67340a89a4ca95b28c	game
+0040.GDT	23407	1994-10-04 18:17	A	image (DA1 compressed planar)	0f0a3e6e6a914ba62bf607cca459db7c	game
+0040B.GDT	760	1994-11-19 14:00	A	image (DA1 compressed planar)	7bae089f62cce85443a79122777a4c6e	game
+0050.GDT	29786	1994-11-21 21:29	A	image (DA1 compressed planar)	31d10a43b7156ecbc903722938167cbc	game
+0060.GDT	28152	1994-11-09 15:59	A	image (DA1 compressed planar)	f172ba17b91c70ce023e8f080ac153af	game
+0070.GDT	33405	1994-11-09 15:59	A	image (DA1 compressed planar)	96e8cdcb17da4e5867909d7b1a899cad	game
+0100.GDT	22575	1994-10-08 17:00	B	image (DA1 compressed planar)	70b0c285e5ae6521f7deda5fce54fe20	game
+0100B.ADT	189472	1994-10-07 17:51	B	animation (diff frames for a GDT)	a16f8128c2f7e55802d7be0d5fec770a	game
+0100B.GDT	34139	1994-10-07 17:13	B	image (DA1 compressed planar)	e4dc62e892e8e284eb08ee591d77ae9c	game
+0100BB.GDT	4044	1994-10-08 23:28	B	image (DA1 compressed planar)	f88af0e8d32687b6cbafbf3c1f7b078f	game
+0110.GDT	3169	1994-11-19 12:14	B	image (DA1 compressed planar)	1c11be9d34a10b059364dad765d5cbaf	game
+0120.GDT	2844	1994-11-19 12:17	B	image (DA1 compressed planar)	38153ab5e71eec2665641fdd70006170	game
+0130.GDT	17462	1994-11-16 14:37	B	image (DA1 compressed planar)	dbd92902e1b4d894c0c85e6255a586e3	game
+1010.GDT	19931	1994-09-27 00:26	AB	image (DA1 compressed planar)	e0ae1d50ca7d11a8ca295fcc88072c33	game
+1010B.GDT	14515	1994-10-20 15:09	BCD	image (DA1 compressed planar)	cdee2f6ab67084d2ed6161f42ed63b57	game
+1010B_M.GDT	2859	1994-10-19 17:48	BCD	image (DA1 compressed planar)	38262b12945fb67c110bbb347bef7977	game
+1010C.GDT	3183	1994-11-19 12:30	BC	image (DA1 compressed planar)	2583d07be11ebca257896f3d19d1df0d	game
+1020.GDT	14873	1994-11-14 21:14	A	image (DA1 compressed planar)	4ae8726e075d6bd0be84bf560e4e73f8	game
+1020_2.GDT	32765	1994-10-22 18:43	C	image (DA1 compressed planar)	596bfe8f2edc2ce844c2010bffeabaee	game
+1020_3.GDT	15544	1994-11-19 13:32	C	image (DA1 compressed planar)	34a6c33b5c818d7397472b5a32ea08c9	game
+1030.GDT	14702	1994-11-14 21:14	A	image (DA1 compressed planar)	bbbd6655efe326d89d2bf54210920cd2	game
+1040.GDT	30659	1994-10-15 01:16	A	image (DA1 compressed planar)	de81af8e548b233b0cce5917e8c59bed	game
+1040B.GDT	38968	1994-11-16 14:33	E	image (DA1 compressed planar)	330469f013090df5a45c0d186b2d3701	game
+1050.GDT	30698	1994-11-21 11:29	A	image (DA1 compressed planar)	97c488021b6c82b4e231df5ad76a5b5b	game
+1050B.GDT	23238	1994-11-23 11:10	A	image (DA1 compressed planar)	56310cc536b8a489dbf12409a5a59da8	game
+1060.GDT	17810	1994-11-07 15:50	A	image (DA1 compressed planar)	c1a9723c6ab3aedc150712e40574084e	game
+1070.GDT	19619	1994-10-22 18:43	A	image (DA1 compressed planar)	550a06ea6ca0ca36c46702a5d8c1614d	game
+AGS.EXE	72316	1994-11-26 18:51	A	engine	219e2452de1743d5af4af615090091ce	game
+ALL.GDT	47722	1994-11-25 23:14	E	image (DA1 compressed planar)	dc9c184195b7436987dbc32f224a172c	game
+ALL2.GDT	39852	1994-11-25 13:24	E	image (DA1 compressed planar)	6ff7521687ee1696dea3d84057300efc	game
+AUTOEXEC.BAT	64	1994-11-07 16:57	-	batch	0ee177905d68cbb190383ff15c22bbb1	game
+BAST_M01.GDT	31274	1994-09-30 23:12	A	image (DA1 compressed planar)	1a6459f6e3d7577b9085bb477fc03d32	game
+BAST_M02.GDT	23223	1994-11-18 14:50	A	image (DA1 compressed planar)	731b4e63608d675623e8ba49f70d1661	game
+BI01.GDT	34295	1994-11-21 23:00	B	image (DA1 compressed planar)	cb7317d3f09f9336dc9c44cee44ab8cb	game
+BI02.GDT	34820	1994-11-18 17:18	E	image (DA1 compressed planar)	1fe587945d40e809896273dd4c57893c	game
+BI02B.GDT	37440	1994-11-25 01:11	E	image (DA1 compressed planar)	532ea227085c80392f3525bd727ed464	game
+BI03.GDT	26357	1994-11-09 15:59	D	image (DA1 compressed planar)	586fd21ff3e458d4e6a3fbd17d9af11f	game
+BI03_M.GDT	13615	1994-11-07 21:38	D	image (DA1 compressed planar)	248f31bbd0cb57135c12656467f7a718	game
+BI04.GDT	39995	1994-10-26 22:30	D	image (DA1 compressed planar)	15457e2e2200ec87101fd8662ef6d309	game
+BI04_M.GDT	12155	1994-10-27 13:44	D	image (DA1 compressed planar)	462e1a43439e15b7856a4791e15a78c6	game
+BI05.GDT	36537	1994-11-23 17:45	E	image (DA1 compressed planar)	a86409df815c93295278921edea2e3a2	game
+BI06.GDT	29412	1994-11-25 19:36	E	image (DA1 compressed planar)	4ace979f7485a4c05393114d36b293cd	game
+BI06B.GDT	12318	1994-11-25 03:22	E	image (DA1 compressed planar)	38eac0cd7e0d119a49ad4d007aa6e243	game
+BI06C.GDT	7843	1994-11-25 03:23	E	image (DA1 compressed planar)	0a7851df2170b8a8363b7e2984a353f2	game
+BI06D.GDT	22252	1994-11-25 03:23	E	image (DA1 compressed planar)	ea911d0d5b29853f48c468c1446015b1	game
+BI06E.GDT	6126	1994-11-25 03:23	E	image (DA1 compressed planar)	00b5b9cb782690fa258df2c2a6d1c788	game
+BI06E_M.GDT	9760	1994-11-22 17:09	E	image (DA1 compressed planar)	9be252a22be2f43a55aaf5a464d42590	game
+BI_BAST.GDT	18668	1994-09-30 12:33	A	image (DA1 compressed planar)	54b9da9545a28b2b4addb1a78105e662	game
+BI_BA_B.GDT	106	1994-09-29 15:06	A	image (DA1 compressed planar)	cfd016d18a7231206167e376812b50fb	game
+CONFIG.SYS	84	2001-10-07 14:43	A	DOS config	e9dcf4856c8dd69ba6760b01e903bae3	game
+FA01.GDT	46343	1994-10-07 00:26	A	image (DA1 compressed planar)	4e91c58026005197733af4589f1c9827	game
+FA02.GDT	37361	1994-11-14 21:52	D	image (DA1 compressed planar)	653cc1cc666d9351c006795dca7c223a	game
+FA02B.GDT	113	1994-11-09 17:55	D	image (DA1 compressed planar)	1fc7e652ee566968e422b90c9fd73548	game
+FA02_M.GDT	10373	1994-11-09 18:02	D	image (DA1 compressed planar)	eb7b35dd582ed5547c9218ba098cf052	game
+FA03.ADT	54829	1994-11-15 12:01	D	animation (diff frames for a GDT)	919c696abfe7979cd3ec2563f0958775	game
+FA03.GDT	26876	1994-11-14 21:53	D	image (DA1 compressed planar)	11df6bcae65627cd8a286ffae7558dde	game
+FA03B.GDT	97	1994-11-15 19:18	D	image (DA1 compressed planar)	39379794c8f46f9feca645689ff584bd	game
+FA03_M.GDT	8328	1994-11-22 14:36	D	image (DA1 compressed planar)	cda1da06c0438c891c7c589abe9f79c1	game
+FA04.GDT	40988	1994-11-14 21:53	DE	image (DA1 compressed planar)	fcf8a5a45cc6ee47d7a88f2bdb64bcc0	game
+FA05.GDT	34554	1994-11-18 17:18	D	image (DA1 compressed planar)	83d194147c16d89df2e17f6e5a8ef785	game
+FA06.GDT	32440	1994-11-25 19:45	E	image (DA1 compressed planar)	47362e20ba4901667f503438422ef4eb	game
+FA07.GDT	41880	1994-09-26 23:57	E	image (DA1 compressed planar)	4b3209d3d5d080698fb952971e0ce9d8	game
+FA08.ADT	34516	1994-11-24 21:19	DE	animation (diff frames for a GDT)	830f7c58c729f2d40c7225647eb4f0e2	game
+FA08.GDT	33120	1994-11-26 00:16	DE	image (DA1 compressed planar)	11b1f7c0454807753d2b0b0328c9b4b1	game
+FA09.ADT	17875	1994-10-24 20:49	BD	animation (diff frames for a GDT)	b17c6464eccb6282ebdd551f9248ea2c	game
+FA09.GDT	39623	1994-10-21 14:07	BD	image (DA1 compressed planar)	42cf9466b93d71e3341edc243bf7cfbc	game
+FA09B.GDT	12857	1994-11-07 04:41	D	image (DA1 compressed planar)	9e6d844d4e9fe76d4e01149c7737f061	game
+FA10.GDT	35044	1994-11-16 03:53	D	image (DA1 compressed planar)	750bab96e92c9b66b4f77729e2c9c087	game
+FA11.GDT	38365	1994-11-20 16:25	B	image (DA1 compressed planar)	c30621618649f081f9e2c156ade68742	game
+FA_BAST.GDT	22615	1994-09-26 00:24	A	image (DA1 compressed planar)	3ffd044958beb512e1136d42a6f593b6	game
+FA_BA_B.GDT	108	1994-09-27 12:41	A	image (DA1 compressed planar)	9c0725e79c51105d89b6a779c4e94443	game
+HDINST.BAT	678	1994-11-26 15:21	A	batch	2e6baa57d47dff4ef95629c44f7ff071	game
+HDINST2.BAT	1580	1994-11-23 12:46	A	batch	dd509258dece46973b99662c623ce763	game
+K.CC	1445	1994-11-25 23:23	A	script (LCZ/LZSS bytecode)	5f519e39dbf93ba06701a643dbe13984	game
+KAI_BAST.GDT	25629	1994-09-28 14:29	A	image (DA1 compressed planar)	98f448dc0a2106abbaf92e7c1d49ef22	game
+KO01.GDT	43565	1994-11-21 07:50	D	image (DA1 compressed planar)	38be43d6e575dd25805eeefc3db962e1	game
+L.CC	199	1994-11-25 19:10	A	script (LCZ/LZSS bytecode)	7912b9ba0156c2abc3c311a1a3388e57	game
+M.CC	442	1994-11-24 15:30	A	script (LCZ/LZSS bytecode)	8ff2cd1dcb8c395fa475406e195178db	game
+MAI01.GDT	34605	1994-10-25 13:03	BD	image (DA1 compressed planar)	e7ed2cec658295bd786a0d4ab29c0ade	game
+MAI01_M.GDT	6289	1994-10-25 14:15	B	image (DA1 compressed planar)	03836df03c134de7416731631abf6cba	game
+MAI02.GDT	37094	1994-09-26 23:57	B	image (DA1 compressed planar)	4812a13e70c0fba77ca1fc593fe1247f	game
+MAI02B.GDT	19421	1994-09-09 14:49	B	image (DA1 compressed planar)	dbcbff5b1551ff11940d19a51ff5c84b	game
+MAI02C.GDT	30491	1994-11-23 17:45	B	image (DA1 compressed planar)	ab1f323b8ea3cd4891c7564076d90a56	game
+MAI03.GDT	33799	1994-11-26 00:13	BC	image (DA1 compressed planar)	8aa2dcfdb6e86b9fb3dee78a09368524	game
+MAI04.GDT	34981	1994-10-25 13:03	C	image (DA1 compressed planar)	0561145f1751908ffd87d0c67ad88f91	game
+MAI04B.GDT	980	1994-10-25 13:02	C	image (DA1 compressed planar)	59bcade3f17dc0de78711e68ddda720e	game
+MAI04_M.GDT	4171	1994-10-24 20:47	C	image (DA1 compressed planar)	2a504a3ad4477d7056efa705e0ed21fd	game
+MAI05.GDT	30797	1994-11-09 16:00	B	image (DA1 compressed planar)	2c7e3df88eabc957a964acd7beb40595	game
+MAI_BAST.GDT	25932	1994-11-18 14:27	A	image (DA1 compressed planar)	9ee84e28c5f445e6d7fbcf8de00228bf	game
+MAI_BA_B.GDT	87	1994-11-18 15:09	A	image (DA1 compressed planar)	5b11af2f0621ecb869b2c34533c08762	game
+MEG01.GDT	31159	1994-11-21 21:29	BC	image (DA1 compressed planar)	5d07a838b7f55e25ad96680645944df8	game
+MEG01B.GDT	1694	1994-11-23 22:15	BC	image (DA1 compressed planar)	49635b71ddc998e51a60027e64d272f6	game
+MEG01C.GDT	905	1994-11-23 22:16	BC	image (DA1 compressed planar)	3765a001c4f407d30af4720192b447f5	game
+MEG01_M.GDT	9207	1994-11-09 12:12	BC	image (DA1 compressed planar)	43071a8c8eda71a167b3f20049f8d2f2	game
+MEG02.GDT	33830	1994-10-21 14:07	C	image (DA1 compressed planar)	50668a02b7513f7aadcb10775f3ecdc6	game
+MEG03.GDT	40002	1994-10-25 13:03	C	image (DA1 compressed planar)	12443766e47ae814469f766e927272a4	game
+MEG04.GDT	19121	1994-11-26 00:02	C	image (DA1 compressed planar)	94d547d49e68ddc5e09386d7edacfa9b	game
+MEG05.ADT	19051	1994-11-25 15:17	C	animation (diff frames for a GDT)	d4b5f1b98d721b6bd92a72b7f423aaf7	game
+MEG05.GDT	38455	1994-11-25 15:23	C	image (DA1 compressed planar)	4e4ad2b30ff9586773193ede17f426c5	game
+MEG06.GDT	30411	1994-11-15 00:20	C	image (DA1 compressed planar)	00a476953a59cfe36de3a136a7d18f2a	game
+MEG06_M.GDT	8556	1994-11-19 18:41	C	image (DA1 compressed planar)	26869dcd863e95ef44e3325245c0334a	game
+MEG_BAST.GDT	21238	1994-10-06 18:28	A	image (DA1 compressed planar)	ec2fc5aec416eb840c3ecbbb256a187e	game
+MEG_BA_B.GDT	93	1994-10-06 18:29	A	image (DA1 compressed planar)	d417ba8df21128af66da0c3ca972b3bf	game
+MENU1.GDT	7145	1994-11-26 14:19	A	image (DA1 compressed planar)	4d985fa99f2eb72c297a07f6763ddc9a	game
+MENU2.GDT	7208	1994-11-23 20:43	A	image (DA1 compressed planar)	63b4aa053b965737aa508b74a8b944ab	game
+MUSIC.GDT	6926	1994-11-23 22:45	A	image (DA1 compressed planar)	47c87a3565a5837fbfc4b2e260c99eb9	game
+PMD.COM	19699	1994-07-17 04:07	A	program	cd5634a197a3163734722da554ddadf8	game
+R&M&M.GDT	37860	1994-11-25 01:41	C	image (DA1 compressed planar)	40626a9afbbb59190822299ef16ff7df	game
+R&M&MB.GDT	43529	1994-11-25 01:41	C	image (DA1 compressed planar)	b752a43ac374336789506b2b4d00c78f	game
+R&M01.GDT	27674	1994-11-26 00:15	C	image (DA1 compressed planar)	e3660ec999948535822942ae27178429	game
+R&M02.GDT	28191	1994-10-07 00:26	C	image (DA1 compressed planar)	2a9d3c119121ccee7633d8c9d861cd56	game
+R&M03.GDT	40564	1994-11-03 18:35	C	image (DA1 compressed planar)	c702f814a8b1e872d2f6c2ef6e020072	game
+R&M03B.GDT	17136	1994-11-23 17:49	C	image (DA1 compressed planar)	df30383a3f10ffaa13bd8227a8b3cd9b	game
+R&M03C.GDT	4886	1994-11-23 17:50	C	image (DA1 compressed planar)	345d2adf2ead29f281391d7c5f96f5db	game
+R&M04.GDT	39607	1994-10-17 15:22	C	image (DA1 compressed planar)	004e47220cd227eb3a1cc852caf3cce6	game
+R&S.GDT	36949	1994-11-24 19:18	C	image (DA1 compressed planar)	1e849f9ce634e515802892a052dfec71	game
+R&SB.GDT	20567	1994-11-22 20:10	C	image (DA1 compressed planar)	12ec3e1603bdeb9f804c11d9aacfd9aa	game
+R&SC.GDT	19950	1994-11-22 20:11	C	image (DA1 compressed planar)	01780ecf0af1fe93ffe87b76f8bcb23a	game
+RA&TO01.GDT	38274	1994-11-23 11:10	B	image (DA1 compressed planar)	88e8d39513aa19c4c6077aeb168cbf96	game
+RA&TO02.GDT	41965	1994-11-24 15:02	B	image (DA1 compressed planar)	508c22d6577e8282624962a91abd572c	game
+RA&TO03.GDT	13066	1994-11-25 02:00	CD	image (DA1 compressed planar)	12922dd40f49de2b8c629d790cf87190	game
+RA&TO03B.GDT	22960	1994-11-23 15:34	CD	image (DA1 compressed planar)	25b35251a6313cd9778a761e29c5f123	game
+RA&TO03C.GDT	17423	1994-11-23 15:31	CD	image (DA1 compressed planar)	32e9680936d51c593935d8befbfc8016	game
+RA01.GDT	36659	1994-09-26 23:57	BDE	image (DA1 compressed planar)	e8c13b6be3ebd3c2a5d016221424271f	game
+RA01B.GDT	1097	1994-11-07 16:04	D	image (DA1 compressed planar)	bbc6915ce0486dc135461194b030080f	game
+RA01B_M.GDT	15548	1994-11-07 16:29	D	image (DA1 compressed planar)	bbd71c431479c6b2166853c2874faa25	game
+RA01C.GDT	2140	1994-11-07 16:15	D	image (DA1 compressed planar)	405c8abd832d7643dd31eaa66e84d2e5	game
+RA01_M.GDT	14945	1994-11-21 23:40	BDE	image (DA1 compressed planar)	238acbeaea6dfa6babbd7a5901262316	game
+RA02.GDT	37380	1994-10-19 23:32	BD	image (DA1 compressed planar)	bdefb4590560b6e0e784c891084b5bf3	game
+RA02B.GDT	30585	1994-11-20 16:20	BD	image (DA1 compressed planar)	3a7f0bc53e528b5e8014b4efb9c4f1fe	game
+RA02B_M.GDT	8113	1994-10-24 22:48	BD	image (DA1 compressed planar)	b920ca240f9ce9670d8e6f155c682390	game
+RA02C.GDT	25912	1994-11-20 16:21	BD	image (DA1 compressed planar)	dc03de21db6f78ee48a583cca9339c39	game
+RA02C_M.GDT	7400	1994-10-25 17:03	BD	image (DA1 compressed planar)	ed6a0d46d4c3fece1be99fba01464551	game
+RA02_M.GDT	6504	1994-10-17 18:45	BD	image (DA1 compressed planar)	e4f1e4143965aa0f411c9ab45d04e5c9	game
+RA03.ADT	11328	1994-11-26 00:44	E	animation (diff frames for a GDT)	192869a1d427a4d4cd80889c067195de	game
+RA03.GDT	34187	1994-11-26 00:18	E	image (DA1 compressed planar)	613d848eaf1b18f94c3fb39cc264d855	game
+RA04.GDT	42240	1994-11-23 17:45	BDE	image (DA1 compressed planar)	2fd25234f0843f17adb564adf2ee320f	game
+RA04_M.GDT	6420	1994-10-26 14:53	E	image (DA1 compressed planar)	672c61a6a5f62ba8915d011ea4ad823f	game
+RA05.GDT	34413	1994-11-14 21:52	E	image (DA1 compressed planar)	ef4f87d6b7aa9e53ffad8f3934e81f87	game
+RA05B.GDT	1312	1994-11-24 22:52	E	image (DA1 compressed planar)	7ea3984a0bb4d01a4ad704bb47d56060	game
+RA06.GDT	41039	1994-11-01 16:23	BD	image (DA1 compressed planar)	7dcb7ff87351682938c9ab1d4fe8b124	game
+RA06B.GDT	6514	1994-11-01 16:07	B	image (DA1 compressed planar)	12da4a64798e6216d7dd3c03741a7039	game
+RA06B_M.GDT	5185	1994-11-01 15:56	B	image (DA1 compressed planar)	d2498a08770a30575e432598978a4b03	game
+RA06C.GDT	6574	1994-11-07 16:36	D	image (DA1 compressed planar)	69f9c36a49ecbd07a02ea47bbe2b942e	game
+RA06C_M.GDT	5338	1994-11-01 15:59	D	image (DA1 compressed planar)	eb39462469f719eddcf70fe50488bdd4	game
+RA_BAST.GDT	20200	1994-11-25 17:34	A	image (DA1 compressed planar)	41137c211f1ee0c0b50eaedbdbc8d04b	game
+RA_BA_B.GDT	813	1994-11-25 17:36	A	image (DA1 compressed planar)	570f19f749b614fad5da87c953e7afd0	game
+ROGO.GDT	6399	1994-07-02 12:05	A	image (DA1 compressed planar)	6b747d7cddfe849f59eb770c7176e8fa	game
+RYO01.GDT	42624	1994-10-22 18:43	CD	image (DA1 compressed planar)	4c79cd5b6210e6e5dc69248aea47ab4d	game
+RYO01B.GDT	36359	1994-10-21 14:07	CD	image (DA1 compressed planar)	aa2bcf0db0757e1bcd36b08bc3d6620e	game
+RYO01B_M.GDT	12108	1994-10-19 21:25	CD	image (DA1 compressed planar)	f6cc4bf75d7ac669f19dbbf513acb5e7	game
+RYO01_M.GDT	10603	1994-10-21 20:10	CD	image (DA1 compressed planar)	3430d647aa3ff9bd3f6c5cc8eee49159	game
+RYO02.GDT	34710	1994-11-14 21:52	C	image (DA1 compressed planar)	9a0cea3622374dfb334563c5261414cd	game
+RYO02B.GDT	24470	1994-11-23 17:48	C	image (DA1 compressed planar)	c7eda369342954af4281016133965bc3	game
+RYO02C.GDT	17625	1994-11-23 17:48	C	image (DA1 compressed planar)	3b2619bded973a7c736de9c40fd5fb98	game
+RYO02_M.GDT	3916	1994-10-21 17:33	C	image (DA1 compressed planar)	b51a6cc5a115729007ecebe8734cc7a1	game
+RYO03.GDT	29736	1994-11-14 21:52	C	image (DA1 compressed planar)	666fdb516b4bf594048665e96da180a1	game
+RYO04.GDT	36469	1994-11-16 03:53	C	image (DA1 compressed planar)	cb872bca194a20a4c66e32050eb69d40	game
+RYO04B.GDT	1474	1994-11-15 19:06	C	image (DA1 compressed planar)	793e8783facab4d1966e21131b1c4ba3	game
+RYO04_M.GDT	7292	1994-11-19 15:32	C	image (DA1 compressed planar)	8ed907105cf12dbc71c1f7a9cf8bc0d0	game
+RYO_BAST.GDT	18077	1994-10-13 13:04	A	image (DA1 compressed planar)	bab4bb7b94e3408388735edf657d68a6	game
+RYO_BA_B.GDT	93	1994-10-13 13:38	A	image (DA1 compressed planar)	2dfca5310bf37379100922b74cd30047	game
+S00.CC	4538	1994-11-24 19:26	A	script (LCZ/LZSS bytecode)	b5df3e60c2d425a37d5cf18e73316864	game
+S00B.CC	5127	1994-11-24 18:33	A	script (LCZ/LZSS bytecode)	a8dd7dab6b1f1ad19dd9a0b287ed1aa9	game
+S00C.CC	5290	1994-11-24 18:33	A	script (LCZ/LZSS bytecode)	f1ea1f694769b8702822aae63cdfecdb	game
+S0101.CC	4911	1994-11-26 15:32	A	script (LCZ/LZSS bytecode)	1379ebc64c55840b5267fdbfd80fa3e5	game
+S0102.CC	9556	1994-11-26 15:32	A	script (LCZ/LZSS bytecode)	6f7e18be687903862827ba415a3616a8	game
+S0103.CC	8447	1994-11-26 15:32	A	script (LCZ/LZSS bytecode)	b60bec779a07b252c78bbeacf4d1c828	game
+S0104.CC	11832	1994-11-26 19:13	A	script (LCZ/LZSS bytecode)	62b6094a7b870543c9a8bf7c500c72bd	game
+S0105.CC	14044	1994-11-26 15:32	A	script (LCZ/LZSS bytecode)	203ac897cb1d0bc79cc2f10a23754993	game
+S0106.CC	17369	1994-11-26 15:33	A	script (LCZ/LZSS bytecode)	72a8e5f4a99ccf9d51d7a1c4e5c378a6	game
+S0107.CC	12096	1994-11-26 15:33	A	script (LCZ/LZSS bytecode)	c2de458e8592bf7ac85611219f160dd4	game
+S0108.CC	6615	1994-11-26 15:33	A	script (LCZ/LZSS bytecode)	8210282f699bab18c107d2ec2b3c6979	game
+S0109.CC	6483	1994-11-26 15:33	A	script (LCZ/LZSS bytecode)	9b28d9dbf1b9439c2b2222fce9973ca6	game
+S0110.CC	11100	1994-11-26 15:33	A	script (LCZ/LZSS bytecode)	3ea3008a24bd228d180fe5af7e22c32b	game
+S0111.CC	9442	1994-11-26 15:33	A	script (LCZ/LZSS bytecode)	306dd61305402834dcdb278abb775614	game
+S0201.CC	3778	1994-11-26 19:26	A	script (LCZ/LZSS bytecode)	d4bdeb58b5ff47e6a275bacb907ca734	game
+S0202.CC	9419	1994-11-25 23:04	A	script (LCZ/LZSS bytecode)	92083a718169a3fafaabe7a309505ce1	game
+S0203.CC	10818	1994-11-26 21:53	A	script (LCZ/LZSS bytecode)	6488f3d92e5ed797e99325167bec2992	game
+S0204.CC	10589	1994-11-26 19:14	A	script (LCZ/LZSS bytecode)	de8b0f619b2e1b136b47e807f1454241	game
+S0205.CC	9393	1994-11-26 19:22	A	script (LCZ/LZSS bytecode)	f5ec76b70ef9ba3e3dd2e65a240ce9bf	game
+S0206.CC	9057	1994-11-26 19:30	A	script (LCZ/LZSS bytecode)	5a504a8558cb07ba47ca45528b497a51	game
+S0207.CC	10716	1994-11-26 19:29	A	script (LCZ/LZSS bytecode)	f3b7733ac539d86abc43b8e32d5011e3	game
+S0301.CC	8082	1994-11-25 23:06	A	script (LCZ/LZSS bytecode)	b427267505f042aa4a00cd407082a1b0	game
+S0301A.CC	15977	1994-11-26 23:38	A	script (LCZ/LZSS bytecode)	3fe1eed7c082f9babbfc44785fe6564c	game
+S0301B.CC	13678	1994-11-26 21:51	A	script (LCZ/LZSS bytecode)	52704c481f8826f76f941184c21bed87	game
+S0302A.CC	11451	1994-11-26 19:07	D	script (LCZ/LZSS bytecode)	eac0ba7a97f14e9bcb0b31c05281a981	game
+S0302B.CC	11700	1994-11-26 23:45	D	script (LCZ/LZSS bytecode)	5e50ddbf939f02d5f7aa4d461d97ef63	game
+S0303A.CC	14014	1994-11-26 19:35	D	script (LCZ/LZSS bytecode)	a369f54e21fbb5841091d4a207ab1ffa	game
+S0303B.CC	11446	1994-11-26 19:07	D	script (LCZ/LZSS bytecode)	e4b2c7e4fd07a0bfa01844e6b9565ec8	game
+S0304A.CC	12384	1994-11-26 23:40	D	script (LCZ/LZSS bytecode)	5757163f418c0364e732e933315da23e	game
+S0304B.CC	14011	1994-11-26 19:35	D	script (LCZ/LZSS bytecode)	b2b0f6bdcb387fac25813fe7c616e688	game
+S0305A.CC	11445	1994-11-25 23:29	DE	script (LCZ/LZSS bytecode)	d33f2bc1bc3ef5716ffc1a52b7dd52a6	game
+S0305B.CC	11951	1994-11-26 23:40	D	script (LCZ/LZSS bytecode)	4c2b8e64a75a9c6000bd9b500f6332b6	game
+S0306A.CC	13288	1994-11-26 23:36	A	script (LCZ/LZSS bytecode)	0a2c3910a1ceba37a7d2f3b3c182e58a	game
+S0306B.CC	7132	1994-11-26 19:11	A	script (LCZ/LZSS bytecode)	d320ecf4f29b86bd1124f88bf92cd048	game
+S0401.CC	11700	1994-11-24 19:32	A	script (LCZ/LZSS bytecode)	666ca8e7c778f48a0e2856fce8eb7683	game
+S0402.CC	8212	1994-11-26 19:01	A	script (LCZ/LZSS bytecode)	a7ec2a2a8daa81d0403a4d448d396519	game
+S0403.CC	2863	1994-11-24 22:59	A	script (LCZ/LZSS bytecode)	1833c15c41e10ade9892ee483e3427f6	game
+SAYA01.GDT	34169	1994-09-26 23:57	BC	image (DA1 compressed planar)	a5ec4108b19d2f7ff8e90b00c9f53f2b	game
+SAYA01_M.GDT	6822	1994-10-22 14:42	BC	image (DA1 compressed planar)	4db493291b283796b4298209e25998a1	game
+SAYA02.GDT	28339	1994-11-23 17:45	C	image (DA1 compressed planar)	a849c948dbf666698be10ec3aa6d1ff6	game
+SAYA03.GDT	38881	1994-10-14 12:13	BC	image (DA1 compressed planar)	4de08bc266d9194709d1436e0e820062	game
+SAYA03_M.GDT	5285	1994-10-22 16:23	BC	image (DA1 compressed planar)	0792657267c640379495849b70c0dc57	game
+SAYA04.GDT	31557	1994-11-03 18:35	C	image (DA1 compressed planar)	37ce24b478da5e6d5368cb41780485d5	game
+SAYA04B.GDT	2047	1994-11-25 12:38	C	image (DA1 compressed planar)	e4e2e7a4828423d873c02e228a0c1460	game
+SAYA05.GDT	30994	1994-10-07 00:26	C	image (DA1 compressed planar)	ba941cf5ff9ce7b5e140e3848e3447df	game
+SAYA06.GDT	33557	1994-11-14 21:52	BC	image (DA1 compressed planar)	e6a3ba0430e5356e1b7ade4405a31a3a	game
+SAYA06B.GDT	775	1994-11-12 16:00	BC	image (DA1 compressed planar)	14c0b709e16baacb9c292fc9f2eb7bf9	game
+SAYA06BM.GDT	3344	1994-11-19 21:20	BC	image (DA1 compressed planar)	b0c751d8f4ac8e64eda9b42d2956ebd5	game
+SA_BAST.GDT	20224	1994-09-30 20:47	A	image (DA1 compressed planar)	ac4c995b1b58dc47f4880f265e0df584	game
+SA_BA_B.GDT	103	1994-11-10 20:56	A	image (DA1 compressed planar)	337dc05b36f3d60971c08df58b1c2e93	game
+ST00.GDT	1333	1994-11-23 15:54	E	image (DA1 compressed planar)	4e0d6111c140536f373709d950656d1d	game
+ST01.GDT	3975	1994-11-26 18:24	E	image (DA1 compressed planar)	07f23188507b545d3dc6e09f0f55762e	game
+ST02.GDT	3260	1994-11-26 17:02	E	image (DA1 compressed planar)	c138a07bb68f1f6705bab1d18d0fa0a2	game
+ST03.GDT	2879	1994-11-21 21:26	E	image (DA1 compressed planar)	537aa3e171dd69cb08001178133060be	game
+ST04.GDT	2936	1994-11-21 21:24	E	image (DA1 compressed planar)	20f1eaf1d9fb6298557a696f19d22834	game
+ST05.GDT	5953	1994-11-21 19:47	E	image (DA1 compressed planar)	cd5dd2ffd1e1547cc0f49f95a61aa05d	game
+ST06.GDT	7657	1994-11-21 21:30	E	image (DA1 compressed planar)	5a59a3316de5afa032032a0c8cee5368	game
+ST07.GDT	2950	1994-11-21 21:32	E	image (DA1 compressed planar)	e5814ba37e79120a420bd581b09f6dbb	game
+ST08.GDT	2106	1994-11-21 21:38	E	image (DA1 compressed planar)	72f198ba370efbfd01369f9cd5244558	game
+ST09.GDT	2463	1994-11-21 21:58	E	image (DA1 compressed planar)	2b322869dc4b1593be9e2efe47349655	game
+TO01.GDT	37000	1994-10-28 22:37	BDE	image (DA1 compressed planar)	15d9bcf8dc704a912764dc0ba1feac0d	game
+TO01_M.GDT	4597	1994-10-28 15:20	BDE	image (DA1 compressed planar)	1191a33fc6f2f85cfea7b2838ad5c4e3	game
+TO02.GDT	44649	1994-09-26 23:57	E	image (DA1 compressed planar)	e92e861da43d7046756ee8d02e5c6e89	game
+TO02_M.GDT	10102	1994-10-14 14:57	E	image (DA1 compressed planar)	7a2a35691d1a3ba082a2bf7659fdd065	game
+TO03.GDT	38888	1994-10-14 12:13	E	image (DA1 compressed planar)	8c570fa69ac9b096115bad73b5c6cf31	game
+TO03B.GDT	3400	1994-11-07 16:06	E	image (DA1 compressed planar)	3b9930bdaf5660c03bdbe9532ab93f6c	game
+TO03C.GDT	1706	1994-11-15 19:50	E	image (DA1 compressed planar)	8b8d870b6d1bfc995fa5d18ec4eb2f7e	game
+TO03_M.GDT	10150	1994-10-14 13:59	E	image (DA1 compressed planar)	ee0577fe87645beb5769957297b60555	game
+TO04.GDT	43709	1994-11-23 17:45	E	image (DA1 compressed planar)	2b37b2850ee48ff8d7e5467dcd467fd1	game
+TO05.GDT	37414	1994-11-23 18:32	E	image (DA1 compressed planar)	4adf7d0198ea4e4ef1bb462ecdcfbc44	game
+TO05B.GDT	359	1994-11-23 18:35	E	image (DA1 compressed planar)	1e395815aad27f75d7a49c642f2b3995	game
+TO05C.GDT	599	1994-11-23 18:38	E	image (DA1 compressed planar)	eea9903574e1fc8057e627492b073e03	game
+TO05D.GDT	693	1994-11-23 18:40	E	image (DA1 compressed planar)	ca74956fdcbd98ac8c23f7f95e58efa2	game
+TO05E.GDT	851	1994-11-23 18:42	E	image (DA1 compressed planar)	0ac8d0fd409b9184edd424c66e699a55	game
+TO05_M.GDT	7121	1994-10-14 13:56	E	image (DA1 compressed planar)	305b1ac28fd5063f9e3cffdec4488609	game
+TO06.GDT	44360	1994-11-23 20:59	E	image (DA1 compressed planar)	bbddfbfb0b91d980c2437c21e668712f	game
+TO06B.GDT	7624	1994-11-24 22:51	E	image (DA1 compressed planar)	521355e2731a7e89b70a3da774e69aa7	game
+TO07.GDT	36286	1994-11-03 18:35	E	image (DA1 compressed planar)	6b3c7779a8495c6a78b8dd41e931a1f5	game
+TO08.GDT	33499	1994-11-23 17:45	DE	image (DA1 compressed planar)	9ee20fb93f12f0217961bf546734c0bd	game
+TO09.GDT	36002	1994-11-14 21:52	E	image (DA1 compressed planar)	8070138b04f58be47bb5819c56269bba	game
+TO09B.GDT	18227	1994-11-20 16:17	E	image (DA1 compressed planar)	4d3d69218c40bea74f66e2dfe77c4646	game
+TO09B_M.GDT	7753	1994-11-21 19:05	E	image (DA1 compressed planar)	8771fee172d8fcc75bbc9d1a5ce532b9	game
+TO09C.GDT	7105	1994-11-20 16:17	E	image (DA1 compressed planar)	725c715249629453661b5b302bb35c80	game
+TO09C_M.GDT	6364	1994-11-21 18:39	E	image (DA1 compressed planar)	125b9feb7f923fb0722cce8c2870a33a	game
+TO09_M.GDT	7820	1994-11-21 19:12	E	image (DA1 compressed planar)	103ad0d01b04467ab45fba70bbf49ba7	game
+TO_BAST.GDT	23720	1994-09-27 12:32	A	image (DA1 compressed planar)	bca40040f4c8087aed1dae9761968216	game
+TO_BA_B.GDT	359	1994-11-19 17:00	A	image (DA1 compressed planar)	a45a49f282788e07f2211e56cfd4ee97	game
+WAKU.GDT	2244	1994-09-27 00:08	A	image (DA1 compressed planar)	585697387cecd30fd5f59423f33bb021	game
+WAKU2.GDT	2717	1994-11-22 19:55	A	image (DA1 compressed planar)	d109d65691c9fe298fa36016a48fcedf	game
+XEN.GDT	1	1994-11-21 20:34	A	progress bitmask (1 byte, NOT an image)	93b885adfe0da089cdf634904fd59f71	game
+XENON.BAT	64	1994-11-07 16:57	A	batch	0ee177905d68cbb190383ff15c22bbb1	game
+XENON2.GDT	8632	1994-11-19 20:57	B	image (DA1 compressed planar)	5ec1a50faf67bb221ce8f3e282c9868a	game
+XENON_01.M	980	1994-11-20 03:00	A	music (PMD compiled)	458e79bd12143d8d73c18f08a4fa7bd2	game
+XENON_02.M	4042	1994-11-22 02:18	A	music (PMD compiled)	d0d8421f46052889d946e531a5799672	game
+XENON_03.M	2962	1994-11-19 15:08	A	music (PMD compiled)	6c78eeedf87d45038c18d6a600a3f700	game
+XENON_04.M	2239	1994-11-19 12:18	A	music (PMD compiled)	a520f3167f14f5d4afc96f297406a1b0	game
+XENON_05.M	5601	1994-11-17 19:33	A	music (PMD compiled)	f6f899ea96eb04be6fedbc5f8cfbc180	game
+XENON_06.M	4599	1994-11-18 10:44	A	music (PMD compiled)	faa3fedb49014718c794c8cbc9905777	game
+XENON_07.M	500	1994-11-18 15:33	A	music (PMD compiled)	a0c76dbacb961c9c6b4ffbc2f577712b	game
+XENON_08.M	297	1994-11-21 10:57	A	music (PMD compiled)	55432b132fc6611374db85507c229def	game
+XENON_09.M	3279	1994-11-19 23:19	A	music (PMD compiled)	3bf1d129b5ba796e54b19c2392707564	game
+XENON_10.M	2544	1994-11-19 23:19	A	music (PMD compiled)	5977019a907e27f434fa50fcd3957f3b	game
+XENON_11.M	1029	1994-11-19 23:18	A	music (PMD compiled)	e354e49cf21fc39d056d8dea622a23f5	game
+XENON_12.M	888	1994-11-19 23:06	A	music (PMD compiled)	6db591f6049b6816b0b76708d151c85f	game
+XENON_13.M	2150	1994-11-19 17:52	A	music (PMD compiled)	a63de923a5fbcb3c10b83d57c52ce4ea	game
+XENON_14.M	406	1994-11-19 18:05	A	music (PMD compiled)	f8b001c6ae802377a1fa71e7202a7983	game
+XENON_15.M	3549	1994-11-21 11:01	A	music (PMD compiled)	c9be68829fbdcda55fe34d98906c1ea4	game
+XENON_16.M	1622	1994-11-20 15:46	A	music (PMD compiled)	2a96e7a0e941d5560195fc2809763e9f	game
+XENON_17.M	2137	1994-11-20 04:53	A	music (PMD compiled)	e931897004c2812e3c329ca2dcc4d42e	game
+XENON_18.M	482	1994-11-21 11:20	A	music (PMD compiled)	69cb9af6b00e2a2dcab3b556001177ea	game
+XENON_19.M	325	1994-11-20 04:09	A	music (PMD compiled)	9c8153d69e1328d4f2118e95485f20cb	game
+XENON_20.M	276	1994-11-20 06:02	A	music (PMD compiled)	686640a59c3cbcdb1f2f51d795456e8e	game
+XENON_21.M	3294	1994-11-21 01:38	A	music (PMD compiled)	c4e35b35b513a7a71b94ebb53b98e7d2	game
+XENON_22.M	1795	1994-11-21 01:25	A	music (PMD compiled)	9852f63f16e2aca28fcc9b588dcf9ebb	game
+XENON_23.M	854	1994-11-21 09:53	A	music (PMD compiled)	7d313f7f873f3277eae7087fd272fca1	game
+XENON_24.M	4842	1994-11-22 03:55	A	music (PMD compiled)	22af2694ff92abc765df4c2f30d3f775	game
+XENON_25.M	3985	1994-11-21 05:37	A	music (PMD compiled)	4323d458103c6cd4be894aec23024017	game
+XENON_26.M	4054	1994-11-22 01:19	A	music (PMD compiled)	f87d5cd44d56e4b1e2502b964fff15ce	game
+XENON_27.M	379	1994-11-21 11:11	A	music (PMD compiled)	d460e7bfa3f8891a296f10c673752781	game
+XENON_28.M	1482	1994-11-21 10:47	A	music (PMD compiled)	54aec6e2e5df165d9ac122bd78b9910e	game
+XENON_29.M	3452	1994-11-21 11:09	A	music (PMD compiled)	ca02fc5a990a0b2fd79cc63a805efd2e	game
+XEN_03A.M	350	1994-10-20 00:58	A	music (PMD compiled)	7e9b30c164c6f4872d0b50d55bd59451	game
+XEN_03B.M	382	1994-10-20 01:06	A	music (PMD compiled)	d2225123bf6a0a97db83da0d3f5988bb	game
+XEN_A.DAT	7	1994-11-21 21:09	A	install marker (HDINST.BAT disk check)	68e8e7eee0c0898665abe1601a66304d	game
+XEN_A_E.DAT	7	1994-11-23 12:46	A	install marker (HDINST.BAT disk check)	68e8e7eee0c0898665abe1601a66304d	game
+XEN_B.DAT	7	1994-11-21 21:10	B	install marker (HDINST.BAT disk check)	ce83bcb45ebe734f45cd4de69b78621f	game
+XEN_B_E.DAT	7	1994-11-23 12:50	B	install marker (HDINST.BAT disk check)	ce83bcb45ebe734f45cd4de69b78621f	game
+XEN_C.DAT	7	1994-11-21 21:10	C	install marker (HDINST.BAT disk check)	398ea37c2099e13854f5c28f059b7b35	game
+XEN_C_E.DAT	7	1994-11-23 12:50	C	install marker (HDINST.BAT disk check)	398ea37c2099e13854f5c28f059b7b35	game
+XEN_D.DAT	7	1994-11-21 21:10	D	install marker (HDINST.BAT disk check)	c9614bb3302679229a68f89cbd54963e	game
+XEN_D_E.DAT	7	1994-11-23 12:50	D	install marker (HDINST.BAT disk check)	c9614bb3302679229a68f89cbd54963e	game
+XEN_E.DAT	7	1994-11-21 21:10	E	install marker (HDINST.BAT disk check)	fabf7fa70cfe9e490509885064e6f7c5	game
+XEN_E_E.DAT	7	1994-11-23 12:50	E	install marker (HDINST.BAT disk check)	fabf7fa70cfe9e490509885064e6f7c5	game
+XEN_SE.EFC	3038	1994-11-20 06:50	A	sound effects (PMD FM effect table)	ba213831b712d58b4f840fa88218b005	game
+CONFIG.SYS	42	1994-06-25 19:13	A	DOS config	3dead0d398e48c1bd47db95f638d960a	floppy_only
+SAVE1.DAT	391	1994-12-23 19:11	A	save slot (original owner's floppy saves)	5b406e886c116862fc3e50f9e3cc9e32	floppy_only
+SAVE2.DAT	391	1994-12-23 18:17	A	save slot (original owner's floppy saves)	4f7f4c683e412ee305936e8ff865511f	floppy_only
+SAVE3.DAT	391	1994-12-23 18:54	A	save slot (original owner's floppy saves)	5380abf964cff48e6cca5fd576cc8069	floppy_only
+SAVE4.DAT	391	1994-12-22 16:25	A	save slot (original owner's floppy saves)	e897592f4dbdfce646bc2f8f4096986b	floppy_only
+STARTUP.COM	355	1994-11-23 13:59	A	program	85ffabf6d89d5114a03adf1b2aa4ac2b	floppy_only
+XEN.GDT	1	1994-12-25 17:54	A	progress bitmask (1 byte, NOT an image)	4a8a08f09d37b73795649038408b5f33	floppy_only

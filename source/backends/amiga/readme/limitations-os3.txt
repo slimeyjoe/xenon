@@ -1,0 +1,15 @@
+6. KNOWN LIMITATIONS
+====================
+
+  - On a 68040 at 25 MHz the music plays at 11 kHz. Faster rates need a
+    faster processor.
+  - Graphics card support has been tested in an emulator only.
+  - The WarpOS (PowerPC) version has been tested in an emulator only.
+  - Save files of the PC-98 version cannot be imported.
+  - The game does not pause when you switch to the Workbench.
+  - In a window (WINDOW) the game needs a Workbench of 256 colours or a
+    graphics card; with 8 or 16 colours it opens its own screen. A
+    window has no double buffering: a new picture may tear, and while
+    you drag a window around the picture stops (the music plays on).
+
+

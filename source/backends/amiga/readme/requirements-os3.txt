@@ -1,0 +1,62 @@
+2. SYSTEM REQUIREMENTS
+======================
+
+Operating system
+  AmigaOS 3.0 or newer (Kickstart 39 or newer). Tested on AmigaOS 3.1.
+
+Processor
+  A 68040 is required. A 68040 at 25 MHz is the minimum and is what the
+  game was tested on. The program is built for the 68040; a 68060 should
+  work but has not been tested. A 68020 or 68030 is not supported: the
+  music synthesis alone needs more time than those processors have.
+
+  PowerPC: a separate version for WarpOS exists (archive
+  xenon-warpos-<version>.lha, see "The WarpOS version" in section 3). It
+  needs a Blizzard PPC or CyberStorm PPC board with WarpOS (WarpUP 5.x,
+  powerpc.library) installed.
+
+  AROS: a separate version for AROS on x86_64 PCs exists (archive
+  xenon-aros-x86_64-<version>.lha) with its own ReadMe.
+
+Memory
+  Chip RAM: about 260 KB free for the screen and the sound buffers. With a
+  graphics card the screen lives in card memory and almost no chip RAM is
+  needed.
+  Fast RAM: about 1.2 MB free as a minimum.
+  Recommended: 8 MB of fast RAM or more. With about 7.5 MB free, the game
+  loads all of its data into memory at start-up (a few seconds) and never
+  touches the disk again. With less, it reads each picture from disk when
+  needed, which can cause short pauses at scene changes (see "Hard disk"
+  below).
+
+Graphics
+  The game uses a 640x400 screen with 16 colours, like the PC-98.
+  - Native AGA: tested. The default mode is PAL HiRes Laced.
+  - Native ECS: should work (HiRes with 16 colours), not tested.
+  - Graphics card with Picasso96: works, including promotion of the
+    default mode to a card mode. Tested in an emulator only.
+  Interlace flicker on a native screen is normal. A flicker fixer, a
+  scan doubler or a graphics card removes it.
+
+Sound
+  - Paula, the Amiga's own sound chip: the default. Nothing to install.
+  - AHI: optional, for sound cards or AHI's 14-bit Paula modes. You need
+    ahi.device installed and a unit set up in the AHI preferences.
+  The game emulates the PC-98's FM sound chip in software. On a 68040 at
+  25 MHz this works at 11 kHz, which is the default. Higher rates need a
+  faster processor.
+  The voices (optional, section 3) cost about a fifth of a 68040 at 25 MHz
+  more (measured in an emulator) and 4 KB of chip RAM. With AHI they play
+  as a second AHI channel.
+
+Hard disk
+  About 6.5 MB. Floppy disks are not supported. The voices (optional,
+  section 3) need 261 MB more, best on a PFS3 or SFS partition.
+  If the game cannot preload its data (see "Memory"), it reads from the
+  6 MB data file xenon.pak as you play. The Fast File System is slow at
+  seeking within such a large file. Give the partition more buffers before
+  you start the game, for example:
+      AddBuffers DH1: 200
+  This costs about 100 KB of memory and removes the pauses.
+
+

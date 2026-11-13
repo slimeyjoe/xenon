@@ -1,0 +1,74 @@
+% DH0:wosprobe
+wosprobe: PowerPC under WarpOS
+1 layout: 74 entries, 0 differ under amiga-align, 51 differ without it
+  natural  Node                         68k  14  ppc(natural)  16
+  natural  Node.ln_Name                 68k  10  ppc(natural)  12
+  natural  List                         68k  14  ppc(natural)  16
+  natural  Message                      68k  20  ppc(natural)  24
+  natural  MsgPort                      68k  34  ppc(natural)  40
+  natural  MsgPort.mp_SigBit            68k  15  ppc(natural)  17
+  natural  MsgPort.mp_MsgList           68k  20  ppc(natural)  24
+  natural  Task                         68k  92  ppc(natural)  96
+  natural  Task.tc_SigWait              68k  22  ppc(natural)  24
+  natural  Task.tc_SPLower              68k  58  ppc(natural)  60
+  natural  Task.tc_SPUpper              68k  62  ppc(natural)  64
+  natural  Process                      68k 228  ppc(natural) 240
+  natural  Process.pr_CLI               68k 172  ppc(natural) 184
+  natural  Interrupt                    68k  22  ppc(natural)  24
+  natural  Interrupt.is_Data            68k  14  ppc(natural)  16
+  natural  Interrupt.is_Code            68k  18  ppc(natural)  20
+  natural  Library                      68k  34  ppc(natural)  40
+  natural  SignalSemaphore              68k  46  ppc(natural)  52
+  natural  IORequest                    68k  32  ppc(natural)  36
+  natural  IORequest.io_Error           68k  31  ppc(natural)  35
+  natural  IOStdReq                     68k  48  ppc(natural)  52
+  natural  IOStdReq.io_Length           68k  36  ppc(natural)  40
+  natural  IOStdReq.io_Data             68k  40  ppc(natural)  44
+  natural  IOStdReq.io_Offset           68k  44  ppc(natural)  48
+  natural  timerequest                  68k  40  ppc(natural)  44
+  natural  timerequest.tr_time          68k  32  ppc(natural)  36
+  natural  IOAudio                      68k  68  ppc(natural)  80
+  natural  IOAudio.ioa_Data             68k  34  ppc(natural)  40
+  natural  IOAudio.ioa_Length           68k  38  ppc(natural)  44
+  natural  IOAudio.ioa_Period           68k  42  ppc(natural)  48
+  natural  AHIRequest                   68k  80  ppc(natural)  84
+  natural  AHIRequest.ahir_Version      68k  48  ppc(natural)  52
+  natural  AHIRequest.ahir_Type         68k  60  ppc(natural)  64
+  natural  AHIRequest.ahir_Frequency    68k  64  ppc(natural)  68
+  natural  AHIRequest.ahir_Link         68k  76  ppc(natural)  80
+  natural  RastPort                     68k 100  ppc(natural) 104
+  natural  GfxBase.DisplayFlags         68k 206  ppc(natural) 224
+  natural  Screen                       68k 346  ppc(natural) 364
+  natural  Screen.ViewPort              68k  44  ppc(natural)  48
+  natural  Screen.RastPort              68k  84  ppc(natural)  88
+  natural  Screen.BitMap                68k 184  ppc(natural) 192
+  natural  Window.UserPort              68k  86  ppc(natural)  88
+  natural  Window.RPort                 68k  50  ppc(natural)  52
+  natural  IntuiMessage                 68k  52  ppc(natural)  56
+  natural  IntuiMessage.Class           68k  20  ppc(natural)  24
+  natural  IntuiMessage.Code            68k  24  ppc(natural)  28
+  natural  IntuiMessage.Qualifier       68k  26  ppc(natural)  30
+  natural  IntuiMessage.MouseX          68k  32  ppc(natural)  36
+  natural  IntuitionBase.FirstScreen    68k  60  ppc(natural)  68
+  natural  WBStartup.sm_ArgList         68k  36  ppc(natural)  40
+  natural  DiskObject.do_ToolTypes      68k  54  ppc(natural)  60
+2 tasks: FindTask(NULL) = 0x440857f8 "Initial CLI" type 13 pri 0 cli yes, stack 4096
+  FindTaskPPC(NULL) = 0x44118c70 "Initial CLI_PPC1" pri 0, stack 36864 (tp_StackSize 36864), sp 0x44121b2c in [0x44118e30,0x44121e30]
+  PowerPCBase 0x440dee88 version 16.1
+3 Run68K: wp68_add(40, 2) = 42
+  Run68K exec AvailMem(MEMF_CHIP) by LVO = 2055976, through the stub = 2055976
+4 CreateNewProcTags(68k entry): created, process 0x440e6be0, it saw itself as 0x440e6be0, ran 600df00d after 0 ticks
+5 CreateTaskPPC: running, task 0x44122510 (self 0x44122510), 68k mirror 0x44625000 (main 68k task 0x440857f8), timer.device from the task: err 0, 100 ms took 119012 us
+  ping-pong main <-> task mirror: 200 of 200, 42367 us each
+  68k VERTB server -> mirror: 102 frames, 20 signals sent; task got 10 with Wait(), 10 with WaitPPC()
+  child end: signalled, gone from the PPC task list after 0 ticks
+6 cost of a 68k call from PPC (emulated, not real-hardware speed): AvailMem 18569 us E-clock, 3982 us PPC clock (checksum 0)
+  Delay(50) = 1 s: 1021643 us E-clock, 216088 us PPC clock (GetSysTimePPC)
+9 PPC bus clock 310000000 Hz, CPU clock 465000000 Hz; time base over Delay(50): 16971655 ticks in 1041659 us E-clock = 16292908 ticks/s (bus/4 = 77500000)
+  DoIO(TR_ADDREQUEST 1 ms) from PPC: 60094 us each (with two E-clock reads), longest 40090 us
+  50 x WaitTime(200 ms) for a 68k VERTB Signal to the shell process: 50 woken, 987867 us E-clock (50 frames), 16340468 time base ticks
+  50 x Wait (68k stub) woken the same way: 1001596 us E-clock (51 frames)
+7 custom chips from PPC: vhposr 0300 -> a701 (after 43611 reads), intenar 602c, dmaconr 02d0
+8 chip RAM written by PPC, summed by 68k (no explicit flush): 522240, expected 522240: same
+  after SetCache(CACHE_DCACHEFLUSH): 522240: same
+wosprobe: done

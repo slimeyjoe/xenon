@@ -1,0 +1,109 @@
+5. TOOL TYPES AND OPTIONS
+=========================
+
+The same options work as tool types of the program's icon (select the icon,
+then Information from the Icons menu) and as Shell arguments. A tool type
+in parentheses, such as (LANG=en), is switched off; remove the parentheses
+to use it. The icon comes with every option at its default.
+
+  LANG=en | pl | ja
+      Language of the text. Default: en. LANG=pl plays the Polish
+      translation. LANG=ja plays the original Japanese text; no Japanese
+      system software is needed, the game brings its own font.
+
+  MODE=<screen mode id>
+      The screen mode, as a hexadecimal mode id. Default: the best mode
+      AROS finds for 640x400 with 256 colours. Any mode of at least
+      640x400 works; a larger one shows the picture in its middle.
+
+  AUDIO=ahi | none
+      Sound output. Default: ahi. "none" plays silently.
+
+  AHIUNIT=<n>
+      The AHI unit to use. Default: 0.
+
+  RATE=<Hz>
+      The sample rate of the music and sound. Default: 44100.
+
+  AUDIOCPU=<percent>
+      How much of the processor the sound may use, from 10 to 100.
+      Default: 75. If the sound needs more, short gaps of silence are
+      inserted instead, so that the game and the system stay responsive.
+
+  AUDIOBUF=<samples>
+      Size of each sound buffer. Default: 4096 at 44100 Hz, about a tenth
+      of a second. Larger buffers survive heavy disk activity better but
+      delay sound effects.
+
+  VOICEPAK=<file>
+      Where the voice data is (section 3, "Voices"). Default:
+      xenon_voice.pak in the program's drawer, or next to the PAK= file.
+      The characters speak whenever this file is found.
+
+  NOVOICE
+      No voices, even when the voice data is there.
+
+  VOICEVOL=<percent>
+      Volume of the voices, 1 to 100. Default: 100.
+
+  MUSICVOL=<percent>
+      Volume of the music and the sound effects, 1 to 100. Default: 50
+      while the voices play (the music would cover them), 100 without
+      them.
+
+  VOICESTRICT
+      A click during a voice does not cut it short: the line waits until
+      the voice has finished, as in the Windows version. Default: off (OK
+      or a click cuts the voice; Cancel always does).
+
+  VOICEMIX
+      With AUDIO=ahi: the game mixes the voices into the music itself
+      instead of playing them on a second AHI channel. Needed when the AHI
+      unit is set to a single channel in the AHI preferences (the voices
+      are silent otherwise). The voices then play at the music's rate.
+
+  OPN=lite | lite2
+      The FM sound emulation. Default: lite. lite2 renders the FM part
+      at double rate for a cleaner sound.
+
+  UPLOAD=chunky | rtg
+      How the picture is drawn. Default: chunky. Leave it unless the
+      picture looks wrong with your graphics driver.
+
+  WINDOW
+      Play in a window on the desktop instead of on the game's own
+      screen. Default: off. The screen needs 256 colours or a graphics
+      card (16 free colours for the game) and room for 640x400 pixels. If
+      the screen cannot take the window, the game opens its own screen
+      as usual. In a window F10 changes its size (section 4).
+
+  PUBSCREEN=<name>
+      With WINDOW: the public screen to open the window on. Default: the
+      default public screen, normally Wanderer's.
+
+  SCALE=1 | 2 | 3 | auto
+      Show each pixel of the game 1, 2 or 3 times as large. Default: 1.
+      "auto" takes the largest that fits. On the game's own screen the
+      game picks a mode large enough (MODE= insists on one mode).
+
+  ASPECT
+      Show the picture with the proportions of the PC-98's 4:3 monitor,
+      by repeating every fifth line (640x400 becomes 640x480). Default:
+      off.
+
+  PRELOAD=auto | yes | no
+      Load all game data into memory at start-up. Default: auto, which
+      preloads when the data fits with 1.5 MB to spare. "yes" preloads
+      whenever it fits, "no" never preloads.
+
+  PAK=<file>
+      Where the data file is. Default: xenon.pak in the program's drawer.
+
+  QUIET
+      No messages in the Shell window.
+
+The program also understands AUTOPLAY, MAXTICKS, FAST, SNAPDIR and
+PRESENTTEST. They exist for automated testing and are of no use for
+playing.
+
+

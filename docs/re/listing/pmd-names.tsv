@@ -1,0 +1,379 @@
+0000:0100	pmd_entry	COM entry: jmp to transient installer
+0000:0103	pmd_int60_vector_target	INT 60h vector points here: EB 11 (jmp 0116), then 'PMD' at 0105 = residency signature
+0000:0105	pmd_signature	'PMD' + 47h 'g' (version 4.7g); 010A saved INT60, 010E saved FM IRQ vector, 0112 old IMR bit, 0113 IVT addr, 0115 IRQ no
+0000:010A	saved_int60_vector	dd old INT 60h (restored by /R)
+0000:010E	saved_fmirq_vector	dd old FM IRQ vector (chained when 0112==0, restored by /R)
+0000:0112	saved_imr_bit	IMR bit of FM IRQ before install (0 = was unmasked -> chain old handler)
+0000:0113	fmirq_ivt_addr	word: IVT address of FM IRQ (2Ch/48h/50h/54h)
+0000:0115	fmirq_irq_no	byte: IRQ number 3/10/12/13
+0000:0116	int60_entry	INT 60h API entry (resident)
+0000:012E	int60_iret_ok	dec 3142, 3143=0, iret
+0000:013B	int60_iret_err	dec 3142, 3143=FF (refused/invalid), iret
+0000:0148	ssg_eff_rhythm	SSG drum from K part: PPS (INT64 AH=1, pitch+vol, 0315=3) or internal effect
+0000:0167	ssg_eff_cmd	SSG effect from music cmd D4 (0315=1: PPS pitch from part)
+0000:016E	api03_ssg_eff_on	INT60 AH=03: SSG effect AL (0315=0)
+0000:0173	ssg_eff_start	priority check vs 0313, mask part I (3480 bit1), load first frame
+0000:0206	ssg_eff_tick	Timer-A: SSG effect frame countdown / sweep
+0000:0217	ssg_eff_frame	load 11-byte frame: dur,tone(2),noise,mix,vol,env(2),shape,dtone,noisesweep
+0000:0279	ssg_eff_reg_out	lodsb -> reg dh, dh++
+0000:0282	api04_ssg_eff_off	INT60 AH=04: SSG effect off
+0000:0286	ssg_eff_stop	PPS stop, reg0A=0, reg07 |=24h, 0313=0, 0314=FF
+0000:02B5	ssg_eff_sweep	tone += delta, noise sweep
+0000:0309	ssg_eff_ptr	word: SSG effect stream pointer
+0000:030B	ssg_eff_tone	word: current tone period ch3
+0000:030D	ssg_eff_dtone	word: tone delta per Timer-A tick (sign-extended)
+0000:030F	ssg_eff_count	byte: Timer-A ticks left in frame
+0000:0310	ssg_eff_noise	byte: noise period
+0000:0311	ssg_eff_nsweep	byte: noise sweep hi=signed delta lo=period
+0000:0312	ssg_eff_ncount	byte: noise sweep countdown
+0000:0313	ssg_eff_priority	byte: running SSG effect priority (0 none, 1 drum, 2 effect)
+0000:0314	ssg_eff_number	byte: running SSG effect no (FF none, bit7 = PPS)
+0000:0315	ssg_eff_ppsmode	byte: bit0 pitch from part, bit1 vol from part (PPS)
+0000:0316	pps_last	byte: last PPS number|80h
+0000:0317	get_measure	AX = 315B
+0000:031C	get_status	AH=3111 status1, AL=3112 status2
+0000:0326	api02_fout	INT60 AH=02: fade speed AL -> 3114 (80h+ = fade-in)
+0000:032B	efc_part_tick	FM effect part 3594 tick (Timer A): voices from EFC table, 643 on ch3, auto-off at 80h
+0000:035A	mstart	INT60 AH=00: start song (deferred if in timer int)
+0000:036E	mstart_core	stop, init work, parse header, fadevol=0, chip init, timers, playing=1
+0000:0394	song_header_parse	parse .M header: 11 part ptrs, voice table, R table; per-part defaults
+0000:0443	work_init	clear 11 part work areas (5Ch each) and sequencer globals
+0000:04FA	opn_song_init	reg29=83, reg6=0, OPNA pan B4-B6=C0, reg22=0, ADPCM reset
+0000:0569	mstop	INT60 AH=01: stop song
+0000:0582	mstop_core	clear play flag, status2=FF, fadevol=FF, silence
+0000:05A0	music_tick	Timer-B: process parts G H I K A B C D E F, then loop accounting
+0000:0643	fm_part_tick	FM part (and FM effect) per-clock processing
+0000:066E	fm_part_parse	FM: read commands until note
+0000:0698	fm_note	FM note: LFO/porta prep, transpose, fnum, length, gate, vol/freq/keyon
+0000:06EA	fm_part_sustain	FM: no new note this clock: keyon delay, LFO, portamento
+0000:0765	part_tick_done	30AB &= part loop status [di+32]
+0000:076F	calc_gate	gate count [di+5] from q/Q or C1 (no-gate) prefix
+0000:0796	fm_part_masked	masked FM part: count/parse without sound
+0000:07F7	ssg_part_tick	SSG part per-clock processing
+0000:084C	ssg_note	SSG note
+0000:095D	ssg_masked_note_check	SSG: unmask after SSG effect if note not rest
+0000:0991	rhythm_part_tick	K part: R pattern interpreter (SSG drums via 0148)
+0000:0A6A	cmd_dispatch_fm	bx=0A8E
+0000:0A6F	cmd_dispatch_rhythm	bx=0BBA
+0000:0A74	cmd_dispatch_ssg	bx=0B24
+0000:0A77	cmd_dispatch	al>=B5: jmp [bx+(~al)*2]; else part end (writes 80h)
+0000:0A8E	cmdtab_fm	75 words, cmds FF..B5
+0000:0B24	cmdtab_ssg	75 words, cmds FF..B5
+0000:0BBA	cmdtab_rhythm	75 words, cmds FF..B5
+0000:0C50	cmd_skip6	skip n operand bytes (0C50..0C56 = 6..0)
+0000:0C56	cmd_nop	ret
+0000:0C57	cmd_c0_sub	C0 F7..FF subcommands, table 0C6D
+0000:0C6D	cmdtab_c0	9 words: C0 FF..F7 volume-down set/rel
+0000:0CDA	cmd_B5_keyon_delay	B5 slotmask,n: per-slot key-on delay
+0000:0CF2	cmd_B6_feedback	B6 n: FB set/relative
+0000:0D69	cmd_B8_tl	B8 mask,n: operator TL set/relative
+0000:0E32	cmd_C0_fm	C0 0/1 part mask (m) FM
+0000:0E5C	cmd_C0_ssg	C0 0/1 part mask SSG
+0000:0E8C	cmd_C0_rhythm	C0 0/1 part mask K
+0000:0EA2	fm_voice_restore	reload voice after unmask, restore TLs
+0000:0F06	cmd_F1_rhythm_pps	K part F1: PPSDRV INT64 AH=5
+0000:0F1A	cmd_C5_lfo1_slot	C5 n: LFO1 slot mask
+0000:0F36	cmd_BA_lfo2_slot	BA n: LFO2 slot mask
+0000:0F50	fm3_mode_check	if ch3 music part: 1095
+0000:0F64	cmd_C6_fm3ex_parts	C6 w,w,w: set D/E/F part addresses
+0000:0FAC	cmd_CC_detune_ext	CC n: [2E] bit0 (SSG detune scaled)
+0000:0FB7	cmd_CA_lfo_ext	CA n: [2E] bit1 (LFO runs at Timer-A rate)
+0000:0FC4	cmd_C9_env_ext	C9 n: [2E] bit2 (SSG envelope at Timer-A rate)
+0000:0FD3	cmd_CB_lfo_wave	CB n: LFO waveform [3A]
+0000:0FD8	cmd_CD_ssg_env_ext	CD ar,dr,sr,rr|sl,al: extended SSG envelope
+0000:101C	cmd_C7_slot_detune_rel	C7 mask,w: FM3 slot detune relative
+0000:104C	cmd_C8_slot_detune	C8 mask,w: FM3 slot detune absolute
+0000:1095	fm3_special_mode_update	decide reg27 7F/3F from FM3 parts slot/LFO usage
+0000:1145	cmd_CF_slot_mask	CF n: slot mask / carrier mask (FM3 extended)
+0000:1210	cmd_D4_ssg_effect	D4 n: SSG effect on/off
+0000:122B	cmd_D3_fm_effect	D3 n: FM effect on/off
+0000:1258	cmd_D2_fadeout	D2 n: start fade-out speed n
+0000:1261	cmd_D6_lfo_md	D6 speed,delta: LFO depth modulation
+0000:126D	cmd_B7_md_count	B7 n: MD count (bit7=LFO2)
+0000:128A	porta_step	portamento accumulate
+0000:12A6	cmd_DA_porta_fm	DA n1,n2,len: FM portamento
+0000:1318	cmd_DA_porta_ssg	DA n1,n2,len: SSG portamento
+0000:1360	cmd_DC_status1	DC n: status1 = n
+0000:1365	cmd_DB_status1_add	DB n: status1 += n
+0000:136E	cmd_DE_tmpvol_fm	DE n: one-note volume V+n (FM)
+0000:1383	cmd_DE_tmpvol_ssg	DE n: one-note volume V+n (SSG)
+0000:139D	cmd_DD_tmpvol_down	DD n: one-note volume V-n
+0000:13B1	cmd_DF_measure	DF n: measure length
+0000:13B6	cmd_FF_voice	FF n: FM voice
+0000:1400	cmd_FE_q	FE n: gate q
+0000:1405	cmd_C4_Q	C4 n: gate Q ratio
+0000:140A	cmd_FD_volume	FD n: V
+0000:140F	cmd_FC_tempo	FC n / FC FF t / FC FE d / FC FD d
+0000:1468	tempo_TB_to_t	t = 4396/(256-TB)
+0000:1487	tempo_t_to_TB	TB = 256 - 4396/t
+0000:14AA	cmd_FB_tie	FB: tie/slur flag
+0000:14B0	cmd_FA_detune	FA w: detune
+0000:14B5	cmd_D5_detune_rel	D5 w: detune relative
+0000:14BA	cmd_F9_loop_start	F9 w: clear loop counter
+0000:14D0	cmd_F8_loop_end	F8 cnt,ctr,w: loop back
+0000:14FC	cmd_F7_loop_exit	F7 w: break on last pass
+0000:151D	cmd_F6_L	F6: set loop point
+0000:1521	cmd_F5_transpose	F5 n
+0000:1526	cmd_E7_transpose_rel	E7 n
+0000:152E	cmd_F4_volup_fm	F4: V+4 (FM)
+0000:153D	cmd_E3_volup_fm	E3 n: V+n (FM)
+0000:1543	cmd_F4_volup_ssg	F4: V+1 (SSG)
+0000:1550	cmd_E3_volup_ssg	E3 n (SSG)
+0000:1556	cmd_F3_voldn_fm	F3: V-4
+0000:1561	cmd_E2_voldn_fm	E2 n
+0000:156F	cmd_F3_voldn_ssg	F3: V-1
+0000:157A	cmd_E2_voldn_ssg	E2 n
+0000:1588	cmd_BF_lfo2_params	BF: LFO2 M
+0000:1599	cmd_BD_lfo2_md	BD: LFO2 MD
+0000:159E	cmd_BC_lfo2_wave	BC: LFO2 waveform
+0000:15A3	cmd_BB_lfo2_ext	BB: LFO2 MX
+0000:15A8	cmd_B9_lfo2_delay	B9: LFO2 delay
+0000:15AD	cmd_BE_lfo2_switch_ssg	BE n: LFO2 switch
+0000:15C2	cmd_BE_lfo2_switch_fm	BE n (FM)
+0000:15C8	lfo_swap	swap LFO1/LFO2 work fields
+0000:161F	cmd_F2_lfo_params	F2 delay,speed,step,times
+0000:163E	cmd_C2_lfo_delay	C2 n: LFO1 delay
+0000:1648	cmd_F1_lfo_switch_ssg	F1 n
+0000:165B	cmd_F1_lfo_switch_fm	F1 n (FM)
+0000:1661	cmd_F0_ssg_env	F0 al,dd,sr,rr: SSG envelope
+0000:1689	cmd_EF_reg_write	EF reg,val: OPN register write
+0000:1691	cmd_EE_noise_freq	EE n: SSG noise frequency
+0000:1696	cmd_D0_noise_freq_rel	D0 n
+0000:16AB	cmd_ED_ssg_mixer	ED n: SSG tone/noise mask
+0000:16C2	note_transpose	apply [di+13] transpose
+0000:1717	fm_note_to_fnum	note -> block|fnum in [di+6]
+0000:174E	ssg_note_to_period	note -> tone period in [di+6]
+0000:177E	fm_freq_write	fnum+porta+detune+LFO -> A4/A0 (or FM3 per-slot)
+0000:17DC	fm3_freq_write	FM3 special mode per-slot A6/A2 AC/A8 AE/AA AD/A9
+0000:18E7	fnum_normalize	keep fnum in 26Ah..4D3h by shifting block
+0000:192A	ssg_freq_write	period - detune - LFO -> regs 0..5
+0000:19DD	fm_volume_write	V (+fade, volume-down, LFO) -> carrier TL
+0000:1AF1	lfo_tl_apply	subtract LFO value from TL buffer
+0000:1B15	ssg_volume_write	V + envelope (+fade, LFO) -> regs 8..A
+0000:1BBE	fm_keyon	reg28 |= slot mask
+0000:1BEA	ssg_keyon	reg7 mixer, reg6 noise
+0000:1C22	ssg_mixer_bits	al=reg7, ah=tone|noise bits for channel
+0000:1C38	fm_keyoff	reg28 &= ~slot mask
+0000:1C5D	ssg_keyoff	envelope to release
+0000:1C74	fm_voice_load	look up voice, write 30..8C, B0
+0000:1D34	copy_voice_tl	voice TL -> [di+34..37]
+0000:1D40	voice_lookup	bx = voice record (+1) for voice dl
+0000:1D7B	fm_voice_mute	TL=7F, SL/RR=7F for [39] slots; keyoff
+0000:1DAE	lfo_tick	LFO delay / step (MX: N steps)
+0000:1DE5	lfo_step	one LFO step per waveform
+0000:1ECA	lfo_md_step	depth modulation (MD)
+0000:1F18	lfo_random	LCG rnd=(rnd*259+3)&7FFF
+0000:1F32	lfo_rnd_seed	word
+0000:1F34	ssg_note_prep	SSG envelope key-on + LFO prep
+0000:1FBF	fm_note_prep	portamento reset + LFO prep
+0000:1FF5	lfo_keyon	keyon delay reload, LFO reset/step
+0000:203A	lfo_reset	LFO1 value 0, reload params
+0000:205E	ssg_env_tick	SSG envelope tick (EX: N steps)
+0000:2091	ssg_env_normal_step	PMD E envelope (AL,DD,SR,RR)
+0000:20E9	ssg_env_ext_step	PMD extended envelope (AR,DR,SR,RR,SL,AL)
+0000:21CE	fade_step	every 8 Timer-A: vol += speed; end -> stop unless /F
+0000:2214	tempo_timer_init	TB=200, reg26, Timer A NA=0, reg27=3F
+0000:2248	silence_all	SL/RR=FF, keyoff, SSG mixer off
+0000:22AC	silence_regs_list	80h-offsets FF-terminated (all ch)
+0000:22B9	silence_regs_list_efc	same without ch3
+0000:22C2	opn_write	reg dh <- dl via ports [30F2]/[30F4]
+0000:22EA	opn_write_fm	reg dh <- dl via ports [3096]/[3098]
+0000:2312	opn_read_reg7	read SSG mixer reg 7
+0000:232F	int60_dispatch	save regs to 309A-309F, gate 23EF, sti unless /I, call [2411+2*AH]
+0000:23BE	int60_refused	gate refused: return caller AX/DX/DS unchanged, 3143=FF
+0000:23EF	int60_gate_table	22h bytes: bit0 refuse if 3140 (TimerB), bit1 if 3141 (TimerA), bit2 if nested INT60
+0000:2411	int60_jump_table	23h words AH=00..22h (board present)
+0000:2457	api05_get_measure	AX = measure counter 315B
+0000:2462	api06_get_musdat	DS:DX = music buffer - 1 (CS:36F0)
+0000:246F	api07_get_tondat	DS:DX = voice buffer
+0000:247B	api0B_get_efcdat	DS:DX = FM effect buffer
+0000:2487	api08_get_fadevol	AL = 3115
+0000:248E	api19_set_fadevol	3115 = AL
+0000:2492	api09_board_check	AL=00, AH=47h, DX=4767h
+0000:24A3	api0A_get_status	AH=status1 AL=status2
+0000:24AE	api0E_get_pcmadr	DS:DX = CS:35F0 (stack area; no PCM in this build)
+0000:24BA	api10_get_workadr	DS:DX = CS:3188 part pointer table
+0000:24C6	api11_get_efcnum	AL = FM effect number 311D (FF none)
+0000:24CD	api12_get_pcmefcnum	AL = 3125 (always FF)
+0000:24D4	api13_set_fmint	DS:DX far hook called after each Timer-B; 0:0 = off; locks /R
+0000:24FB	api14_set_efcint	DS:DX far hook called after each Timer-A; 0:0 = off; locks /R
+0000:2522	api1F_get_fmint	DS:DX = FM hook
+0000:252F	api20_get_efcint	DS:DX = effect hook
+0000:253C	api15_get_ssgefc	AH = SSG effect no 0314, AL = priority 0313
+0000:2549	api17_get_ppsflag	AL = 30AC
+0000:2550	api18_set_ppsflag	30AC = AL if PPSDRV resident else 0
+0000:2574	api21_get_openwork	DS:DX = CS:316A
+0000:257F	api22_get_bufsize	AL=/M AH=/V DL=/E (KB)
+0000:2592	api16_get_joystick	reg0F select, reg0E read: AL=joy1, AH=joy2 (6 bits)
+0000:2626	api1A_pause	playing->paused, silence_all
+0000:263B	api1B_resume	re-send FM voices, paused->playing
+0000:26A0	api1D_get_memo	DS:DX = memo string AL (0:0 if none)
+0000:26FD	api1C_ff_to_measure	mask IRQ, 2720, unmask; AL=0 ok/1 ended/2 not playing
+0000:2720	skip_to_measure	DX measure: rewind (restart) or run music_tick silently
+0000:27A9	mask_all_parts	set part flag bit7, silence
+0000:27CD	unmask_all_parts	clear part flag bit7, restore voices
+0000:27ED	api1E_part_mask	AL part (bit7 = unmask) via table 28B8
+0000:28B8	part_mask_table	16 x {part idx, channel, type 0 FM/2 SSG/3 PCM/4 rhythm}
+0000:28E8	int60_dispatch_noboard	no-board dispatcher, table 2948
+0000:2948	int60_noboard_table	23h words
+0000:298E	nob_ret_al_ff	AL = FF
+0000:2993	nob_ret	no-op
+0000:2994	nob_ret_ax_ffff	AX = FFFF
+0000:299B	nob_board_check	AL=FF AH=47 DX=4767
+0000:29A8	api0C_fm_efc_on	stop running, mask FM3 parts, init part 3594, 27h shadow 3F
+0000:2A1D	api0D_fm_efc_off	mute ch3, re-send FM3 voices, restore 27h mode
+0000:2A71	opn_irq_handler	OPN timer IRQ handler; vector chosen by 26K/86 jumper (reg 0Eh bits 6-7 via table 4D63h; INT5 -> INT 14h/IRQ12); masks own IRQ, EOI, loops on status&3
+0000:2AF0	fm_irq_chain	call old vector, re-enter if flags pending
+0000:2B13	timer_dispatch	read status, reset flags (reg27=[30AD]), call B then A
+0000:2B60	timer_b_handler	deferred start/stop, music_tick, tempo, measure
+0000:2BA7	timer_a_handler	fade every 8th, SSG effect, FM effect
+0000:2C26	measure_count	3118/315B
+0000:2C3B	tempo_reg_write	reg26 = TB (or fast-forward value)
+0000:2C4E	timerb_write_cached	write reg26 if != 3156
+0000:2C5E	rew_key_check	KR+GRPH: back to measure start / previous measure
+0000:2C81	hotkey_test	tests 0:0538h keyboard map (disabled by /K, 310Ah)
+0000:2CA9	tab_fnum	12 words: C..B F-numbers (block in note)
+0000:2CC1	tab_ssg_period	12 words: octave-0 tone periods
+0000:2CD9	tab_carrier_mask	8 bytes per ALG (reg28 slot bits)
+0000:2CE1	tab_noncarrier_regmask	8 bytes per ALG (TL write mask, [39] format)
+0000:2CE9	ssg_eff_table	40 x {priority, word offset from 2CE9}
+0000:2D61	ssg_eff_data	frames of 11 bytes, FF-terminated, up to 3095
+0000:3096	cur_fm_addr_port	word
+0000:3098	cur_fm_data_port	word
+0000:309A	api_ds	word: caller DS in / DS out
+0000:309C	api_dx	word: caller DX in / DX out
+0000:309E	api_ah	byte: AH in/out
+0000:309F	api_al	byte: AL in/out
+0000:30A0	cur_channel	byte: FM/SSG channel 1-3 of current part
+0000:30A3	empty_rhythm_byte	FFh: default rhythm pattern pointer target
+0000:30AB	song_end_acc	AND of part loop states
+0000:30AC	pps_enable	FF auto, 0 off, 1 PPSDRV in use
+0000:30AD	reg27_shadow	timer/FM3 mode byte written on every IRQ ack
+0000:30AE	reg27_saved	30AD saved during FM effect
+0000:30AF	efc_voice_table	EFC voice table pointer
+0000:30B7	timera_at_timerb	Timer-A counter copy at last Timer-B tick
+0000:30B8	deferred_req	bit0 mstart, bit1 mstop (done at next Timer-B)
+0000:30BB	pic_cmd_port	00h master / 08h slave
+0000:30BD	pic_eoi_cmd	60h|IR (specific EOI)
+0000:30BE	pic_imr_port	02h / 0Ah
+0000:30C0	pic_irq_bit	IMR bit
+0000:30C1	pic_irq_bit_inv	~IMR bit
+0000:30C2	irq_saved_ss	word
+0000:30C4	irq_saved_sp	word
+0000:30C8	chip_type	0 YM2203, 1 YM2608
+0000:30EC	musdat_ptr	music buffer + 1 (part table)
+0000:30EE	tondat_ptr	voice buffer
+0000:30F0	efcdat_ptr	FM effect buffer
+0000:30F2	opn_addr_port	address/status port (088h/188h/288h/388h)
+0000:30F4	opn_data_port	+2
+0000:30F6	opna_ext_addr_port	+4
+0000:30F8	opna_ext_data_port	+6
+0000:30FA	fmint_hook	dd FM-interrupt hook (AH=13h)
+0000:30FE	efcint_hook	dd effect-interrupt hook (AH=14h)
+0000:3102	song_voice_table	embedded voice table pointer
+0000:3104	rhythm_table_ptr	R pattern table
+0000:3106	rhythm_ptr	current R pattern pointer
+0000:3109	board_present	0 none (stub API) / 1
+0000:310A	hotkeys_enable	1 = ESC/GRPH keys active (/K -> 0)
+0000:310B	voldown_fm	current FM volume down (/DF, def 16)
+0000:310C	voldown_ssg	/DS def 0
+0000:310D	voldown_pcm	/DP
+0000:310E	voldown_rhythm	/DR
+0000:310F	song_has_voices	1 if .M carries its voice table
+0000:3110	song_type	.M byte 0
+0000:3111	status1	~ marks
+0000:3112	status2	loop count, FF stopped
+0000:3113	timerb_value	current TB
+0000:3114	fade_speed	AH=02h value
+0000:3115	fade_vol	0 full .. FF silent
+0000:3116	timerb_base	TB as set by music
+0000:3117	measure_len	clocks per measure (60h)
+0000:3118	measure_clock	clock in measure
+0000:3119	timera_count	Timer-A interrupt counter
+0000:311A	ssg_eff_disable	never set
+0000:311D	fm_eff_number	FF none
+0000:311E	fm_eff_active	byte
+0000:311F	opt_I	1 = keep interrupts disabled in API / timer code
+0000:3125	pcm_eff_number	always FF
+0000:313C	playing	byte
+0000:313D	paused	byte
+0000:313E	stop_after_fade	1 default, /F -> 0
+0000:313F	opt_N	stored only
+0000:3140	in_timerb	byte
+0000:3141	in_timera	byte
+0000:3142	int60_nest	byte
+0000:3143	int60_error	0 ok, FF refused/invalid
+0000:3145	opt_KE	ESC modifier mask (def 16)
+0000:3146	opt_KG	FF modifier mask (def 16)
+0000:3147	remove_lock	bit7 FM hook, bit6 effect hook
+0000:3150	opn_wait_loops	/W
+0000:3152	ns_per_loop	calibration
+0000:3154	opt_G	FF Timer-B value (def 250)
+0000:3156	timerb_written	last reg26 value
+0000:3157	fade_from_music	set by cmd D2
+0000:3158	opt_A	stored only
+0000:315A	opt_S_cur	byte
+0000:315B	measure_counter	word
+0000:315D	irq_depth	byte
+0000:315E	reg22_shadow	LFO (YM2608)
+0000:315F	tempo	t value
+0000:3160	tempo_base	t as set by music
+0000:3161	opt_KR	REW modifier mask (def 1)
+0000:3162	hook_flags	bit0 FM hook, bit1 effect hook
+0000:3163	skip_state	1 skipping, 2 rewinding
+0000:3164	def_voldown_fm	restored at song start
+0000:3165	def_voldown_ssg	
+0000:3166	def_voldown_pcm	
+0000:3167	def_voldown_rhythm	
+0000:3168	def_opt_S	
+0000:3169	song_start_count	byte
+0000:316A	open_work_block	returned by AH=21h; unused here
+0000:3177	bufsize_m	KB
+0000:3178	bufsize_v	KB
+0000:3179	bufsize_e	KB
+0000:3188	tab_part_work_ptr	12 words: A..K work, 3594 effect
+0000:31A0	work_part_A	5Ch bytes per part: A 31A0 B 31FC C 3258 D 32B4 E 3310 F 336C G 33C8 H 3424 I 3480 J 34DC K 3538
+0000:3594	work_efc_part	FM effect part work (5Ch)
+0000:35F0	irq_stack_area	message text 'STACK area'; SP top 36EE
+0000:36F0	music_buffer	byte0 of .M; default = empty song (all parts -> 80h at 3709)
+0000:370A	installer_entry	transient part (overwritten by buffers)
+0000:3759	inst_first_install	defaults, detect, PMDOPT, cmdline, buffers, vectors, TSR
+0000:3806	inst_parse_pmdopt	parse env with error recovery via 4DF7
+0000:3A2B	inst_board_init	detect board (3C2A), read IRQ jumper (3A75), wait calibration (4316)
+0000:3A75	inst_read_irq_jumper	SSG reg 07h=3Fh, read reg 0Eh bits 6-7 -> table 4D63h
+0000:3BD2	inst_sound_reset	clear work 31A0h..3593h, 443/4FA/582/2214, unmask IRQ
+0000:3C2A	inst_detect_board	3D26 OPNA probe, else 3C7F 86-board (A460h), else OPN probe (reg 0Bh=AAh readback) at 088h/188h/288h/388h
+0000:3C7F	inst_detect_86	86 board via port A460h / FD80:0002
+0000:3D26	inst_detect_opna	reg FFh ID==1 and ext ports +4/+6 not FFh
+0000:3DBE	inst_resident_options	change options of resident copy, print settings
+0000:3F17	print_dec_byte	
+0000:3F4F	inst_remove	/R
+0000:3FAC	inst_restore_vectors	restore IMR bit, reg27=30, FM vector, INT60, free
+0000:400C	inst_pic_unmask	unmask IRQ AL in PIC (02h/0Ah); [0112h]=old mask bit (0 -> chain to old vector)
+0000:403D	inst_pic_restore	OR old IMR bit
+0000:4061	inst_parse_options	option letter table at BX=4D73h
+0000:4095	opt_M	
+0000:40A2	opt_V	
+0000:40AF	opt_E	
+0000:40BC	opt_D	DF/DS/DP/DR
+0000:4107	opt_K	K / K- / KE / KG / KR
+0000:4141	opt_I_h	
+0000:4155	opt_N_h	
+0000:4169	opt_F_h	
+0000:417D	opt_P_h	
+0000:4196	opt_W_h	
+0000:41B6	opt_G_h	
+0000:41CE	opt_A_h	
+0000:41DD	opt_S_h	
+0000:41FD	opt_O_h	
+0000:421C	opt_C_h	quiet
+0000:4222	parse_byte	decimal, wraps mod 256, CF if no digit
+0000:424C	print_dec_word	
+0000:4290	inst_env_find	find PMDOPT= in environment
+0000:42E5	opt_error_usage	PMDOPT: warning; cmdline: usage, exit FF
+0000:4316	inst_wait_calib	counts PIT IRQ0 ticks during busy loop -> [3150h] OPN wait loops, [3152h]
+0000:43CF	calib_pit_isr	bx++, EOI
+0000:4D63	irq_jumper_table	4 x {ascii INT digit, IRQ no, IVT address}: 00:'0' IRQ3 2Ch; 40:'6' IRQ13 54h; 80:'4' IRQ10 48h; C0:'5' IRQ12 50h
+0000:4D73	opt_table_install	
+0000:4DA7	opt_table_resident	
+0000:4DDE	resident_cmdline	'PMD ver.4.7g' copied to PSP:80

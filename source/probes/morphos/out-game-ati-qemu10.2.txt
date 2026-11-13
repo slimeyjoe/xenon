@@ -1,0 +1,12 @@
+xenon 1.1 (10.11.2026)
+storage: PROGDIR:saves/
+pack: 6906 KB in memory, loaded in 40 ms
+video: mode 0x41120000, RTG (BltBitMap) bitmaps, depth 8
+sound: core lite, 0 Hz (no audio output)
+stall at frame 1 (start-up): 15 ticks late, 1 frames behind in 277 ms: pack 10 reads 25972 bytes 0 ms (seeks 0 ms; first 0x6be967, largest 12000 at 0x10), present 1 (1 full) 55 ms, other 221 ms; audio task ran 0 ms of it; woken 0 ms late
+max ticks reached
+video: 1 full uploads, 0 flips (0 failed), 50 dirty uploads, 62 palette loads
+exit 0 after 2401 frames in 2420 ticks of real time (56.42 Hz)
+memory: engine peak 410 KB at frame 501 (fast 410, chip 0), largest block 375 KB, 0 bytes not freed; free low-water: chip 0 KB, fast 7943 KB below the start (of 2040, 902368 KB)
+stack: main 1720 of 4096 bytes used, audio 0 of 0
+timer: 1 stalls over ten ticks, 15 ticks lost in them

@@ -1,0 +1,16 @@
+sbprobe
+trailerprobe
+trailerprobe.hunk
+trailerprobe.raw
+payload.bin
+*.o
+opnbench
+opnbench-*
+bench-*/
+seekprobe
+iconprobe
+opnprof-*
+opnsum-*
+opn_lite_68k.lst
+winprobe
+keyprobe

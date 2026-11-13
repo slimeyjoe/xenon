@@ -1,0 +1,18 @@
+# Polish for the strings of K.CC (CG gallery), L.CC (load) and M.CC (music mode). One entry per
+# line: exact Japanese text<TAB>Polish. Same layout rules as lang/en/klm.txt; centred titles keep
+# the English centre column. DRAFT: to be reviewed by the Polish editor.
+　◆ 先に進む　　	◆ Dalej
+　◆ 前に戻る	◆ Wstecz
+　◆ 最後尾に進む	◆ Do ostatniego
+　◆ メニューに戻る　　　	◆ Powrót do menu
+　◆ メニューに戻る	◆ Powrót do menu
+　◆ 最初の絵に戻る　	◆ Do pierwszego obrazu
+\n　　　　　　　　　 ＬＡＤＹ’Ｓ　ＲＯＯＭ	\n                      BUDUAR
+　ゲームの続きをロードする。　	 Wczytaj zapisaną grę.
+　メニューへ戻る。	 Powrót do menu.
+　データ１をロードする。　	 Wczytaj zapis 1.
+　データ２をロードする。	 Wczytaj zapis 2.
+　データ３をロードする。	 Wczytaj zapis 3.
+　データ４をロードする。	 Wczytaj zapis 4.
+\n　　　　　　　　～　ミュージックモード　～	\n                ~ TRYB MUZYCZNY ~
+\n　　　　　　　　　　     　蝶	\n                          Motyl

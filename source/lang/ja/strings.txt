@@ -1,0 +1,16 @@
+# Engine messages, Japanese originals (docs/re/globals.md). key=value, UTF-8; mkpack encodes cp932.
+sysmenu_cancel=　キャンセル
+sysmenu_restart=　最初に戻る
+sysmenu_quit=　ゲーム終了
+quit_continue=　このままゲームを続ける。
+quit_really=　本当にゲームを終了する。
+omake_locked=　　　　　　　　ゲーム終了後にお楽しみ下さい
+no_save_data=データがセーブされていません
+file_open_error=ファイルがオープンできません
+disk_insert=ディスクをセットして下さい
+disk_wrong=ディスクが違います
+disk_not_game=ゲームディスクではありません
+disk_write_protect=ディスクへ書き込みができません
+disk_prompt=をドライブ２へセットして下さい
+menu_empty=menu : 選択項目がありません
+script_error=スクリプトエラー

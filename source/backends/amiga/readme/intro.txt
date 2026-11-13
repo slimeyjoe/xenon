@@ -1,0 +1,36 @@
+
+                 "Xenon: the limbs of phantasmagoria", 1994
+                   An unofficial port of the PC-9801 original
+
+                        Version 1.4, 13 November 2026
+
+
+ADULTS ONLY. This is an adult game. It contains explicit sexual scenes,
+some of them non-consensual. Do not play it if you are under 18 or if such
+content offends you.
+
+
+1. WHAT THE GAME IS
+===================
+
+Xenon is a Japanese visual novel published by C's Ware in 1994 for the NEC
+PC-9801. You read the story page by page and steer it at a few points by
+picking from a short menu.
+
+Kouji, a young man, is a paid test subject at a research and medical
+centre. A doctor treats his recurring nightmare with hypnosis. In the dream
+he is someone else, aboard a spaceship near an alien planet, and he cannot
+tell which world is the real one. The choices you make in the prologue send
+you into one of four dreams. Each one tells a different story with the same
+cast. There are seven endings in all.
+
+This port runs the original game's scripts, pictures and music unchanged.
+It plays in English by default, using a complete fan translation. A
+Polish translation and the original Japanese text are included as well
+(see LANG in section 5). With the voice data of the 1997 Windows version,
+made from your own copy (section 3), the characters speak their lines.
+
+The PC-98 version is reproduced faithfully. That includes its timing, its
+controls and its odd corners, which section 4 explains.
+
+

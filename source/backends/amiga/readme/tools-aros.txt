@@ -1,0 +1,3 @@
+Tools
+  Built with the GNU C compiler (gcc) of the AROS cross toolchain and the
+  AROS SDK.

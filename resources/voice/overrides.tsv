@@ -1,0 +1,5 @@
+# Hand corrections for re-tools/voicemap.py (applied after the automatic alignment).
+# script, offset (FD token in the Japanese bytecode, hex), part (segment after the n-th {KEY}),
+# clip (Windows clip name, or - to remove the automatic cue), note.
+script	offset	part	clip	note
+S0205	2BB7	0	KOH0069	PC-98 "んぎゃおぅ！！", Windows rewrote the line as "むきーっ！！"

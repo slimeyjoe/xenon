@@ -1,0 +1,35 @@
+2. SYSTEM REQUIREMENTS
+======================
+
+Operating system
+  AROS for x86_64 PCs with the ABIv11 system (AROS 2026.09 or newer,
+  AROS One 1.3 or newer). Tested on AROS 2026.09 running natively in a
+  virtual machine (QEMU/KVM with VMware SVGA and VESA graphics, ES1370
+  sound) and hosted on Linux.
+  32-bit AROS (i386, ABIv0) and the AROS versions for other processors
+  are not supported by this archive.
+
+Processor
+  Any x86_64 processor that runs AROS. The music synthesis uses about one
+  percent of a current PC.
+
+Memory
+  About 2 MB free. With about 8 MB free, the game loads all of its data
+  into memory at start-up and never touches the disk again.
+
+Graphics
+  Any graphics driver that AROS supports. The game asks AROS for the best
+  screen mode for 640x400 with 256 colours; when the driver has no such
+  mode it takes a larger one (640x480, or the VESA driver's single mode)
+  and shows the picture in its middle, with a black border.
+
+Sound
+  AHI with a working driver for your sound hardware (HDAudio, AC97,
+  SB128/ES1370 and others come with AROS), set up in the AHI
+  preferences. The game plays through unit 0 at 44.1 kHz by default.
+
+Hard disk
+  About 7 MB. The voices (optional, section 3) need 48 MB more (261 MB
+  for the original voice data).
+
+

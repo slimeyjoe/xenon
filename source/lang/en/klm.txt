@@ -1,0 +1,18 @@
+# English for the strings of K.CC (CG gallery), L.CC (load) and M.CC (music mode), which the
+# PC-98 translation patch never built. One entry per line: exact Japanese text<TAB>English.
+# Leading full-width spaces and the bullet are part of the option text (scripts.md §5.3).
+　◆ 先に進む　　	◆ Next
+　◆ 前に戻る	◆ Previous
+　◆ 最後尾に進む	◆ Last
+　◆ メニューに戻る　　　	◆ Back to menu
+　◆ メニューに戻る	◆ Back to menu
+　◆ 最初の絵に戻る　	◆ First picture
+\n　　　　　　　　　 ＬＡＤＹ’Ｓ　ＲＯＯＭ	\n                    LADY'S ROOM
+　ゲームの続きをロードする。　	 Load a saved game.
+　メニューへ戻る。	 Back to the menu.
+　データ１をロードする。　	 Load data 1.
+　データ２をロードする。	 Load data 2.
+　データ３をロードする。	 Load data 3.
+　データ４をロードする。	 Load data 4.
+\n　　　　　　　　～　ミュージックモード　～	\n                  ~ MUSIC MODE ~
+\n　　　　　　　　　　     　蝶	\n                        Butterfly

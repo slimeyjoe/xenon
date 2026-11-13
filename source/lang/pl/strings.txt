@@ -1,0 +1,17 @@
+# Engine messages, Polish. key=value, UTF-8 (ASCII, the Polish letters of tools/langs.py, and the
+# full-width space U+3000 for layout). DRAFT: to be reviewed by the Polish editor.
+sysmenu_cancel= Anuluj
+sysmenu_restart= Powrót do ekranu tytułowego
+sysmenu_quit= Wyjdź z gry
+quit_continue= Kontynuuj grę.
+quit_really= Naprawdę wyjdź z gry.
+omake_locked=                       Dostępne po ukończeniu gry
+no_save_data=Brak zapisanych danych
+file_open_error=Nie można otworzyć pliku
+disk_insert=Włóż dysk
+disk_wrong=Niewłaściwy dysk
+disk_not_game=To nie jest dysk z grą
+disk_write_protect=Dysk jest zabezpieczony przed zapisem
+disk_prompt=: włóż go do napędu 2
+menu_empty=menu: brak opcji do wyboru
+script_error=Błąd skryptu

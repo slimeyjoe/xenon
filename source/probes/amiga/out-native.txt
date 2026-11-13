@@ -1,0 +1,173 @@
+% Version
+Kickstart 40.68, Could not find version information for ''
+% Avail
+Type  Available    In-Use   Maximum   Largest
+chip    2059048     37080   2096128   2058544
+fast    8799800    113096   8912896   8275248
+total  10858848    150176  11009024   8275248
+% C:sbprobe 0x8004 native
+sbprobe: intuition 40.85 graphics 40.24 ChipRevBits0=0x13
+sbprobe: AvailMem chip=2059048 fast=8765592
+sbprobe: no rtg.library
+sbprobe: timer.device open, E-clock 709379 Hz
+sbprobe: Delay(50) = 1001 ms E-clock, 50 VERTB interrupts
+sbprobe: opening screen mode 0x00008004 640x400x4 tag=native
+sbprobe: mode 0x00008004 not in display database
+source bitmap: InitBitMap 640x400x4 BytesPerRow=80 Planes[0]=0x223fd0 TypeOfMem=0x605 FAST
+source: bm=0x21fe3c BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+source: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+source: Planes[0]=0x223fd0 TypeOfMem=0x605 FAST
+source: Planes[1]=0x22bcd0 TypeOfMem=0x605 FAST
+source: Planes[2]=0x2339d0 TypeOfMem=0x605 FAST
+source: Planes[3]=0x23b6d0 TypeOfMem=0x605 FAST
+screen opened: 640x400, ViewPort modes 0xc004, GetVPModeID=0x00008004, BitMap 0x243414
+screen: bm=0x243414 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+screen: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+screen: Planes[0]=0x28ad0 TypeOfMem=0x703 CHIP
+screen: Planes[1]=0x307d0 TypeOfMem=0x703 CHIP
+screen: Planes[2]=0x384d0 TypeOfMem=0x703 CHIP
+screen: Planes[3]=0x401d0 TypeOfMem=0x703 CHIP
+LoadRGB32 done
+AllocScreenBuffer: sb[0]=0x243bbc (SB_SCREEN_BITMAP) sb[1]=0x243c24 (0)
+sb[0]: sb_BitMap=0x243414 (== screen bitmap) sb_DBufInfo=0x243bc8
+sb[0]: bm=0x243414 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+sb[0]: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+sb[0]: Planes[0]=0x28ad0 TypeOfMem=0x703 CHIP
+sb[0]: Planes[1]=0x307d0 TypeOfMem=0x703 CHIP
+sb[0]: Planes[2]=0x384d0 TypeOfMem=0x703 CHIP
+sb[0]: Planes[3]=0x401d0 TypeOfMem=0x703 CHIP
+sb[1]: sb_BitMap=0x243c8c (!= screen bitmap) sb_DBufInfo=0x243c30
+sb[1]: bm=0x243c8c BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+sb[1]: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+sb[1]: Planes[0]=0x481e8 TypeOfMem=0x703 CHIP
+sb[1]: Planes[1]=0x4fee8 TypeOfMem=0x703 CHIP
+sb[1]: Planes[2]=0x57be8 TypeOfMem=0x703 CHIP
+sb[1]: Planes[3]=0x5f8e8 TypeOfMem=0x703 CHIP
+(a) BltBitMap(FAST source -> sb[1]) done
+verify (a) hidden sb[1] before flip: first mismatch at 3,2 got 0 expected 15
+verify (a) hidden sb[1] before flip: ReadPixel 319/324 sampled pixels differ -> WRONG
+verify (a) hidden sb[1] after 2nd BltBitMap: first mismatch at 3,2 got 0 expected 15
+verify (a) hidden sb[1] after 2nd BltBitMap: ReadPixel 319/324 sampled pixels differ -> WRONG
+(a) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (a) BltBitMap from FAST: first mismatch at 3,2 got 0 expected 15
+verify (a) BltBitMap from FAST: ReadPixel 319/324 sampled pixels differ -> WRONG
+verify (a) BltBitMap from FAST: plane compare 70061/128000 bytes differ -> WRONG
+SHOT 1 (after BltBitMap from FAST + ChangeScreenBuffer: stripes, rect colour 9 (orange)): requesting DH0:shot_native_1.req
+SHOT 1: ack after 35 polls
+(b) CPU copy of planes into sb[0] (BMF_STANDARD set, dst BytesPerRow=80)
+(b) ChangeScreenBuffer(sb[0]) ok=1, zero-returns before success=0
+verify (b) CPU plane copy: ReadPixel 0/324 sampled pixels differ -> OK
+verify (b) CPU plane copy: plane compare 0/128000 bytes differ -> OK
+SHOT 2 (after CPU plane copy+flip: rect colour 5 (yellow)): requesting DH0:shot_native_2.req
+SHOT 2: ack after 37 polls
+(c) BltBitMap(CHIP source -> sb[1]) done
+(c) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (c) BltBitMap from CHIP: ReadPixel 0/324 sampled pixels differ -> OK
+verify (c) BltBitMap from CHIP: plane compare 0/128000 bytes differ -> OK
+SHOT 3 (after BltBitMap from CHIP + flip: rect colour 3 (green)): requesting DH0:shot_native_3.req
+SHOT 3: ack after 37 polls
+flip test (no ports): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 2 ms, 0 VERTB
+flip test (SafeMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 safe messages, 16 ms, 1 VERTB
+flip test (DispMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 disp messages, 400 ms, 20 VERTB
+flip test (WaitTOF after each): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 400 ms, 20 VERTB
+verify end state: ReadPixel 0/324 sampled pixels differ -> OK
+verify end state: plane compare 0/128000 bytes differ -> OK
+SHOT 4 (end state: sb[1] displayed again (rect colour 3, green)): requesting DH0:shot_native_4.req
+SHOT 4: ack after 30 polls
+FreeScreenBuffer done
+CloseScreen done
+sbprobe: done
+% C:sbprobe 0x29004 nativepal
+sbprobe: intuition 40.85 graphics 40.24 ChipRevBits0=0x13
+sbprobe: AvailMem chip=2017536 fast=8762656
+sbprobe: no rtg.library
+sbprobe: timer.device open, E-clock 709379 Hz
+sbprobe: Delay(50) = 1005 ms E-clock, 51 VERTB interrupts
+sbprobe: opening screen mode 0x00029004 640x400x4 tag=nativepal
+sbprobe: mode 0x00029004 not in display database
+source bitmap: InitBitMap 640x400x4 BytesPerRow=80 Planes[0]=0x2243c8 TypeOfMem=0x605 FAST
+source: bm=0x220234 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+source: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+source: Planes[0]=0x2243c8 TypeOfMem=0x605 FAST
+source: Planes[1]=0x22c0c8 TypeOfMem=0x605 FAST
+source: Planes[2]=0x233dc8 TypeOfMem=0x605 FAST
+source: Planes[3]=0x243bf8 TypeOfMem=0x605 FAST
+screen opened: 640x400, ViewPort modes 0xd004, GetVPModeID=0x00029004, BitMap 0x21abc4
+screen: bm=0x21abc4 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+screen: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+screen: Planes[0]=0x32b98 TypeOfMem=0x703 CHIP
+screen: Planes[1]=0x3a898 TypeOfMem=0x703 CHIP
+screen: Planes[2]=0x42598 TypeOfMem=0x703 CHIP
+screen: Planes[3]=0x4a298 TypeOfMem=0x703 CHIP
+LoadRGB32 done
+AllocScreenBuffer: sb[0]=0x23bfc4 (SB_SCREEN_BITMAP) sb[1]=0x23c29c (0)
+sb[0]: sb_BitMap=0x21abc4 (== screen bitmap) sb_DBufInfo=0x23c240
+sb[0]: bm=0x21abc4 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+sb[0]: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+sb[0]: Planes[0]=0x32b98 TypeOfMem=0x703 CHIP
+sb[0]: Planes[1]=0x3a898 TypeOfMem=0x703 CHIP
+sb[0]: Planes[2]=0x42598 TypeOfMem=0x703 CHIP
+sb[0]: Planes[3]=0x4a298 TypeOfMem=0x703 CHIP
+sb[1]: sb_BitMap=0x23c304 (!= screen bitmap) sb_DBufInfo=0x23c2a8
+sb[1]: bm=0x23c304 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=400
+sb[1]: struct: BytesPerRow=80 Rows=400 Flags=0x0 Depth=4 pad=0x0
+sb[1]: Planes[0]=0x52400 TypeOfMem=0x703 CHIP
+sb[1]: Planes[1]=0x5a100 TypeOfMem=0x703 CHIP
+sb[1]: Planes[2]=0x61e00 TypeOfMem=0x703 CHIP
+sb[1]: Planes[3]=0x69b00 TypeOfMem=0x703 CHIP
+(a) BltBitMap(FAST source -> sb[1]) done
+verify (a) hidden sb[1] before flip: first mismatch at 3,2 got 0 expected 15
+verify (a) hidden sb[1] before flip: ReadPixel 319/324 sampled pixels differ -> WRONG
+verify (a) hidden sb[1] after 2nd BltBitMap: first mismatch at 3,2 got 0 expected 15
+verify (a) hidden sb[1] after 2nd BltBitMap: ReadPixel 319/324 sampled pixels differ -> WRONG
+(a) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (a) BltBitMap from FAST: first mismatch at 3,2 got 0 expected 15
+verify (a) BltBitMap from FAST: ReadPixel 319/324 sampled pixels differ -> WRONG
+verify (a) BltBitMap from FAST: plane compare 70835/128000 bytes differ -> WRONG
+SHOT 1 (after BltBitMap from FAST + ChangeScreenBuffer: stripes, rect colour 9 (orange)): requesting DH0:shot_nativepal_1.req
+SHOT 1: ack after 30 polls
+(b) CPU copy of planes into sb[0] (BMF_STANDARD set, dst BytesPerRow=80)
+(b) ChangeScreenBuffer(sb[0]) ok=1, zero-returns before success=0
+verify (b) CPU plane copy: ReadPixel 0/324 sampled pixels differ -> OK
+verify (b) CPU plane copy: plane compare 0/128000 bytes differ -> OK
+SHOT 2 (after CPU plane copy+flip: rect colour 5 (yellow)): requesting DH0:shot_nativepal_2.req
+SHOT 2: ack after 37 polls
+(c) BltBitMap(CHIP source -> sb[1]) done
+(c) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (c) BltBitMap from CHIP: ReadPixel 0/324 sampled pixels differ -> OK
+verify (c) BltBitMap from CHIP: plane compare 0/128000 bytes differ -> OK
+SHOT 3 (after BltBitMap from CHIP + flip: rect colour 3 (green)): requesting DH0:shot_nativepal_3.req
+SHOT 3: ack after 37 polls
+flip test (no ports): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 2 ms, 0 VERTB
+flip test (SafeMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 safe messages, 16 ms, 1 VERTB
+flip test (DispMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 disp messages, 400 ms, 20 VERTB
+flip test (WaitTOF after each): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 400 ms, 20 VERTB
+verify end state: ReadPixel 0/324 sampled pixels differ -> OK
+verify end state: plane compare 0/128000 bytes differ -> OK
+SHOT 4 (end state: sb[1] displayed again (rect colour 3, green)): requesting DH0:shot_nativepal_4.req
+SHOT 4: ack after 30 polls
+FreeScreenBuffer done
+CloseScreen done
+sbprobe: done
+% C:trailerprobe.hunk
+trailerprobe: started from CLI (_WBenchMsg=0 argc=1)
+CLI: GetProgramName="C:trailerprobe.hunk" argv[0]="C:trailerprobe.hunk"
+CLI: GetProgramDir=0x86861 "dh0:C"
+file "C:trailerprobe.hunk" size 9572
+trailer read 16 bytes: 00 00 03 f2 -> NO TRAILER, payload size 3942842368
+trailerprobe: done
+% Why
+The last command did not set a return code
+% C:trailerprobe.raw
+% Why
+The last command did not set a return code
+% C:trailerprobe
+trailerprobe: started from CLI (_WBenchMsg=0 argc=1)
+CLI: GetProgramName="C:trailerprobe" argv[0]="C:trailerprobe"
+CLI: GetProgramDir=0x86867 "dh0:C"
+file "C:trailerprobe" size 13632
+trailer read 16 bytes: 58 50 4b 54 -> XPKT FOUND, payload size 4036
+payload at offset 9580, first 16 bytes: 58 45 4e 4f 4e 2d 50 41 59 4c 4f 41 44 2d 54 45  "XENON-PAYLOAD-TE"
+trailerprobe: done
+% Why
+The last command did not set a return code

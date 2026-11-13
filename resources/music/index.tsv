@@ -1,0 +1,32 @@
+file	size	mc_ver	parts_used	fm	ssg	adpcm	rhythm	tempo	ticks_total	ticks_loop	loop	approx_sec_intro	approx_sec_loop	n_voices	status_marks	title	composer	arranger	memo	music_mode_title	engine_use	scripts
+XEN_03A.M	350	47	ABCGH	ABC	GH			T200	30	0	none	0.5	0.0	2		Ｘenon Ｎo.03	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= Ｓound effect = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".		engine: opening logo 0E31:0503	
+XEN_03B.M	382	47	ABCG	ABC	G			T200	288	192	L	1.6	3.1	3		Ｘenon Ｎo.03	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= Ｓound effect = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".		engine: opening 0E31:0543	
+XENON_01.M	980	47	ABCDGHI	ABCD	GHI			T170	3480	2712	L	19.1	67.3	3	~+1@tick384	Ｘenon Ｎo.01 "Ｄesert Ｓtorm"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= Ｏpening Ｂridge = (Prototype) | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Desert Storm	S00* use op 0x48 0 (waits for ~+1)	S00 S00B S00C S0111
+XENON_02.M	4042	47	ABCDGHI	ABCD	GHI			T180	8457	6144	L	50.7	134.7	9	~+1@tick768	Ｘenon Ｎo.02 "Ｘenon"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= Ｍain Ｔheme = (Prototype) | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	XENON	engine: staff roll 0E31:05EC (waits for ~+1)	
+XENON_03.M	2962	47	ABCDGHI	ABCD	GHI			T160	6336	6336	L	0.0	175.5	2		Ｘenon Ｎo.03 "Ｒanphar Ⅰ"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= Ｔheme of "Ｍai" For Ｎight = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Lanhua		S0105 S0107 S0109 S0110
+XENON_04.M	2239	47	ABCDGHI	ABCD	GHI			T170	4608	4608	L	0.0	114.3	3		Ｘenon Ｎo.04 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	蝶		S0103 S0105 S0202 S0203
+XENON_05.M	5601	47	ABCDGHI	ABCD	GHI			T170	5376	4608	L	19.1	114.3	9		Ｘenon Ｎo.05 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	<< QUADRA >>		S0106 S0301A S0302B S0402
+XENON_06.M	4599	47	ABCDGHI	ABCD	GHI			T170	4608	4608	L	0.0	114.3	9		Ｘenon Ｎo.06 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Ending II		S0207 S0306A K(CG gallery)
+XENON_07.M	500	47	ABCG	ABC	G			T170	579	0	[ ]0	14.4	0.0	2		Ｘenon Ｎo.07 "Ｓound Ｅffect No.01"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= シャトル発進 = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0106 S0110
+XENON_08.M	297	47	A	A				T170	204	6	[ ]0	4.9	0.1	1		Ｘenon Ｎo.08 "Ｓound Ｅffect No.02"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= シャワー = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0302A S0303B
+XENON_09.M	3279	47	ABCDGHI	ABCD	GHI			T170	5760	5376	L	9.5	133.4	8		Ｘenon Ｎo.09 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Synaps		S0111 S0207 S0301 S0301B
+XENON_10.M	2544	47	ABCDGHI	ABCD	GHI			T170	6720	6720	L	0.0	166.7	7		Ｘenon Ｎo.10 "Ｄesert Ｓtorm"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= Ｅnding = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Ago (M.CC references nonexistent "xenon_102")		S0111
+XENON_11.M	1029	47	ABCDGHI	ABCD	GHI			T160	1920	1920	L	0.0	53.2	2		Ｘenon Ｎo.11 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Trust		S0108 S0111 S0204 S0206 S0301 S0301B S0303A S0304A S0304B S0305B S0306B S0402
+XENON_12.M	888	47	ABCDGHI	ABCD	GHI			T170	3168	3168	L	0.0	78.6	2		Ｘenon Ｎo.12 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Silence		S00 S00B S00C S0102 S0105 S0107 S0110 S0202 S0207 S0301 S0301B S0303B S0305B S0402
+XENON_13.M	2150	47	ABGHI	AB	GHI			T170	6912	6144	L	19.1	152.4	3		Ｘenon Ｎo.13 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Encoder		S0101 S0104 S0105 S0107 S0201 S0203 S0206 S0301 S0301B S0403
+XENON_14.M	406	47	A	A				T200	96	48	[ ]0	0.8	0.8	2		Ｘenon Ｎo.14 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0106
+XENON_15.M	3549	47	ABCGHI	ABC	GHI			T200	3264	2496	L/[ ]0	12.4	40.3	8		Ｘenon Ｎo.15 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Emergency		S0106 S0303A S0304B
+XENON_16.M	1622	47	ABCDGHI	ABCD	GHI			T170	5568	5568	L	0.0	138.1	5		Ｘenon Ｎo.16 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Moon		S0104 S0108 S0110 S0401 S0403
+XENON_17.M	2137	47	ABCDGHI	ABCD	GHI			T170	7680	7680	L	0.0	190.5	2		Ｘenon Ｎo.17 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Dream		S00 S00B S00C S0104 S0105 S0106 S0107 S0108 S0109 S0110 S0202 S0203 S0205 S0301A S0301B S0302A S0302B S0303B S0304A S0305A S0305B S0306B S0401 S0402
+XENON_18.M	482	47	ABGHI	AB	GHI			T170	204	6	[ ]0	4.9	0.1	2		Ｘenon Ｎo.18 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0104 S0106 S0301A S0301B
+XENON_19.M	325	47	AB	AB				T170	192	96	[ ]0	2.4	2.4	1		Ｘenon Ｎo.07 "Ｓound Ｅffect No.01"	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= シャトル発進 = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0106 S0110
+XENON_20.M	276	47	A	A				T190	320	160	[ ]0	3.0	3.0	1		Ｘenon Ｎo.20 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0107
+XENON_21.M	3294	47	ABCDGHI	ABCD	GHI			T170	7680	7680	L	0.0	190.5	7		Ｘenon Ｎo.21 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Towering Past		S0111 S0401
+XENON_22.M	1795	47	ABCDGHI	ABCD	GHI			T200	6180	6144	L	0.6	99.2	2		Ｘenon Ｎo.22 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	7th		S0110 S0304A S0305A S0305B
+XENON_23.M	854	47	ABCGHI	ABC	GHI			T160	1548	1536	L	0.3	42.5	1		Ｘenon Ｎo.28 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0203 S0205 S0304A
+XENON_24.M	4842	47	ABCDGHI	ABCD	GHI			T193	4224	4224	L	0.0	76.8	8		Ｘenon Ｎo.24 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0205 S0206 S0303A S0304A S0304B S0305A S0306B S0401 S0402
+XENON_25.M	3985	47	ABCDGHI	ABCD	GHI			T185	5400	5376	L	0.5	110.1	3		Ｘenon Ｎo.27 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0202 S0203 S0204 S0205 S0304A S0305B S0306A
+XENON_26.M	4054	47	ABCDGHI	ABCD	GHI			T180	4668	4608	L	1.3	101.0	8		Ｘenon Ｎo.26 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".	Mood		S0301A S0301B S0302A S0303B S0305A S0305B S0306A
+XENON_27.M	379	47	ABCGHI	ABC	GHI			T180	384	0	none	8.4	0.0	1		Ｘenon Ｎo.27 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0108 S0305A S0402 S0403
+XENON_28.M	1482	47	ABCGHI	ABC	GHI			T170	1536	0	none	38.1	0.0	6		Ｘenon Ｎo.15 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			
+XENON_29.M	3452	47	ABGHI	AB	GHI			T200	2880	2496	L	6.2	40.3	7		Ｘenon Ｎo.28 ""	Ｒyu Ｕmemoto.	Ｒyu Ｕmemoto.	= = | (C)Ｃ's ware office. | (R)Ｓtaff "Ｙ-arm".			S0207 S0306A

@@ -1,0 +1,12 @@
+6. KNOWN LIMITATIONS
+====================
+
+  - Tested in a virtual machine and hosted on Linux only, not on a real
+    PC. Reports from AROS users are welcome.
+  - The screen is not synchronised with the display's refresh: a page
+    switch can tear on some graphics drivers.
+  - Save files of the PC-98 version cannot be imported.
+  - The game does not pause when you switch to Wanderer.
+  - A window (WINDOW) has no double buffering: a new picture may tear.
+
+

@@ -1,0 +1,12 @@
+screen mode 0x41120000
+band 0 BltBitMap InitBitMap d8 (as the game)        0 0 0 0  WRONG
+band 1 BltBitMap InitBitMap d8 separate planes      0 0 0 0  WRONG
+  AllocBitMap(no friend): flags 0x0 bpr 80
+band 2 skipped: not BMF_STANDARD
+band 3 BltBitMapRastPort InitBitMap d8              0 0 0 0  WRONG
+band 4 WriteChunkyPixels                            16 20 24 28  OK
+band 5 WritePixelArray8                             16 20 24 28  OK
+band 6 BltBitMap InitBitMap d4                      0 0 8 8  WRONG
+  AllocBitMap(friend): flags 0x0
+band 7 BltBitMap friend bitmap (chunky->chunky)     0 0 0 0  WRONG
+done

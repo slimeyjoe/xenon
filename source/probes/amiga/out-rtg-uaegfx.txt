@@ -1,0 +1,189 @@
+% Version
+Kickstart 40.68, Workbench 40.42
+% Avail
+Type  Available    In-Use   Maximum   Largest
+chip    2058880     37248   2096128   2058072
+fast   25232760    457352  25690112  16313120
+total  27291640    494600  27786240  16313120
+% List DEVS:Monitors LIBS:Picasso96
+Directory "DEVS:Monitors" on Sunday 08-Nov-26
+uaegfx.info                  526 ----rwed Today     02:44:56
+uaegfx                      2720 ----rwed Today     02:44:56
+PAL.info                     356 ----rwed Today     02:44:56
+PAL                         2936 ----rwed Today     02:44:56
+4 files - 19 blocks used
+
+Directory "LIBS:Picasso96" on Sunday 08-Nov-26
+emulation.library          39652 ----rwed Today     02:44:56
+uaegfx.card                 1704 ----rwed Today     02:44:56
+fastlayers.library          1460 ----rwed Today     02:44:56
+rtg.library               216548 ----rwed Today     02:44:56
+4 files - 512 blocks used
+% C:sbprobe uaegfx rtg
+sbprobe: intuition 40.85 graphics 40.24 ChipRevBits0=0x1f
+sbprobe: AvailMem chip=2058880 fast=25198552
+sbprobe: rtg.library (Picasso96) is loaded
+sbprobe: timer.device open, E-clock 709379 Hz
+sbprobe: Delay(50) = 1016 ms E-clock, 51 VERTB interrupts
+  mode 0x00000000 "PAL:Low Res" nominal 320x256 maxdepth 8 propflags 0x001cebe0
+  mode 0x00008000 "PAL:High Res" nominal 640x256 maxdepth 8 propflags 0x001cebe0
+  mode 0x00008020 "PAL:Super-High Res" nominal 1280x256 maxdepth 8 propflags 0x001cebf0
+  mode 0x00000800 "(no name)" nominal 320x256 maxdepth 8 propflags 0x001ceae8
+  mode 0x00000080 "(no name)" nominal 320x256 maxdepth 6 propflags 0x001cfae0
+  mode 0x00000004 "PAL:Low Res Laced" nominal 320x512 maxdepth 8 propflags 0x001cebe1
+  mode 0x00008004 "PAL:High Res Laced" nominal 640x512 maxdepth 8 propflags 0x001cebe1
+  mode 0x00008024 "PAL:Super-High Res Laced" nominal 1280x512 maxdepth 8 propflags 0x001cebf1
+  mode 0x00000804 "(no name)" nominal 320x512 maxdepth 8 propflags 0x001ceae9
+  mode 0x00000084 "(no name)" nominal 320x512 maxdepth 6 propflags 0x001cfae1
+  mode 0x00000400 "(no name)" nominal 320x256 maxdepth 8 propflags 0x001ceae2
+  mode 0x00008400 "(no name)" nominal 640x256 maxdepth 8 propflags 0x001ceae2
+  mode 0x00008420 "(no name)" nominal 1280x256 maxdepth 8 propflags 0x001ceaf2
+  mode 0x00000404 "(no name)" nominal 320x512 maxdepth 8 propflags 0x001ceae3
+  mode 0x00008404 "(no name)" nominal 640x512 maxdepth 8 propflags 0x001ceae3
+  mode 0x00008424 "(no name)" nominal 1280x512 maxdepth 8 propflags 0x001ceaf3
+  mode 0x00000440 "(no name)" nominal 320x256 maxdepth 8 propflags 0x001ceae6
+  mode 0x00008440 "(no name)" nominal 640x256 maxdepth 8 propflags 0x001ceae6
+  mode 0x00008460 "(no name)" nominal 1280x256 maxdepth 8 propflags 0x001ceaf6
+  mode 0x00000444 "(no name)" nominal 320x512 maxdepth 8 propflags 0x001ceae7
+  mode 0x00008444 "(no name)" nominal 640x512 maxdepth 8 propflags 0x001ceae7
+  mode 0x00008464 "(no name)" nominal 1280x512 maxdepth 8 propflags 0x001ceaf7
+  mode 0x00008800 "(no name)" nominal 640x256 maxdepth 8 propflags 0x001deae8
+  mode 0x00008820 "(no name)" nominal 1280x256 maxdepth 8 propflags 0x001deae8
+  mode 0x00008804 "(no name)" nominal 640x512 maxdepth 8 propflags 0x001deae9
+  mode 0x00008824 "(no name)" nominal 1280x512 maxdepth 8 propflags 0x001deae9
+  mode 0x00008080 "(no name)" nominal 640x256 maxdepth 6 propflags 0x001dfae0
+  mode 0x000080a0 "(no name)" nominal 1280x256 maxdepth 6 propflags 0x001dfae0
+  mode 0x00008084 "(no name)" nominal 640x512 maxdepth 6 propflags 0x001dfae1
+  mode 0x000080a4 "(no name)" nominal 1280x512 maxdepth 6 propflags 0x001dfae1
+  mode 0x00000008 "(no name)" nominal 320x128 maxdepth 8 propflags 0x001feae0
+  mode 0x00000808 "(no name)" nominal 320x128 maxdepth 8 propflags 0x001feae8
+  mode 0x00000088 "(no name)" nominal 320x128 maxdepth 6 propflags 0x001ffae0
+  mode 0x00008808 "(no name)" nominal 640x128 maxdepth 8 propflags 0x001feae8
+  mode 0x00021000 "PAL:Low Res" nominal 320x256 maxdepth 8 propflags 0x001cebe0
+  mode 0x00029000 "PAL:High Res" nominal 640x256 maxdepth 8 propflags 0x001cebe0
+  mode 0x00029020 "PAL:Super-High Res" nominal 1280x256 maxdepth 8 propflags 0x001cebf0
+  mode 0x00021800 "(no name)" nominal 320x256 maxdepth 8 propflags 0x001ceae8
+  mode 0x00021080 "(no name)" nominal 320x256 maxdepth 6 propflags 0x001cfae0
+  mode 0x00021004 "PAL:Low Res Laced" nominal 320x512 maxdepth 8 propflags 0x001cebe1
+  mode 0x00029004 "PAL:High Res Laced" nominal 640x512 maxdepth 8 propflags 0x001cebe1
+  mode 0x00029024 "PAL:Super-High Res Laced" nominal 1280x512 maxdepth 8 propflags 0x001cebf1
+  mode 0x00021804 "(no name)" nominal 320x512 maxdepth 8 propflags 0x001ceae9
+  mode 0x00021084 "(no name)" nominal 320x512 maxdepth 6 propflags 0x001cfae1
+  mode 0x00021400 "(no name)" nominal 320x256 maxdepth 8 propflags 0x001ceae2
+  mode 0x00029400 "(no name)" nominal 640x256 maxdepth 8 propflags 0x001ceae2
+  mode 0x00029420 "(no name)" nominal 1280x256 maxdepth 8 propflags 0x001ceaf2
+  mode 0x00021404 "(no name)" nominal 320x512 maxdepth 8 propflags 0x001ceae3
+  mode 0x00029404 "(no name)" nominal 640x512 maxdepth 8 propflags 0x001ceae3
+  mode 0x00029424 "(no name)" nominal 1280x512 maxdepth 8 propflags 0x001ceaf3
+  mode 0x00021440 "(no name)" nominal 320x256 maxdepth 8 propflags 0x001ceae6
+  mode 0x00029440 "(no name)" nominal 640x256 maxdepth 8 propflags 0x001ceae6
+  mode 0x00029460 "(no name)" nominal 1280x256 maxdepth 8 propflags 0x001ceaf6
+  mode 0x00021444 "(no name)" nominal 320x512 maxdepth 8 propflags 0x001ceae7
+  mode 0x00029444 "(no name)" nominal 640x512 maxdepth 8 propflags 0x001ceae7
+  mode 0x00029464 "(no name)" nominal 1280x512 maxdepth 8 propflags 0x001ceaf7
+  mode 0x00029800 "(no name)" nominal 640x256 maxdepth 8 propflags 0x001deae8
+  mode 0x00029820 "(no name)" nominal 1280x256 maxdepth 8 propflags 0x001deae8
+  mode 0x00029804 "(no name)" nominal 640x512 maxdepth 8 propflags 0x001deae9
+  mode 0x00029824 "(no name)" nominal 1280x512 maxdepth 8 propflags 0x001deae9
+  mode 0x00029080 "(no name)" nominal 640x256 maxdepth 6 propflags 0x001dfae0
+  mode 0x000290a0 "(no name)" nominal 1280x256 maxdepth 6 propflags 0x001dfae0
+  mode 0x00029084 "(no name)" nominal 640x512 maxdepth 6 propflags 0x001dfae1
+  mode 0x000290a4 "(no name)" nominal 1280x512 maxdepth 6 propflags 0x001dfae1
+  mode 0x00021008 "(no name)" nominal 320x128 maxdepth 8 propflags 0x001feae0
+  mode 0x00021808 "(no name)" nominal 320x128 maxdepth 8 propflags 0x001feae8
+  mode 0x00021088 "(no name)" nominal 320x128 maxdepth 6 propflags 0x001ffae0
+  mode 0x00029808 "(no name)" nominal 640x128 maxdepth 8 propflags 0x001feae8
+  mode 0x50ff1000 "UAE: 320x 200  8bit" nominal 320x200 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50ff1100 "UAE: 320x 200 16bit PC" nominal 320x200 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50ff1303 "UAE: 320x 200 32bit BGRA" nominal 320x200 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50011000 "UAE: 320x 240  8bit" nominal 320x240 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50011100 "UAE: 320x 240 16bit PC" nominal 320x240 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50011303 "UAE: 320x 240 32bit BGRA" nominal 320x240 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50091000 "UAE: 320x 256  8bit" nominal 320x256 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50091100 "UAE: 320x 256 16bit PC" nominal 320x256 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50091303 "UAE: 320x 256 32bit BGRA" nominal 320x256 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50fc1000 "UAE: 640x 400  8bit" nominal 640x400 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50fc1100 "UAE: 640x 400 16bit PC" nominal 640x400 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50fc1303 "UAE: 640x 400 32bit BGRA" nominal 640x400 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50031000 "UAE: 640x 480  8bit" nominal 640x480 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50031100 "UAE: 640x 480 16bit PC" nominal 640x480 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50031303 "UAE: 640x 480 32bit BGRA" nominal 640x480 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x500a1000 "UAE: 640x 512  8bit" nominal 640x512 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x500a1100 "UAE: 640x 512 16bit PC" nominal 640x512 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x500a1303 "UAE: 640x 512 32bit BGRA" nominal 640x512 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50041000 "UAE: 800x 600  8bit" nominal 800x600 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50041100 "UAE: 800x 600 16bit PC" nominal 800x600 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50041303 "UAE: 800x 600 32bit BGRA" nominal 800x600 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50051000 "UAE:1024x 768  8bit" nominal 1024x768 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50051100 "UAE:1024x 768 16bit PC" nominal 1024x768 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50051303 "UAE:1024x 768 32bit BGRA" nominal 1024x768 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x508e1000 "UAE:1280x 720  8bit" nominal 1280x720 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x508e1100 "UAE:1280x 720 16bit PC" nominal 1280x720 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x508e1303 "UAE:1280x 720 32bit BGRA" nominal 1280x720 maxdepth 24 propflags 0x00104380 RTG
+  mode 0x50071000 "UAE:1280x1024  8bit" nominal 1280x1024 maxdepth 8 propflags 0x00104380 RTG
+  mode 0x50071100 "UAE:1280x1024 16bit PC" nominal 1280x1024 maxdepth 16 propflags 0x00104380 RTG
+  mode 0x50071303 "UAE:1280x1024 32bit BGRA" nominal 1280x1024 maxdepth 24 propflags 0x00104380 RTG
+  mode 0xfff01000 "UAE0-P96Mode  8bit" nominal 320x200 maxdepth 8 propflags 0x00104380 RTG
+  mode 0xfff01100 "UAE0-P96Mode 16bit PC" nominal 320x200 maxdepth 16 propflags 0x00104380 RTG
+  mode 0xfff01303 "UAE0-P96Mode 32bit BGRA" nominal 320x200 maxdepth 24 propflags 0x00104380 RTG
+display database: 101 modes, 33 RTG; chosen 640x480x8: 0x50031000
+BestModeID(640x480x8, MonitorID 0x50031000) = 0x50031000
+BestModeID(640x480x8, DIPFMustHave FOREIGN) = 0xffffffff
+sbprobe: opening screen mode 0x50031000 640x480x4 tag=rtg
+sbprobe: mode name "UAE: 640x 480  8bit"
+source bitmap: InitBitMap 640x480x4 BytesPerRow=80 Planes[0]=0x40078b78 TypeOfMem=0x405 FAST
+source: bm=0x4006ec74 BMA_FLAGS=0xa STANDARD DISPLAYABLE BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=480
+source: struct: BytesPerRow=80 Rows=480 Flags=0x0 Depth=4 pad=0x0
+source: Planes[0]=0x40078b78 TypeOfMem=0x405 FAST
+source: Planes[1]=0x40082178 TypeOfMem=0x405 FAST
+source: Planes[2]=0x4008b778 TypeOfMem=0x405 FAST
+source: Planes[3]=0x40094d78 TypeOfMem=0x405 FAST
+screen opened: 640x480, ViewPort modes 0x5000, GetVPModeID=0x50031000, BitMap 0x40022aa4
+screen: bm=0x40022aa4 BMA_FLAGS=0x0 !STANDARD BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=480
+screen: struct: BytesPerRow=640 Rows=480 Flags=0x0 Depth=4 pad=0xf8c1
+screen: Planes[0]=0x41000000 TypeOfMem=0x0 (not RAM)
+screen: Planes[1]=0x4009e37c TypeOfMem=0x405 FAST
+screen: Planes[2]=0x4009e37c TypeOfMem=0x405 FAST
+screen: Planes[3]=0 TypeOfMem=0x0 (not RAM)
+LoadRGB32 done
+AllocScreenBuffer: sb[0]=0x4001d49c (SB_SCREEN_BITMAP) sb[1]=0x4001d4ac (0)
+sb[0]: sb_BitMap=0x40022aa4 (== screen bitmap) sb_DBufInfo=0x4002ea90
+sb[0]: bm=0x40022aa4 BMA_FLAGS=0x0 !STANDARD BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=480
+sb[0]: struct: BytesPerRow=640 Rows=480 Flags=0x0 Depth=4 pad=0xf8c1
+sb[0]: Planes[0]=0x41000000 TypeOfMem=0x0 (not RAM)
+sb[0]: Planes[1]=0x4009e37c TypeOfMem=0x405 FAST
+sb[0]: Planes[2]=0x4009e37c TypeOfMem=0x405 FAST
+sb[0]: Planes[3]=0 TypeOfMem=0x0 (not RAM)
+sb[1]: sb_BitMap=0x4002eca4 (!= screen bitmap) sb_DBufInfo=0x4002eb60
+sb[1]: bm=0x4002eca4 BMA_FLAGS=0x0 !STANDARD BMA_DEPTH=4 BMA_WIDTH=640 BMA_HEIGHT=480
+sb[1]: struct: BytesPerRow=640 Rows=480 Flags=0x0 Depth=4 pad=0xf8c1
+sb[1]: Planes[0]=0x4104b010 TypeOfMem=0x0 (not RAM)
+sb[1]: Planes[1]=0x400e9384 TypeOfMem=0x405 FAST
+sb[1]: Planes[2]=0x400e9384 TypeOfMem=0x405 FAST
+sb[1]: Planes[3]=0 TypeOfMem=0x0 (not RAM)
+(a) BltBitMap(FAST source -> sb[1]) done
+verify (a) hidden sb[1] before flip: ReadPixel 0/378 sampled pixels differ -> OK
+(a) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (a) BltBitMap from FAST: ReadPixel 0/378 sampled pixels differ -> OK
+SHOT 1 (after BltBitMap from FAST + ChangeScreenBuffer: stripes, rect colour 9 (orange)): requesting DH0:shot_rtg_1.req
+SHOT 1: ack after 35 polls
+(b) sb[0] is NOT BMF_STANDARD: skipped CPU plane copy, used BltBitMap from FAST instead
+(b) ChangeScreenBuffer(sb[0]) ok=1, zero-returns before success=0
+verify (b) BltBitMap from FAST: ReadPixel 0/378 sampled pixels differ -> OK
+SHOT 2 (after second BltBitMap+flip: rect colour 5 (yellow)): requesting DH0:shot_rtg_2.req
+SHOT 2: ack after 32 polls
+(c) BltBitMap(CHIP source -> sb[1]) done
+(c) ChangeScreenBuffer(sb[1]) ok=1, zero-returns before success=0
+verify (c) BltBitMap from CHIP: ReadPixel 0/378 sampled pixels differ -> OK
+SHOT 3 (after BltBitMap from CHIP + flip: rect colour 3 (green)): requesting DH0:shot_rtg_3.req
+SHOT 3: ack after 30 polls
+flip test (no ports): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 3 ms, 0 VERTB
+flip test (SafeMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 safe messages, 3 ms, 0 VERTB
+flip test (DispMessage port): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 20 disp messages, 3 ms, 0 VERTB
+flip test (WaitTOF after each): 20 flips, 0 returned 0 on first call, 0 total zero-returns, 337 ms, 20 VERTB
+verify end state: ReadPixel 0/378 sampled pixels differ -> OK
+SHOT 4 (end state: sb[1] displayed again (rect colour 3, green)): requesting DH0:shot_rtg_4.req
+SHOT 4: ack after 29 polls
+FreeScreenBuffer done
+CloseScreen done
+sbprobe: done

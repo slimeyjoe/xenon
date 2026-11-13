@@ -1,0 +1,33 @@
+Short:        Xenon, a 1994 PC-98 visual novel (adults only)
+Uploader:     <uploader>
+Author:       <author>
+Type:         game/role
+Version:      @VERSION@
+Architecture: x86_64-aros
+Requires:     AROS x86_64 ABIv11 (2026.09 / AROS One 1.3 or newer), AHI
+Distribution: Aminet-style, free of charge
+
+An unofficial port of "Xenon: Mugen no Shitai" (C's Ware, 1994), a
+Japanese visual novel for the NEC PC-9801, to AROS. ADULTS ONLY: the game
+contains explicit sexual scenes.
+
+The port runs the original game's scripts, pictures and music unchanged on
+a new engine written from scratch. It plays in English (a complete fan
+translation), in Polish, or in the original Japanese.
+
+- 640x400 with the PC-98's 16 colours, on any AROS graphics driver (the
+  best 640x400 mode, else a larger one with the picture centred)
+- or in a window on Wanderer; the picture scaled 2x or 3x, and the
+  PC-98 monitor's 4:3 proportions (640x480), on request
+- the PC-98's FM and SSG music and sound effects, synthesised in real
+  time, through AHI at 44.1 kHz
+- optional: the voices of the 1997 Windows version, made from your own
+  copy, on a second AHI channel
+- saves compatible with the AmigaOS version
+- tested on AROS 2026.09 in QEMU/KVM (VMware SVGA, VESA, ES1370) and
+  hosted on Linux; reports from real hardware are welcome
+
+The game's own data is not in this archive: the data file xenon.pak is
+made from your copy of the original PC-98 release (floppy or hard disk
+images, or an installed copy) with the tools of the source distribution.
+Unpack with LhA or Unarc, then read Xenon/ReadMe.txt (section 3).

@@ -1,0 +1,11 @@
+% Version
+Kickstart 40.68, Workbench 40.42
+% C:opnbench
+opnbench: log of 5556 writes, 20 s of song data
+calibration: 10 M x (add, xor, shift, add, shift, add, loop) in 10.638 s; 10 M x (mul, add, loop) in 4.964 s (E clock 709379 Hz)
+rate 22050 os 1:  441000 samples =    20.000 s audio in    29.445 s cpu -> 147.2% of the CPU
+rate 22050 os 2:  441000 samples =    20.000 s audio in    46.560 s cpu -> 232.8% of the CPU
+rate 11025 os 1:  220500 samples =    20.000 s audio in    19.498 s cpu ->  97.4% of the CPU
+rate 11025 os 2:  220500 samples =    20.000 s audio in    28.115 s cpu -> 140.5% of the CPU
+rate 27500 os 1:  550000 samples =    20.000 s audio in    34.335 s cpu -> 171.6% of the CPU
+rate 44100 os 1:  882000 samples =    20.000 s audio in    49.219 s cpu -> 246.0% of the CPU

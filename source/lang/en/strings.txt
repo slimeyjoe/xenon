@@ -1,0 +1,16 @@
+# Engine messages, English. key=value, UTF-8 (ASCII + the full-width space U+3000 for layout).
+sysmenu_cancel= Cancel
+sysmenu_restart= Return to title
+sysmenu_quit= Quit game
+quit_continue= Continue the game.
+quit_really= Really quit the game.
+omake_locked=                Please enjoy this after finishing the game
+no_save_data=No data has been saved
+file_open_error=Cannot open the file
+disk_insert=Please insert the disk
+disk_wrong=Wrong disk
+disk_not_game=This is not a game disk
+disk_write_protect=Cannot write to the disk
+disk_prompt=: please insert it into drive 2
+menu_empty=menu : no items to choose from
+script_error=Script error

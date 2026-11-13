@@ -1,0 +1,32 @@
+__pycache__/
+*.pyc
+build/
+
+# The game's data and everything made from it (C's Ware, 1994): not committed. `make data
+# SRC=...` (source/tools/gamedata.py, docs/game-data.md) fills these from your copy of the game,
+# `make data-clean` removes them (keep its DATA_GENERATED list in step with these lines);
+# resources/ keeps only the tables of our own (inventory, music and effect indexes, voice cues).
+resources/original/
+resources/images/
+resources/anim/
+resources/scripts/
+resources/music/vgm/
+resources/sfx/blobs/
+resources/sfx/vgm/
+resources/saves/
+resources/voice/report.txt
+# the disassembly listings (docs/re/README.md "Reproducing" writes them here)
+docs/re/listing/ags.asm
+docs/re/listing/pmd.asm
+docs/re/listing/funcs.tsv
+docs/re/listing/pmd-funcs.tsv
+# local copies of the e2e goldens; the reference is source/tests/e2e/golden.tsv
+source/tests/e2e/golden/
+# editor settings with machine paths (clangd)
+source/.clangd
+# the test rigs' machine settings (source/tests/rig.conf.example)
+source/tests/rig.conf
+# the translations with the Japanese written back from your game (source/tools/tlkeys.py view)
+text/view/
+# Claude Code local state
+.claude/

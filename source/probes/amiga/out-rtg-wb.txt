@@ -1,0 +1,36 @@
+% Version
+Kickstart 40.68, Workbench 40.42
+% Avail
+Type  Available    In-Use   Maximum   Largest
+chip    2058880     37248   2096128   2058072
+fast   25232760    457352  25690112  16313120
+total  27291640    494600  27786240  16313120
+% List DEVS:Monitors LIBS:Picasso96
+Directory "DEVS:Monitors" on Sunday 08-Nov-26
+uaegfx.info                  526 ----rwed Today     02:42:34
+uaegfx                      2720 ----rwed Today     02:42:34
+PAL.info                     356 ----rwed Today     02:42:34
+PAL                         2936 ----rwed Today     02:42:34
+4 files - 19 blocks used
+
+Directory "LIBS:Picasso96" on Sunday 08-Nov-26
+emulation.library          39652 ----rwed Today     02:42:34
+uaegfx.card                 1704 ----rwed Today     02:42:34
+fastlayers.library          1460 ----rwed Today     02:42:34
+rtg.library               216548 ----rwed Today     02:42:34
+4 files - 512 blocks used
+% C:trailerprobe
+trailerprobe: started from CLI (_WBenchMsg=0 argc=1)
+CLI: GetProgramName="C:trailerprobe" argv[0]="C:trailerprobe"
+CLI: GetProgramDir=0x10007573 "dh0:C"
+file "C:trailerprobe" size 13632
+trailer read 16 bytes: 58 50 4b 54 -> XPKT FOUND, payload size 4036
+payload at offset 9580, first 16 bytes: 58 45 4e 4f 4e 2d 50 41 59 4c 4f 41 44 2d 54 45  "XENON-PAYLOAD-TE"
+trailerprobe: done
+trailerprobe: started from WORKBENCH (_WBenchMsg=0x40248076 argc=0)
+WB: sm_NumArgs=1 wa_Lock=0x10006ad1 wa_Name="trailerprobe"
+WB: wa_Lock dir = "dh0:WBStartup"
+file "trailerprobe" size 13632
+trailer read 16 bytes: 58 50 4b 54 -> XPKT FOUND, payload size 4036
+payload at offset 9580, first 16 bytes: 58 45 4e 4f 4e 2d 50 41 59 4c 4f 41 44 2d 54 45  "XENON-PAYLOAD-TE"
+trailerprobe: done

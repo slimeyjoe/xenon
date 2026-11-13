@@ -1,0 +1,367 @@
+==== win-modes-native
+% C:winprobe modes
+winprobe: Picasso96API yes, cybergraphics yes
+mode 0x00000000 PAL:Low Res                      nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00008000 PAL:High Res                     nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008020 PAL:Super-High Res               nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00000800 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00000080 ?                                nominal 320x256 depth 6 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00000004 PAL:Low Res Laced                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00008004 PAL:High Res Laced               nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008024 PAL:Super-High Res Laced         nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00000804 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00000084 ?                                nominal 320x512 depth 6 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00000400 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00008400 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008420 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00000404 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00008404 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008424 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00000440 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00008440 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008460 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00000444 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00008444 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008464 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00008800 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008820 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00008804 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008824 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00008080 ?                                nominal 640x256 depth 6 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x000080a0 ?                                nominal 1280x256 depth 6 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00008084 ?                                nominal 640x512 depth 6 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x000080a4 ?                                nominal 1280x512 depth 6 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00000008 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00000808 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00000088 ?                                nominal 320x128 depth 6 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00008808 ?                                nominal 640x128 depth 8 resolution 22:88 pixel 70 ns, not available 0x0
+mode 0x00021000 PAL:Low Res                      nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00029000 PAL:High Res                     nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029020 PAL:Super-High Res               nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00021800 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00021080 ?                                nominal 320x256 depth 6 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00021004 PAL:Low Res Laced                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00029004 PAL:High Res Laced               nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029024 PAL:Super-High Res Laced         nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00021804 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00021084 ?                                nominal 320x512 depth 6 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00021400 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00029400 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029420 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00021404 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00029404 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029424 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00021440 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00029440 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029460 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00021444 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00029444 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029464 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00029800 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029820 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00029804 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029824 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00029080 ?                                nominal 640x256 depth 6 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x000290a0 ?                                nominal 1280x256 depth 6 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00029084 ?                                nominal 640x512 depth 6 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x000290a4 ?                                nominal 1280x512 depth 6 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00021008 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00021808 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00021088 ?                                nominal 320x128 depth 6 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00029808 ?                                nominal 640x128 depth 8 resolution 22:88 pixel 70 ns, not available 0x0
+==== win-modes-rtg
+% C:winprobe modes
+winprobe: Picasso96API yes, cybergraphics yes
+mode 0x00000000 PAL:Low Res                      nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00008000 PAL:High Res                     nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008020 PAL:Super-High Res               nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00000800 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00000080 ?                                nominal 320x256 depth 6 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00000004 PAL:Low Res Laced                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00008004 PAL:High Res Laced               nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008024 PAL:Super-High Res Laced         nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00000804 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00000084 ?                                nominal 320x512 depth 6 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00000400 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00008400 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008420 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00000404 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00008404 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008424 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00000440 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00008440 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008460 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00000444 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00008444 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008464 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00008800 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00008820 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00008804 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00008824 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00008080 ?                                nominal 640x256 depth 6 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x000080a0 ?                                nominal 1280x256 depth 6 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00008084 ?                                nominal 640x512 depth 6 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x000080a4 ?                                nominal 1280x512 depth 6 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00000008 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00000808 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00000088 ?                                nominal 320x128 depth 6 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00008808 ?                                nominal 640x128 depth 8 resolution 22:88 pixel 70 ns, not available 0x0
+mode 0x00021000 PAL:Low Res                      nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00029000 PAL:High Res                     nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029020 PAL:Super-High Res               nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00021800 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00021080 ?                                nominal 320x256 depth 6 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00021004 PAL:Low Res Laced                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00029004 PAL:High Res Laced               nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029024 PAL:Super-High Res Laced         nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00021804 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00021084 ?                                nominal 320x512 depth 6 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00021400 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00029400 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029420 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00021404 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00029404 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029424 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00021440 ?                                nominal 320x256 depth 8 resolution 44:44 pixel 140 ns, not available 0x0
+mode 0x00029440 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029460 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00021444 ?                                nominal 320x512 depth 8 resolution 44:22 pixel 140 ns, not available 0x0 lace
+mode 0x00029444 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029464 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00029800 ?                                nominal 640x256 depth 8 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x00029820 ?                                nominal 1280x256 depth 8 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00029804 ?                                nominal 640x512 depth 8 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x00029824 ?                                nominal 1280x512 depth 8 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00029080 ?                                nominal 640x256 depth 6 resolution 22:44 pixel 70 ns, not available 0x0
+mode 0x000290a0 ?                                nominal 1280x256 depth 6 resolution 11:44 pixel 35 ns, not available 0x0
+mode 0x00029084 ?                                nominal 640x512 depth 6 resolution 22:22 pixel 70 ns, not available 0x0 lace
+mode 0x000290a4 ?                                nominal 1280x512 depth 6 resolution 11:22 pixel 35 ns, not available 0x0 lace
+mode 0x00021008 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00021808 ?                                nominal 320x128 depth 8 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00021088 ?                                nominal 320x128 depth 6 resolution 44:88 pixel 140 ns, not available 0x0
+mode 0x00029808 ?                                nominal 640x128 depth 8 resolution 22:88 pixel 70 ns, not available 0x0
+mode 0x50ff1000 UAE: 320x 200  8bit              nominal 320x200 depth 8 resolution 44:53 pixel 260 ns, not available 0x0
+mode 0x50ff1100 UAE: 320x 200 16bit PC           nominal 320x200 depth 16 resolution 44:53 pixel 260 ns, not available 0x0
+mode 0x50ff1303 UAE: 320x 200 32bit BGRA         nominal 320x200 depth 24 resolution 44:53 pixel 260 ns, not available 0x0
+mode 0x50011000 UAE: 320x 240  8bit              nominal 320x240 depth 8 resolution 44:44 pixel 217 ns, not available 0x0
+mode 0x50011100 UAE: 320x 240 16bit PC           nominal 320x240 depth 16 resolution 44:44 pixel 217 ns, not available 0x0
+mode 0x50011303 UAE: 320x 240 32bit BGRA         nominal 320x240 depth 24 resolution 44:44 pixel 217 ns, not available 0x0
+mode 0x50091000 UAE: 320x 256  8bit              nominal 320x256 depth 8 resolution 44:41 pixel 203 ns, not available 0x0
+mode 0x50091100 UAE: 320x 256 16bit PC           nominal 320x256 depth 16 resolution 44:41 pixel 203 ns, not available 0x0
+mode 0x50091303 UAE: 320x 256 32bit BGRA         nominal 320x256 depth 24 resolution 44:41 pixel 203 ns, not available 0x0
+mode 0x50fc1000 UAE: 640x 400  8bit              nominal 640x400 depth 8 resolution 22:26 pixel 65 ns, not available 0x0
+mode 0x50fc1100 UAE: 640x 400 16bit PC           nominal 640x400 depth 16 resolution 22:26 pixel 65 ns, not available 0x0
+mode 0x50fc1303 UAE: 640x 400 32bit BGRA         nominal 640x400 depth 24 resolution 22:26 pixel 65 ns, not available 0x0
+mode 0x50031000 UAE: 640x 480  8bit              nominal 640x480 depth 8 resolution 22:22 pixel 54 ns, not available 0x0
+mode 0x50031100 UAE: 640x 480 16bit PC           nominal 640x480 depth 16 resolution 22:22 pixel 54 ns, not available 0x0
+mode 0x50031303 UAE: 640x 480 32bit BGRA         nominal 640x480 depth 24 resolution 22:22 pixel 54 ns, not available 0x0
+mode 0x500a1000 UAE: 640x 512  8bit              nominal 640x512 depth 8 resolution 22:21 pixel 50 ns, not available 0x0
+mode 0x500a1100 UAE: 640x 512 16bit PC           nominal 640x512 depth 16 resolution 22:21 pixel 50 ns, not available 0x0
+mode 0x500a1303 UAE: 640x 512 32bit BGRA         nominal 640x512 depth 24 resolution 22:21 pixel 50 ns, not available 0x0
+mode 0x50041000 UAE: 800x 600  8bit              nominal 800x600 depth 8 resolution 18:18 pixel 34 ns, not available 0x0
+mode 0x50041100 UAE: 800x 600 16bit PC           nominal 800x600 depth 16 resolution 18:18 pixel 34 ns, not available 0x0
+mode 0x50041303 UAE: 800x 600 32bit BGRA         nominal 800x600 depth 24 resolution 18:18 pixel 34 ns, not available 0x0
+mode 0x50051000 UAE:1024x 768  8bit              nominal 1024x768 depth 8 resolution 14:14 pixel 21 ns, not available 0x0
+mode 0x50051100 UAE:1024x 768 16bit PC           nominal 1024x768 depth 16 resolution 14:14 pixel 21 ns, not available 0x0
+mode 0x50051303 UAE:1024x 768 32bit BGRA         nominal 1024x768 depth 24 resolution 14:14 pixel 21 ns, not available 0x0
+mode 0x508e1000 UAE:1280x 720  8bit              nominal 1280x720 depth 8 resolution 11:15 pixel 18 ns, not available 0x0
+mode 0x508e1100 UAE:1280x 720 16bit PC           nominal 1280x720 depth 16 resolution 11:15 pixel 18 ns, not available 0x0
+mode 0x508e1303 UAE:1280x 720 32bit BGRA         nominal 1280x720 depth 24 resolution 11:15 pixel 18 ns, not available 0x0
+mode 0x50071000 UAE:1280x1024  8bit              nominal 1280x1024 depth 8 resolution 11:10 pixel 12 ns, not available 0x0
+mode 0x50071100 UAE:1280x1024 16bit PC           nominal 1280x1024 depth 16 resolution 11:10 pixel 12 ns, not available 0x0
+mode 0x50071303 UAE:1280x1024 32bit BGRA         nominal 1280x1024 depth 24 resolution 11:10 pixel 12 ns, not available 0x0
+mode 0xfff01000 UAE0-P96Mode  8bit               nominal 320x200 depth 8 resolution 44:53 pixel 25 ns, not available 0x2000
+mode 0xfff01100 UAE0-P96Mode 16bit PC            nominal 320x200 depth 16 resolution 44:53 pixel 25 ns, not available 0x2000
+mode 0xfff01303 UAE0-P96Mode 32bit BGRA          nominal 320x200 depth 24 resolution 44:53 pixel 25 ns, not available 0x2000
+==== win-wb-0x29000-3
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 640x256 mode 0x00029000 depth 3 (bitmap 3), flags 0xe STANDARD, borders 4/2/4/2 bar 10
+screen: resolution 22:44
+pens: 0 of 16 exclusive pens:
+window: 640x400 inner needs 648x413, does NOT fit (top 0)
+window A at 0,0 size 600x216 borders 4/11/4/2; B at 399,31 207x67
+write chunky-pens: no pens
+write p96-argb: 592x203, 14874006 us per full write; uncovered 0x000000, covered 0x000000 (nothing expected on this screen)
+write cgx-argb: 592x203, 265973 us per full write; uncovered 0x000007, covered 0x000000 (nothing expected on this screen)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 34,-6652
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 639,108 (window 0..599): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 639,108: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 639,255: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)
+==== win-wb-0x29004-3
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 640x512 mode 0x00029004 depth 3 (bitmap 3), flags 0xe STANDARD, borders 4/2/4/2 bar 10
+screen: resolution 22:22
+pens: 0 of 16 exclusive pens:
+window: 640x400 inner needs 648x413, does NOT fit (top 0)
+window A at 0,0 size 600x472 borders 4/11/4/2; B at 399,31 207x153
+write chunky-pens: no pens
+write p96-argb: 592x459, 33591389 us per full write; uncovered 0x000000, covered 0x000000 (nothing expected on this screen)
+write cgx-argb: 592x459, 600534 us per full write; uncovered 0x000007, covered 0x000000 (nothing expected on this screen)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 34,-6652
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 639,236 (window 0..599): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 639,236: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 639,511: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)
+==== win-wb-0x29004-4
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 640x512 mode 0x00029004 depth 4 (bitmap 4), flags 0xe STANDARD, borders 4/2/4/2 bar 10
+screen: resolution 22:22
+pens: 8 of 16 exclusive pens: 11 10 9 8 7 6 5 4
+window: 640x400 inner needs 648x413, does NOT fit (top 0)
+window A at 0,0 size 600x472 borders 4/11/4/2; B at 399,31 207x153
+write chunky-pens: 592x459, 351262 us per full write; uncovered 0x00000b (ok), covered 0x000000 (clipped)
+write p96-argb: 592x459, 33599714 us per full write; uncovered 0x000000, covered 0x000000 (nothing expected on this screen)
+write cgx-argb: 592x459, 609192 us per full write; uncovered 0x00000f, covered 0x000000 (nothing expected on this screen)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 34,-6652
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 639,236 (window 0..599): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 639,236: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 639,511: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)
+==== win-wb-0x29004-8
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 640x512 mode 0x00029004 depth 8 (bitmap 8), flags 0xe STANDARD, borders 4/2/4/2 bar 10
+screen: resolution 22:22
+pens: 16 of 16 exclusive pens: 251 250 249 248 247 246 245 244 243 242 241 240 239 238 237 236
+window: 640x400 inner needs 648x413, does NOT fit (top 0)
+window A at 0,0 size 600x472 borders 4/11/4/2; B at 399,31 207x153
+write chunky-pens: 592x459, 385789 us per full write; uncovered 0x0000fb (ok), covered 0x000000 (clipped)
+write p96-argb: 592x459, 33634421 us per full write; uncovered 0x000000, covered 0x000000 (nothing expected on this screen)
+write cgx-argb: 592x459, 643592 us per full write; uncovered 0x0000ff, covered 0x000000 (nothing expected on this screen)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 39,2908
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 639,236 (window 0..599): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 639,236: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 639,511: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)
+==== win-wb-0x50041000-8
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 800x600 mode 0x50041000 depth 8 (bitmap 8), flags 0x0, borders 4/2/4/2 bar 10
+screen: Picasso96 bitmap, RGB format 1, depth 8
+screen: resolution 18:18
+pens: 16 of 16 exclusive pens: 251 250 249 248 247 246 245 244 243 242 241 240 239 238 237 236
+window: 640x400 inner needs 648x413, fits (top 11)
+window A at 0,11 size 648x413 borders 4/11/4/2; B at 431,42 223x133
+write chunky-pens: 640x400, 25040 us per full write; uncovered 0x0000fb (ok), covered 0x000000 (clipped)
+write p96-argb: 640x400, 31373900 us per full write; uncovered 0x000000, covered 0x000000 (nothing expected on this screen)
+write cgx-argb: 640x400, 67 us per full write; uncovered 0x000000, covered 0x000000 (nothing expected on this screen)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 16399,30844
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 799,217 (window 0..647): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 799,217: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 799,599: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)
+==== win-wb-0x50041100-16
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 800x600 mode 0x50041100 depth 8 (bitmap 16), flags 0x0, borders 4/2/4/2 bar 10
+screen: Picasso96 bitmap, RGB format 4, depth 16
+screen: resolution 18:18
+pens: 16 of 16 exclusive pens: 251 250 249 248 247 246 245 244 243 242 241 240 239 238 237 236
+window: 640x400 inner needs 648x413, fits (top 11)
+window A at 0,11 size 648x413 borders 4/11/4/2; B at 431,42 223x133
+write chunky-pens: 640x400, 145956 us per full write; uncovered 0x306498 (ok), covered 0xa8a8a8 (clipped)
+write p96-argb: 640x400, 219253 us per full write; uncovered 0x986430 (ok), covered 0xa8a8a8 (clipped)
+write cgx-argb: 640x400, 219386 us per full write; uncovered 0x609830 (ok), covered 0xa8a8a8 (clipped)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 16405,-4508
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 799,217 (window 0..647): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 799,217: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 799,599: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)
+==== win-wb-0x50041303-24
+% C:winprobe wb
+winprobe: Picasso96API yes, cybergraphics yes
+screen: 800x600 mode 0x50041303 depth 8 (bitmap 24), flags 0x0, borders 4/2/4/2 bar 10
+screen: Picasso96 bitmap, RGB format 9, depth 24
+screen: resolution 18:18
+pens: 16 of 16 exclusive pens: 251 250 249 248 247 246 245 244 243 242 241 240 239 238 237 236
+window: 640x400 inner needs 648x413, fits (top 11)
+window A at 0,11 size 648x413 borders 4/11/4/2; B at 431,42 223x133
+write chunky-pens: 640x400, 146013 us per full write; uncovered 0x336699 (ok), covered 0xaaaaaa (clipped)
+write p96-argb: 640x400, 134296 us per full write; uncovered 0x996633 (ok), covered 0xaaaaaa (clipped)
+write cgx-argb: 640x400, 134486 us per full write; uncovered 0x669933 (ok), covered 0xaaaaaa (clipped)
+shot 1: taken
+click into inactive window: active now yes; messages:
+  ACTIVEWINDOW code 0x0000 qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 16420,-27548
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+click into the active window: messages:
+  MOUSEBUTTONS code 0x0068 qual 0xc000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0xc000 mouse 0,0
+  MOUSEBUTTONS code 0x00e8 qual 0x8000 mouse 0,0
+  MOUSEMOVE code 0x00ff qual 0x8000 mouse 0,0
+deltamove: after 40 x +20 the pointer is at 799,217 (window 0..647): 40 messages, sum 800,0
+deltamove: after 100 x +20 the pointer is at 799,217: 100 messages, sum 2000,0
+deltamove: then 100 x +20 down, pointer at 799,599: 100 messages, sum 0,2000
+deltamove: 100 x -20 read once: 5 messages, sum -100,0 (mouse queue)

@@ -1,0 +1,8 @@
+rtgprobe: mode 0x00008004, ModeNotAvailable 0
+screen mode 0x41f20000
+  screen: bm 0x18c1338c depth 8 (attr 8) 640x480 flags 0x2 bpr 81 planes[0] 0x188485c0
+step 1: RectFill pen 17 (red) on the screen RastPort, x 0..199, no ScreenBuffers yet
+  screen pens: (10,10)=17 (47,21)=17 (84,32)=17 (121,43)=17
+step 2: AllocScreenBuffer x2
+  sb0 0 sb1 0
+done
