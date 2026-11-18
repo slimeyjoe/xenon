@@ -6,10 +6,10 @@
 #                                         a Workbench 3.1 in MODEID (hex) with DEPTH planes
 #                                         (or the depth of a graphics card mode), then
 #                                         "winprobe wb" on it; shots/win_1.png
-# The work dir is $EMU/aos/work/xenon/win-<what>/ (RUN= overrides); GDB_PORT for parallel runs.
+# The work dir is $RIG_WORKTOP/win-<what>/ (lrvne/rigs; RUN= overrides); GDB_PORT for parallel runs.
 set -eu
 what=${1:?modes|wb}
-RIG=$(cd "$(dirname "$0")/../../tests/amiga" && pwd)
+RIG=$(cd "$(dirname "$0")/../../lrvne/rigs/winuae" && pwd)
 . "$RIG/run-lib.sh"
 case $what in
 modes)

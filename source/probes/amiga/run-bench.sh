@@ -5,7 +5,7 @@
 # caches are on as on a real machine).  Usage: ./run-bench.sh [MHz [sum]]; "sum" runs
 # "opnbench sum" (the per-configuration hash, to compare with ./opnsum-<song>).
 set -eu
-RIG=$(cd "$(dirname "$0")/../../tests/amiga" && pwd)
+RIG=$(cd "$(dirname "$0")/../../lrvne/rigs/winuae" && pwd)
 . "$RIG/run-lib.sh"
 MHZ=${1:-25}
 MODE=${2:-}

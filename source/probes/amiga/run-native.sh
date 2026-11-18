@@ -6,7 +6,7 @@
 set -eu
 # sbprobe and trailerprobe (make) into the guest's C:
 EMU_C_FILES="$(cd "$(dirname "$0")" && pwd)/sbprobe $(cd "$(dirname "$0")" && pwd)/trailerprobe"
-RIG=$(cd "$(dirname "$0")/../../tests/amiga" && pwd)
+RIG=$(cd "$(dirname "$0")/../../lrvne/rigs/winuae" && pwd)
 . "$RIG/run-lib.sh"
 emu_setup native
 cp "$HERE/trailerprobe.hunk" "$HERE/trailerprobe.raw" "$W/dh0/C/"

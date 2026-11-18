@@ -1,5 +1,11 @@
 # MorphOS probes (QEMU pegasos2)
 
+> These probes were written while the platform layer was this engine's own (before the move to
+> lrvne, `source/lrvne`); what they measured is lrvne's Amiga backend now
+> (`source/lrvne/backends/amiga`, its README). Paths into the old tree (`engine/snd/opn_lite.c`,
+> `config/*.mk`) name files that are in git history only: rebuild such a probe from a checkout
+> of that history. The results stay valid as records.
+
 Does the Amiga build of Xenon (a 68k AmigaOS binary) run on MorphOS? Tested on MorphOS 3.21
 in QEMU's `pegasos2` machine. `sam460ex` is not used: MorphOS does not boot there since QEMU
 8.2 (TCG commit 18a536f1f8, qemu-ppc 2024-02, still listed as broken on the maintainer's page
@@ -12,7 +18,7 @@ The game itself works: `xenon lang=en audio=none maxticks=2400` ran 2401 frames 
 ticks at 56.42 Hz (real time), one 15-tick stall at start-up, 0 bytes not freed
 (`out-game-ati-qemu10.2.txt`). The default `HIRESLACE_KEY` mode is available on MorphOS and is
 mapped to a graphics-card mode (0x41120000 = 640x480x8 on ati-vga), so the RTG depth-8 path of
-`backends/amiga/video.c` is taken.
+`lrvne/backends/amiga/core/video.c` is taken.
 
 But nothing is visible: the 640x480 screen is black except the mouse pointer (a hardware
 cursor, drawn in the screen's pens 17-19, so the palette is right). `rtgprobe` reproduces it
@@ -67,7 +73,7 @@ QEMU cannot show its 8-bit screen, so nothing visual was verified. Not tested at
 - Real hardware (Pegasos II, Sam460, PowerMac): BltBitMap onto an 8-bit screen should just work.
 
 Options considered, none taken:
-1. A second graphics-card upload path in `backends/amiga/video.c`: CPU planar-to-chunky of the
+1. A second graphics-card upload path in `lrvne/backends/amiga/core/video.c`: CPU planar-to-chunky of the
    dirty rectangle into a chunky buffer + `WriteChunkyPixels` (works in QEMU 11.1.3, see
    blitprobe band 4). Would make the picture visible in QEMU, though with wrong colours there
    (6-bit DAC); possibly faster on real MorphOS too (unmeasured).

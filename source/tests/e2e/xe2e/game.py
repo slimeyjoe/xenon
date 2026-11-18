@@ -70,14 +70,14 @@ class Game:
         self.scale = scale or cfg.scale
         self.readbacks = 0
         self.events = []
-        self.storage = os.path.join(cfg.out_dir, 'storage', name)
+        self.storage = os.path.join(cfg.out_dir, 'storage', cfg.lang, name)
         shutil.rmtree(self.storage, ignore_errors=True)
         os.makedirs(self.storage)
         if progress is not None:
-            open(os.path.join(self.storage, 'progress.dat'), 'wb').write(bytes([progress]))
+            open(os.path.join(self.storage, 'progress'), 'wb').write(bytes([progress]))
         for slot, path in (saves or {}).items():
-            shutil.copy(path, os.path.join(self.storage, slot + '.dat'))
-        log_path = os.path.join(cfg.out_dir, 'logs', name + '.jsonl')
+            shutil.copy(path, os.path.join(self.storage, slot))
+        log_path = os.path.join(cfg.out_dir, 'logs', cfg.lang, name + '.jsonl')
         os.makedirs(os.path.dirname(log_path), exist_ok=True)
         self.log = open(log_path, 'wb') if cfg.keep_logs else None
         self.script = ScriptOracle(cfg.pak, cfg.lang, self.storage)

@@ -9,7 +9,7 @@
 # icon".
 set -eu
 depth=${DEPTH:-3}
-RIG=$(cd "$(dirname "$0")/../../tests/amiga" && pwd)
+RIG=$(cd "$(dirname "$0")/../../lrvne/rigs/winuae" && pwd)
 . "$RIG/run-lib.sh"
 emu_setup "icon-$depth" wb
 cp "$HERE/iconprobe" "$W/dh0/C/"

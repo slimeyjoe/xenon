@@ -3,7 +3,7 @@
  * rtgprobe: the Amiga backend's graphics-card presentation path, step by step, for MorphOS
  * (68k binary under its 68k emulation; no custom chip access).
  *
- * The game (backends/amiga/video.c) opens a 640x400 depth-8 screen, allocates two
+ * The game (lrvne/backends/amiga/core/video.c) opens a 640x400 depth-8 screen, allocates two
  * ScreenBuffers, flips once both ways, loads the engine colours into pens 16..31 and then
  * BltBitMap()s an 8-plane planar source bitmap (engine planes 0-3 in fast RAM, plane 4 all
  * ones, planes 5-7 all zero) into the displayed buffer. On MorphOS 3.21 the screen stays black.

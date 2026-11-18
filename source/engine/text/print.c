@@ -1,12 +1,11 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Message printer text_print 0B7D:019B (engine.md §6) with two line-breaking modes:
  * the original byte-column algorithm with kinsoku for Japanese, and word wrap for English
  * (the translation's padding was removed at pack-build time). Row pitch 18 px, 4 rows. */
 #include <string.h>
-#include "xe_internal.h"
-#include "gfx/gfx.h"
+#include "xe.h"
 #include "text/text.h"
-#include "sys.h"
-#include "util/sjis.h"
+#include "lrvne/sjis.h"
 #include "voice/voice.h"
 
 #define ROW_PITCH 18
@@ -31,22 +30,22 @@ static int is_hanging(unsigned hi, unsigned lo)
  * the bottom-right corner inside the text box), blinking white. */
 static void show_prompt(int overflow)
 {
-    sys_trace(XE_TR_PROMPT, 0, 0, overflow, 0, 0, 0);
+    lrv_sys_trace(&xe.sys, XE_TR_PROMPT, 0, 0, overflow, 0, 0, 0);
     text_locate_put(73, 24, text_prompt_str(overflow), 15, XE_OVL_BLINK);
 }
 
 /* text_window_clear 0B7D:0783: 62 bytes x 72 lines at the window origin, all planes */
 void text_window_clear(void)
 {
-    struct xe_planes *pg = gfx_access();
+    struct lrv_surface *pg = lrv_screen_access(&xe.screen);
     int p, y;
     for (p = 0; p < 4; p++)
         for (y = 0; y < ROWS * ROW_PITCH; y++) {
-            int off = (xe.text_y + y) * XE_PLANE_STRIDE + xe.text_x;
+            int off = (xe.text_y + y) * XE_STRIDE + xe.text_x;
             if (off + 62 <= XE_PLANE_BYTES)
-                memset(pg->p[p] + off, 0, 62);
+                memset(pg->plane[p] + off, 0, 62);
         }
-    gfx_mark_dirty(xe.access_page, xe.text_x, xe.text_y, xe.text_x + 62, xe.text_y + ROWS * ROW_PITCH);
+    lrv_screen_mark(&xe.screen, xe.screen.access_page, xe.text_x, xe.text_y, xe.text_x + 62, xe.text_y + ROWS * ROW_PITCH);
 }
 
 struct printer {
@@ -66,7 +65,7 @@ static void new_row(struct printer *pr)
     pr->hang_used = 0;
     if (pr->row >= ROWS) {
         show_prompt(1);
-        sys_wait_ok_key();
+        wait_ok_key();
         text_layer_clear();
         text_window_clear();
         pr->row = 0;
@@ -76,7 +75,7 @@ static void new_row(struct printer *pr)
 /* columns of the word starting at s[i] (English wrap): until space, control code or end */
 static int word_cols(const uint8_t *s, int i)
 {
-    struct text_ch ch;
+    struct lrv_text_ch ch;
     int cols = 0;
     while (s[i] && s[i] != ' ' && s[i] != 0x0A && s[i] != 0x0C && s[i] != 0x04 &&
            s[i] != 0x05 && s[i] != 0x03) {
@@ -94,7 +93,7 @@ static void after_glyph(struct printer *pr)
     if (pr->col >= COLS) {
         if (xe.wrap_mode == XE_WRAP_JA && xe.text_enc == XE_ENC_CP932) {
             unsigned hi = s[pr->i], lo = s[pr->i + 1];
-            if (hi && sjis_is_lead(hi) && is_hanging(hi, lo) && !pr->hang_used) {
+            if (hi && lrv_sjis_is_lead(hi) && is_hanging(hi, lo) && !pr->hang_used) {
                 pr->hang_used = 1;
                 return;                                 /* let it hang once */
             }
@@ -114,8 +113,8 @@ void text_print(const uint8_t *src, int flag)
 {
     uint8_t buf[1024];
     struct printer pr;
-    int part = 0, timed = 0;
-    size_t n = strlen((const char *)src), j;
+    int part = 0;
+    size_t n = strlen((const char *)src);
     if (n >= sizeof buf)
         n = sizeof buf - 1;
     memcpy(buf, src, n);
@@ -128,15 +127,12 @@ void text_print(const uint8_t *src, int flag)
     pr.timed_wait = -1;
     pr.keep = 0;
     pr.hang_used = 0;
-    sys_trace(XE_TR_MSG, 0, buf, !flag, 0, 0, 0);
-    for (j = 0; j + 1 < n; j++)                 /* ends in a timed wait ({W n})? */
-        if (buf[j] == 0x04 && buf[j + 1] >= '0' && buf[j + 1] <= '9')
-            timed = 1;
-    voice_message(src, timed);                  /* the part-0 clip (docs/voice.md §4) */
+    lrv_sys_trace(&xe.sys, XE_TR_MSG, 0, buf, !flag, 0, 0, 0);
+    voice_message(src);                         /* the part-0 clip (docs/voice.md §4) */
 
     while (buf[pr.i]) {
         unsigned c = buf[pr.i];
-        struct text_ch ch;
+        struct lrv_text_ch ch;
         int x = xe.text_x + pr.col, y = xe.text_y + pr.row * ROW_PITCH;
 
         if (xe.wrap_mode == XE_WRAP_EN && c == ' ' && pr.col > 0) {
@@ -163,7 +159,7 @@ void text_print(const uint8_t *src, int flag)
             int skipped;
             pr.i++;
             voice_wait();                       /* the clip of this part plays out first */
-            skipped = sys_wait_ok_key();
+            skipped = wait_ok_key();
             voice_part(++part, skipped);
         } else if (c == 0x03) {                         /* {BIG} ... 0x03 */
             pr.i++;
@@ -185,7 +181,7 @@ void text_print(const uint8_t *src, int flag)
             if (d >= '0' && d <= '9')
                 pr.timed_wait = (int)(d - '0') * 60;
             else
-                sys_log(XE_LOG_WARN, "text: 0x04 without a digit");
+                lrv_log(xe.hal, LRV_LOG_WARN, "text: 0x04 without a digit");
         } else if (c == 0x05) {
             pr.i++;
             pr.keep = 1;
@@ -197,14 +193,14 @@ void text_print(const uint8_t *src, int flag)
         }
     }
 
-    sys_trace(XE_TR_MSG_END, 0, 0, pr.timed_wait, pr.keep, 0, 0);
+    lrv_sys_trace(&xe.sys, XE_TR_MSG_END, 0, 0, pr.timed_wait, pr.keep, 0, 0);
     voice_wait();                               /* the prompt comes when the clip is over */
     if (pr.timed_wait < 0) {
         show_prompt(0);
-        sys_wait_ok_key();
+        wait_ok_key();
         text_layer_clear();
     } else {
-        sys_wait_ticks(pr.timed_wait);
+        wait_vsync(pr.timed_wait);
     }
     if (!pr.keep)
         text_window_clear();

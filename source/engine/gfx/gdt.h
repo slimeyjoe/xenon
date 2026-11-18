@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* GDT ("DA1") image decoder - docs/re/graphics.md §2.
  *
  * Port of the hand-written decoder in AGS.EXE segment 0456 (entry 0456:0004) via the verified
@@ -8,7 +9,10 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "gfx/planes.h"
+#include "lrvne/surface.h"
+
+/* the planes the decoder addresses: 80 bytes a line, 32 000 bytes (PC-98 graphics VRAM) */
+#define GDT_STRIDE 80
 
 #define GDT_FLAG_PALETTE 0x8000u    /* 24-byte palette follows the header */
 #define GDT_FLAG_CODEC1  0x4000u    /* 1-byte column codec (else 2-byte column-pair codec) */
@@ -36,6 +40,6 @@ void gdt_unpack_palette(const uint8_t raw[24], uint8_t rgb4[48]);
  * Returns 0 on success, -1 if a stream ran past the blob (data corruption). The decoder
  * trusts the plane offsets of the data: all shipped files stay inside [0, 32000). */
 int gdt_decode(const uint8_t *data, size_t len, const struct gdt_header *h,
-               struct xe_planes *dst, struct xe_rect *written);
+               struct lrv_surface *dst, struct lrv_rect *written);
 
 #endif

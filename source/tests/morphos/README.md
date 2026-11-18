@@ -6,7 +6,7 @@ MorphOS's 68k emulation. What was found that way is in `../../probes/morphos/REA
 
 ## Environment
 
-Lives outside the repo in `$MOS_DIR` (`tests/rig.conf`, copy `tests/rig.conf.example`, or the
+Lives outside the repo in `$MOS_DIR` (`tests/rig.conf`, see `tests/rig.conf.example`, or the
 environment):
 
 | path | what |

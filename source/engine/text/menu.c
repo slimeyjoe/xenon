@@ -1,11 +1,10 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Choice menu select_menu 0B7D:048C (engine.md §7). Options are drawn 15 on 0 inside the
  * message window at the menu origin, one row (18 px) per option; the current row is
  * highlighted by XOR-inverting all four planes over 16 lines. */
 #include <string.h>
-#include "xe_internal.h"
-#include "gfx/gfx.h"
+#include "xe.h"
 #include "text/text.h"
-#include "sys.h"
 
 #define ROW_PITCH 18
 #define EXIT_CLEAR_WIDTH 0x3C       /* bytes: the message window width (0B7D:05BC) */
@@ -13,15 +12,15 @@
 /* menu_clear 0B7D:0716: the option area (width = longest item) in all planes */
 static void menu_clear(int width, int count)
 {
-    struct xe_planes *pg = gfx_access();
+    struct lrv_surface *pg = lrv_screen_access(&xe.screen);
     int p, y;
     for (p = 0; p < 4; p++)
         for (y = 0; y < count * ROW_PITCH; y++) {
-            int off = (xe.menu_y + y) * XE_PLANE_STRIDE + xe.menu_x;
+            int off = (xe.menu_y + y) * XE_STRIDE + xe.menu_x;
             if (off + width <= XE_PLANE_BYTES)
-                memset(pg->p[p] + off, 0, (size_t)width);
+                memset(pg->plane[p] + off, 0, (size_t)width);
         }
-    gfx_mark_dirty(xe.access_page, xe.menu_x, xe.menu_y, xe.menu_x + width, xe.menu_y + count * ROW_PITCH);
+    lrv_screen_mark(&xe.screen, xe.screen.access_page, xe.menu_x, xe.menu_y, xe.menu_x + width, xe.menu_y + count * ROW_PITCH);
 }
 
 /* menu_draw_item 0B7D:0627: sprintf("%-*s") padded to the width, drawn with text_draw_string.
@@ -45,18 +44,31 @@ static void menu_draw_item(const uint8_t *s, int i, int width)
 /* menu_hilite 0B7D:066B: XOR-invert the row (4 planes, 16 lines) */
 static void menu_hilite(int i, int width)
 {
-    struct xe_planes *pg = gfx_access();
+    struct lrv_surface *pg = lrv_screen_access(&xe.screen);
     int p, y, x;
     for (p = 0; p < 4; p++)
         for (y = 0; y < 16; y++) {
-            int off = (xe.menu_y + i * ROW_PITCH + y) * XE_PLANE_STRIDE + xe.menu_x;
+            int off = (xe.menu_y + i * ROW_PITCH + y) * XE_STRIDE + xe.menu_x;
             if (off + width > XE_PLANE_BYTES)
                 break;
             for (x = 0; x < width; x++)
-                pg->p[p][off + x] ^= 0xFF;
+                pg->plane[p][off + x] ^= 0xFF;
         }
-    gfx_mark_dirty(xe.access_page, xe.menu_x, xe.menu_y + i * ROW_PITCH, xe.menu_x + width,
+    lrv_screen_mark(&xe.screen, xe.screen.access_page, xe.menu_x, xe.menu_y + i * ROW_PITCH, xe.menu_x + width,
                    xe.menu_y + i * ROW_PITCH + 16);
+}
+
+/* the menu's trace event: its options, the cursor, and whether the engine shows it */
+static void trace_menu(const uint8_t *const *items, int count, int cur)
+{
+    struct lrv_trace_event ev;
+    if (!lrv_sys_trace_begin(&xe.sys, &ev, XE_TR_MENU))
+        return;
+    ev.items = items;
+    ev.n = count;
+    ev.a0 = cur;
+    ev.a1 = xe.in_sysmenu;
+    lrv_sys_trace_send(&xe.sys, &ev);
 }
 
 int select_menu(const uint8_t *const *items, int count, int initial)
@@ -77,34 +89,34 @@ int select_menu(const uint8_t *const *items, int count, int initial)
     for (i = 0; i < count; i++)
         menu_draw_item(items[i], i, width);
     menu_hilite(cur, width);
-    sys_kbd_flush();                                    /* 0B7D:0548 drains type-ahead */
-    sys_trace_items(XE_TR_MENU, items, count, cur);
+    kbd_flush();                                    /* 0B7D:0548 drains type-ahead */
+    trace_menu(items, count, cur);
 
     for (;;) {
-        int k = sys_input_get_cmd();
+        int k = input_get_cmd();
         int next = cur;
-        if (xe.quit_requested || xe.emergency_quit) {
-            sys_trace(XE_TR_MENU_SEL, 0, 0, -1, cur, 0, 0);
+        if (quitting()) {
+            lrv_sys_trace(&xe.sys, XE_TR_MENU_SEL, 0, 0, -1, cur, 0, 0);
             return -1;
         }
         switch (k) {
-        case SYS_CMD_UP:
+        case XE_CMD_UP:
             if (cur > 0) next = cur - 1;
             else if (!xe.input_from_mouse) next = count - 1;
             break;
-        case SYS_CMD_DOWN:
+        case XE_CMD_DOWN:
             if (cur < count - 1) next = cur + 1;
             else if (!xe.input_from_mouse) next = 0;
             break;
-        case SYS_CMD_OK:
-        case SYS_CMD_CANCEL:
-        case SYS_CMD_HELP:
+        case XE_CMD_OK:
+        case XE_CMD_CANCEL:
+        case XE_CMD_HELP:
             /* 0B7D:05BB: on the way out the option rows are wiped over the full window
              * width (menu_clear(0x3C, count)), so nothing of this menu survives into the
              * next page's menu or message */
             menu_clear(EXIT_CLEAR_WIDTH, count);
-            sys_trace(XE_TR_MENU_SEL, 0, 0, k == SYS_CMD_OK ? cur : k == SYS_CMD_CANCEL ? -1 : -2, cur, 0, 0);
-            return k == SYS_CMD_OK ? cur : k == SYS_CMD_CANCEL ? -1 : -2;
+            lrv_sys_trace(&xe.sys, XE_TR_MENU_SEL, 0, 0, k == XE_CMD_OK ? cur : k == XE_CMD_CANCEL ? -1 : -2, cur, 0, 0);
+            return k == XE_CMD_OK ? cur : k == XE_CMD_CANCEL ? -1 : -2;
         default:
             break;
         }

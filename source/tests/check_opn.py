@@ -28,13 +28,15 @@ register stream (writes spaced one chip sample apart, as on hardware) and compar
    harmonics make the lite output. lite2 (2x FM oversampling with the half-band decimator)
    is listed the same way.
 """
+import functools
 import glob
+import multiprocessing
 import os
 import subprocess
 import sys
 
 import numpy as np
-from scipy.signal import resample_poly
+from scipy.signal import firwin, resample_poly
 
 SONG_SECONDS = 20.0
 FRAME = 1024
@@ -124,9 +126,22 @@ def decimate_nearest(ref, rate):
     return ref[idx]
 
 
+@functools.lru_cache(maxsize=None)
+def band_taps(up, down):
+    """the low-pass filter resample_poly designs by default for up/down (scipy 1.16), made once:
+    at these ratios it has 0.5 to 1.1 million taps and its Kaiser window took most of the
+    check's time when it was designed again on every call. Read-only: resample_poly copies it."""
+    m = max(up, down)
+    h = firwin(2 * 10 * m + 1, 1.0 / m, window=('kaiser', 5.0))
+    h.flags.writeable = False
+    return h
+
+
 def resample_band(ref, rate):
     g = np.gcd(rate, NATIVE)
-    return resample_poly(ref, rate // g, NATIVE // g)
+    # the taps are float64: equal to the default design only for float64 input
+    assert ref.dtype == np.float64
+    return resample_poly(ref, rate // g, NATIVE // g, window=band_taps(rate // g, NATIVE // g))
 
 
 def over(m, lim, with_snr=False):
@@ -145,6 +160,49 @@ def fmt(m, snr=False):
     return s
 
 
+def run_case(job):
+    """One case: every render and comparison. Its files are <tmp>/<case>-*.raw. Returns the
+    status parts, the failed limits, the worst-case notes and the alias levels, for main() to
+    take in case order."""
+    binary, name, vgm, seconds, base = job
+    T = lambda part: base + '-' + part + '.raw'
+    parts, bad, notes, aliases = [], [], [], []
+    _, ref = render(binary, 'ymfm', NATIVE, vgm, T('ref'), seconds)
+    _, ref_fm = render(binary, 'ymfm', NATIVE, vgm, T('ref_fm'), seconds, 'fm')
+    _, ref_ssg = render(binary, 'ymfm', NATIVE, vgm, T('ref_ssg'), seconds, 'ssg')
+
+    # 1. native: FM and SSG separately
+    _, lite_fm = render(binary, 'lite', NATIVE, vgm, T('lite'), seconds, 'fm')
+    if has_signal(ref_fm):
+        m = compare(lite_fm, ref_fm, NATIVE)
+        m['snr'] = snr_best_lag(lite_fm, ref_fm)
+        notes.append(('native fm', m, True))
+        parts.append('fm ' + fmt(m, True))
+        bad += ['native fm ' + b for b in over(m, LIM_FM_NATIVE, True)]
+    _, lite_ssg = render(binary, 'lite', NATIVE, vgm, T('lite'), seconds, 'ssg')
+    if has_signal(ref_ssg):
+        m = compare(lite_ssg, ref_ssg, NATIVE, env_pct=75)
+        notes.append(('native ssg', m, False))
+        parts.append('ssg ' + fmt(m))
+        bad += ['native ssg ' + b for b in over(m, LIM_SSG_NATIVE)]
+
+    # 2. reduced rates against the nearest-sample decimated reference; alias excess
+    #    against the band-limited one
+    for rate in REDUCED:
+        got, lite = render(binary, 'lite', rate, vgm, T('lite'), seconds)
+        m = compare(lite, decimate_nearest(ref, got), got)
+        notes.append(('%d' % got, m, False))
+        ma = compare(lite, resample_band(ref, got), got)
+        aliases.append((got, ma['level']))
+        parts.append('%d %s alias %+4.1f' % (got, fmt(m), ma['level']))
+        bad += ['%d %s' % (got, b) for b in over(m, LIM_REDUCED)]
+    got, lite2 = render(binary, 'lite2', 22050, vgm, T('lite'), seconds)
+    ma = compare(lite2, resample_band(ref, got), got)
+    aliases.append(('lite2 22050', ma['level']))
+    parts.append('lite2 alias %+4.1f' % ma['level'])
+    return name, parts, bad, notes, aliases
+
+
 def main():
     args = sys.argv[1:]
     verbose = '--verbose' in args
@@ -155,7 +213,6 @@ def main():
     args = [a for a in args if a != '--verbose']
     binary, music_dir, sfx_dir, tmp = args[:4]
     os.makedirs(tmp, exist_ok=True)
-    T = lambda name: os.path.join(tmp, name)
 
     cases = []
     for v in sorted(glob.glob(os.path.join(music_dir, '*.vgm'))):
@@ -175,48 +232,20 @@ def main():
         if snr and m.get('snr') is not None:
             w[3] = min(w[3], m['snr'])
 
-    for name, vgm, seconds in cases:
-        _, ref = render(binary, 'ymfm', NATIVE, vgm, T('ref.raw'), seconds)
-        _, ref_fm = render(binary, 'ymfm', NATIVE, vgm, T('ref_fm.raw'), seconds, 'fm')
-        _, ref_ssg = render(binary, 'ymfm', NATIVE, vgm, T('ref_ssg.raw'), seconds, 'ssg')
-        parts = []
-        bad = []
-
-        # 1. native: FM and SSG separately
-        _, lite_fm = render(binary, 'lite', NATIVE, vgm, T('lite.raw'), seconds, 'fm')
-        if has_signal(ref_fm):
-            m = compare(lite_fm, ref_fm, NATIVE)
-            m['snr'] = snr_best_lag(lite_fm, ref_fm)
-            note('native fm', m, True)
-            parts.append('fm ' + fmt(m, True))
-            bad += ['native fm ' + b for b in over(m, LIM_FM_NATIVE, True)]
-        _, lite_ssg = render(binary, 'lite', NATIVE, vgm, T('lite.raw'), seconds, 'ssg')
-        if has_signal(ref_ssg):
-            m = compare(lite_ssg, ref_ssg, NATIVE, env_pct=75)
-            note('native ssg', m)
-            parts.append('ssg ' + fmt(m))
-            bad += ['native ssg ' + b for b in over(m, LIM_SSG_NATIVE)]
-
-        # 2. reduced rates against the nearest-sample decimated reference; alias excess
-        #    against the band-limited one
-        for rate in REDUCED:
-            got, lite = render(binary, 'lite', rate, vgm, T('lite.raw'), seconds)
-            m = compare(lite, decimate_nearest(ref, got), got)
-            note('%d' % got, m)
-            ma = compare(lite, resample_band(ref, got), got)
-            alias.setdefault(got, []).append((ma['level'], name))
-            parts.append('%d %s alias %+4.1f' % (got, fmt(m), ma['level']))
-            bad += ['%d %s' % (got, b) for b in over(m, LIM_REDUCED)]
-        got, lite2 = render(binary, 'lite2', 22050, vgm, T('lite.raw'), seconds)
-        ma = compare(lite2, resample_band(ref, got), got)
-        alias.setdefault('lite2 22050', []).append((ma['level'], name))
-        parts.append('lite2 alias %+4.1f' % ma['level'])
-
-        status = 'FAIL' if bad else 'ok  '
-        if bad:
-            fails += 1
-        if bad or verbose:
-            print('%s %-9s %s%s' % (status, name, ' | '.join(parts), (' <- ' + ', '.join(bad)) if bad else ''))
+    # the cases run in parallel, each in files of its own; the results are taken in case order,
+    # so the output does not depend on which finishes first
+    jobs = [(binary, name, vgm, seconds, os.path.join(tmp, name)) for name, vgm, seconds in cases]
+    with multiprocessing.Pool(min(len(jobs), os.process_cpu_count() or 1) or 1) as pool:
+        for name, parts, bad, notes, aliases in pool.imap(run_case, jobs):
+            for key, m, snr in notes:
+                note(key, m, snr)
+            for key, level in aliases:
+                alias.setdefault(key, []).append((level, name))
+            status = 'FAIL' if bad else 'ok  '
+            if bad:
+                fails += 1
+            if bad or verbose:
+                print('%s %-9s %s%s' % (status, name, ' | '.join(parts), (' <- ' + ', '.join(bad)) if bad else ''))
 
     for key, w in worst.items():
         print('worst %-10s |level| %.2f dB, env p90 %.2f dB, lsd %.2f dB%s' %

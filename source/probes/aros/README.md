@@ -1,8 +1,15 @@
 # AROS probes (x86_64, ABIv11)
 
-The facts the AROS build (`make TARGET=aros`, `config/aros.mk`, the `aros/` flavour of
-`backends/amiga`, see its README "Layout") rests on. The rig that runs it (`aros.sh`, the
-release archive check, the environment) is `../../tests/aros/README.md`.
+> These probes were written while the platform layer was this engine's own (before the move to
+> lrvne, `source/lrvne`); what they measured is lrvne's Amiga backend now
+> (`source/lrvne/backends/amiga`, its README). Paths into the old tree (`engine/snd/opn_lite.c`,
+> `config/*.mk`) name files that are in git history only: rebuild such a probe from a checkout
+> of that history. The results stay valid as records.
+
+The facts the AROS build (`make TARGET=aros`, lrvne's `mk/target/aros.mk`, the `aros/` flavour of
+`lrvne/backends/amiga`, see its README "Layout") rests on. The rig that runs it (`aros.sh`, the
+release archive check, the environment) is lrvne's (`../../lrvne/rigs/README.md`); the game's
+AROS notes: `../../tests/aros/README.md`.
 
 ## arosprobe (hosted, 2026-11-11)
 

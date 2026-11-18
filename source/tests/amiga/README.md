@@ -1,53 +1,45 @@
-# The Amiga rig: WinUAE, headless, and a real A1200
+# The Amiga build in WinUAE, and a real A1200
 
-How the AmigaOS builds are run and checked: the game in WinUAE with scripted input and
-screenshots (`run-game.sh`, which `make TARGET=amiga e2e` drives through `tests/e2e/amiga.py`),
-the release archive unpacked and started in WinUAE (`run-dist.sh`), the fullscreen fast path's
-object guard (`fastpath-check.sh`), and a real A1200 over the network (`a1200.sh`). The
-WarpOS build has its own runner on the same plumbing (`../warpos/`). The experiments these
-scripts started from, and their findings, are in `../../probes/amiga/README.md`.
+How the AmigaOS builds are run and checked. The WinUAE rig is lrvne's
+(`../../lrvne/rigs/README.md`: `winuae/run-program.sh` runs a program, `run-lib.sh` is the
+plumbing, `snapd.py` answers the guest's snapshot requests, `present.py` is the presentation
+test; nothing there waits on the clock), and so is the release archive check (`make
+TARGET=amiga lrvne-dist-check`). `make TARGET=amiga e2e` drives it through
+`tests/e2e/amiga.py` (the presentation test and the scenario replays, `../e2e/README.md`).
+What is xenon's own here: the fullscreen fast path's object guard (`fastpath-check.sh`) and a
+real A1200 over the network (`a1200.sh`). The experiments these scripts started from, and their
+findings, are in `../../probes/amiga/README.md`.
 
 | file | what |
 |---|---|
-| `run-lib.sh` | the shared WinUAE plumbing (sourced): work dirs under `$EMU/aos/work/xenon/<name>/`, the startup-sequence and its guest watchdog, the config, screenshot requests from the guest, cleanup on exit. The probe run scripts use it too |
-| `run-game.sh`, `mkahiprefs.py`, `settooltype.py` | the game in WinUAE: real-time 68040, scripted input, timed screenshots or `SNAPD=1` snapshots, optional AHI install, a Workbench of a given mode (`WB=`); see "Running the game" |
-| `gdbshot.py` | host side of the screenshot handshake (gdb remote protocol, `qRcmd`) |
-| `uaequit.c`, `Makefile` | quits the emulator (uaelib trap 13); `make` builds it (vbcc) |
-| `run-dist.sh` | the release archive: see "The release archive" |
 | `fastpath-check.sh` | guard of the default fullscreen path: records / compares the objects that draw the custom screen and the whole engine (`record`, `check`, `ref REV`) |
 | `a1200.sh`, `aostelnet.py` | a real A1200 with AmiTCP: install, run, timed play-tests over telnet; see "The real A1200" |
 
 ## Settings
 
-The machine's pieces are named in `tests/rig.conf` (copy `tests/rig.conf.example`; git ignores
-the copy), or in the environment, which wins; `RIG_CONF=path` reads another file instead:
-
-| setting | what | default |
-|---|---|---|
-| `EMU` | the emulator tree: WinUAE builds, ROMs, `aos/C/` (the guest's extra C: commands), `aos/ahi/`, the run work dirs | `~/amiga-emu` |
-| `WINUAE` | the WinUAE binary: the null-video Linux build, or one built with SDL3 for audio interrupts | `$EMU/obj-winuae/winuae` |
-| `KICKSTART` | the Kickstart 3.1 (40.68) A1200 ROM | `$EMU/rom/kick40068.A1200` |
-| `WBDISK` | a Workbench 3.1 tree with Picasso96, read only (runs copy what they need) | none |
-| `A1200`, `A1200_WWW`, `A1200_URL` | the A1200's address; a directory the host's web server serves, and its URL as the A1200 sees it | none |
-
-`make -C tests/amiga` builds `uaequit` first (vbcc's `vc` on `PATH`).
+The machine's pieces are named in `tests/rig.conf` (copy `lrvne/rigs/rig.conf.example` and add
+the A1200's keys below; git ignores the copy), or in the environment, which wins; `RIG_CONF=path`
+reads another file instead. lrvne's rig reads `EMU`, `WINUAE`, `KICKSTART`, `WBDISK`,
+`RIG_WORKTOP` (the work dirs, default `$EMU/aos/work/rig`); `a1200.sh` reads `A1200`,
+`A1200_WWW`, `A1200_URL` (the A1200's address; a directory the host's web server serves, and
+its URL as the A1200 sees it). `make TARGET=amiga lrvne-rig-tools` builds the guest helpers
+(`uaequit`, `waitwb`; vbcc's `vc` on `PATH`).
 
 ## Running the game (phase 4)
 
-`./run-game.sh [native|rtg|promote] [MHz]` copies `build/amiga/xenon` and
-`build/xenon.pak` into a Workbench tree, boots it (SetPatch, 68040 model,
-real time; with MHz: cycle exact at that clock), runs the game with
-`LANG=en AUTOPLAY="at:650=down,750=ok,1000=ok" MAXTICKS=2800` (XENON_ARGS
-overrides; XENON_ARGS2 runs it a second time, to compare `Avail`) and takes
-screenshots at 25, 40 and 55 s.  `out.txt` ends with the game's statistics:
-blocks rendered vs device interrupts (equal up to the two pre-filled blocks
-means no underrun), frames vs E-clock ticks, frame-clock stalls.
-`RUN=name GDB_PORT=n` allow parallel runs; `AMIGA_BIN` runs another executable than
-`build/amiga/xenon`, `GUEST_FILES` and `GUEST_SAVES` put more files into the game's drawer and
-its `saves/`, `WARP=1` runs unthrottled, `WB=MODEID:DEPTH` starts a Workbench first, `PRE_CMD`
-runs a command before the game, `SNAPD=1` answers the game's snapshot requests (the script's
-header).  Results so far (all with the
-title menu correct in `t25.png`):
+    GUEST_FILES=../build/xenon.pak PROGRAM_ARGS='LANG=en AUTOPLAY="at:650=down,750=ok,1000=ok snap:1250,2000,2750" MAXTICKS=2800' \
+        lrvne/rigs/winuae/run-program.sh ../build/amiga/xenon native     # or rtg, promote; [MHz]
+
+copies the game and its pack into a Workbench tree, boots it (SetPatch, 68040 model, real
+time; with MHz: cycle exact at that clock) and runs it; the snapshots at ticks 1250, 2000 and
+2750 (25, 40 and 55 s at 50 Hz) land in `snaps/` of the work dir (a snapshot's pause is not
+counted as a stall). `out.txt` ends with the game's statistics: blocks rendered vs device
+interrupts (equal up to the two pre-filled blocks means no underrun), frames vs E-clock ticks,
+frame-clock stalls. The real-time runs measure timing: that is their subject, not a pass/fail
+check; the conformance runs (`tests/e2e/amiga.py`) use warp. `PROGRAM_ARGS2` runs the game a
+second time (to compare `Avail`), `GUEST_SAVES` and `SAVES_DIR=saves/xenon` put a scenario's
+saves into the drawer, `WARP=1`, `WB=MODEID:DEPTH`, `PRE_CMD`, `AHI=1`, `RUN`, `GDB_PORT`: the
+script's header. Results so far (all with the title menu correct in the first screenshot):
 
 | run | result |
 |---|---|
@@ -63,9 +55,10 @@ and then never runs the audio state machine: no DMA, no AUD0 interrupts,
 `sound_output=interrupts` notwithstanding.  `$EMU/obj-winuae-sdl3/`
 is the same source configured with `-DWINUAE_UNIX_WITH_SDL3=ON` (plus the
 null build's other options, `CMAKE_BUILD_TYPE=Release`; the target is
-`winuae_unix`, the binary `winuae`); `run-game.sh` exports
+`winuae_unix`, the binary `winuae`); `run-program.sh` exports
 `SDL_AUDIO_DRIVER=dummy`, so no sound device is needed.  Use it as
-`WINUAE=$EMU/obj-winuae-sdl3/winuae ./run-game.sh ...` (or `WINUAE=` in `tests/rig.conf`).
+`WINUAE=$EMU/obj-winuae-sdl3/winuae lrvne/rigs/winuae/run-program.sh ...` (or `WINUAE=` in
+`tests/rig.conf`).
 
 **AHI in the guest**: `AHI=1` installs `$EMU/aos/ahi/` (ahi.device
 6.6 from `m68k-amigaos-ahiusr.lha`, `paula.audio` and `AudioModes/PAULA`
@@ -78,9 +71,9 @@ calibrated, 0x20007-0x2000c 8-bit, 0x2000d-0x20012 HiFi, 0x20018 DMA).
 **Hangs**: a program that opens `ahi.device` from a bare exec Task (not a
 Process) hangs in OpenDevice (the device loads its driver through
 dos.library) - the game's audio task is a `CreateNewProc` process for that
-reason.  The harness now survives such hangs: `emu_run` traps EXIT/INT/TERM
-and kills the emulator, and every startup-sequence starts a guest watchdog
-(`Run >NIL: Execute S:watchdog`: `Wait N` + `uaequit`, N = EMU_TIMEOUT - 20).
+reason.  The harness survives such hangs: `EMU_TIMEOUT` ends the run, and `emu_run` traps
+EXIT/INT/TERM and stops the emulator (the guest watchdog that once quit it after
+EMU_TIMEOUT - 20 emulated seconds is gone: those seconds follow the host's load).
 `ReadArgs` splits on an unquoted `=`, so `AUTOPLAY="at:650=down,..."` must
 be quoted on the Amiga command line.
 
@@ -121,7 +114,7 @@ the priority-5 audio task never slept, the game, Workbench and the shells
 starved, and S00's `MUSIC_WAIT` waited for music that played slower than
 real time. Measured with `opnbench` on the board: `probes/amiga/README.md` "Probe 3". Since then the
 default is 11 025 Hz and the audio task has a CPU budget
-(`backends/amiga/README.md` "Audio"); `play-test new` at 11 025 Hz, 22 050 Hz
+(`lrvne/backends/amiga/README.md` "Audio"); `play-test new` at 11 025 Hz, 22 050 Hz
 and with AHI all get through S00 (average render load 46-55 %, peaks
 106-178 %, 39-58 % of the blocks skipped).
 
@@ -147,19 +140,19 @@ RAM copy was deleted. `Version Stuff:Xenon/xenon` prints `xenon 1.0`;
 0 blocks skipped, memory returned. Probes run later should go to a
 separate drawer, so the game drawer stays a clean release install.
 
-## The release archive (`run-dist.sh`, 2026-11-09)
+## The release archive (2026-11-09; now `make TARGET=amiga lrvne-dist-check`)
 
 `make TARGET=amiga dist` stages `build/amiga/dist/` - `Xenon.info` (the
 drawer icon) and `Xenon/` with `xenon`, `xenon.info` and the
-player's `ReadMe.txt` (put together from `backends/amiga/readme/`; since 2026-11-13 no
-`xenon.pak`: `run-dist.sh` copies `build/xenon.pak` into the unpacked drawer before it runs
+player's `ReadMe.txt` (put together from `source/games/xenon/dist/amiga/`; since 2026-11-13 no
+`xenon.pak`: the check copies `build/xenon.pak` into the unpacked drawer before it runs
 the game) - and packs it with
-the host's LhA for UNIX 1.14i into `build/amiga/xenon-amiga-<version>.lha`
+the host's LhA for UNIX 1.14i into `build/amiga/xenon-<version>-amiga.lha`
 (the version from `engine/version.h`; 4.3 MB for the 6.4 MB tree when it held the pack: `-lh5-`,
-level-1 headers; `LHA_LEVEL=` and `LHA=` override). `run-dist.sh
-[ARCHIVE...]` unpacks each archive in WinUAE (68040 CPU: the tree's
-`C/lha` is the 68040 build of LhA 2.12), lists it, starts the game from the
-first one (`AUDIO=none FAST MAXTICKS=200`) and then compares every unpacked
+level-1 headers; `LHA_LEVEL=` and `LHA=` override). `make TARGET=amiga lrvne-dist-check`
+(lrvne's `rigs/winuae/check-dist.sh`) unpacks the archive in WinUAE (68040 CPU: the tree's
+`C/lha` is the 68040 build of LhA 2.12), lists it, starts the game from it
+(`AUDIO=none FAST MAXTICKS=200`) and then compares every unpacked
 file with the staging directory on the host, byte for byte. Findings:
 
 * LhA 2.12 unpacks all three header levels of lha 1.14i (`-0`, `-1`, `-2`)
@@ -172,7 +165,7 @@ file with the staging directory on the host, byte for byte. Findings:
 * two requesters stop LhA dead in the minimal guest tree: a missing
   `mathieeedoubbas.library` (copied from the tree now) and no `ENV:` volume
   (LhA reads its options from there; the script assigns `ENV:` to
-  `RAM:ENV`). The second one only showed on a `gdbshot.py` screenshot
+  `RAM:ENV`). The second one only showed on a gdbserver screenshot
   taken while the run looked hung - the first thing to do when a guest
   program stops producing output.
 * the same archive unpacked on the real A1200 with its `System:C/lha`, see
@@ -181,13 +174,13 @@ file with the staging directory on the host, byte for byte. Findings:
 ## Emulator recipe
 
 Host: `$EMU/obj-winuae/winuae` (null video), `-f a.uae`, output in
-`emu.log`.  The gdbserver pauses the CPU on attach; `gdbshot.py` sends
-`qRcmd,<hex "screenshot /path.png">`, gets `OK`, sends `D` (detach resumes).
-The guest asks for a screenshot by creating `DH0:shot_<tag>_<n>.req` and
-waits (polling `Lock()`) for `.ack`, which `run-lib.sh` creates after the
-PNG is written.  RTG screens are captured too (`rtg_*.png` are 640x480).
+`emu.log`.  The gdbserver pauses the CPU on attach; lrvne's `rigs/snapd.py` (`lrvrig/gdb.py`) sends
+`?` and waits for the stop reply, then `qRcmd,<hex "screenshot /path.png">`, gets `OK`,
+sends `D` (detach resumes). A probe asks for a screenshot by creating
+`DH0:shot_<tag>_<n>.req` and waits (polling `Lock()`) for `.ack`, which the server creates
+after the PNG is written to `shots/`.  RTG screens are captured too (`rtg_*.png` are 640x480).
 
-Config keys that worked for RTG (what `emu_config rtg` in `run-lib.sh` writes):
+Config keys that worked for RTG (what `emu_config rtg` in lrvne's `rigs/winuae/run-lib.sh` writes):
 
 ```
 use_gui=no

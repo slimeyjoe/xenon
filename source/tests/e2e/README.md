@@ -17,6 +17,11 @@ one does need the emulator rig), the AROS build the same way in hosted AROS ("AR
     make TARGET=sdl3 e2e E2E_ARGS="--scale aspect --window 1920x1080 -k title"
     python3 -I tests/e2e/run.py --help           # --transcripts DIR: input transcripts (amiga.py)
 
+The scenarios run in parallel, one per CPU (`--jobs N`; `--jobs 1` runs them one after another
+in the driver's own process). Each language and each part of a scenario is a unit of its own
+(`@scenario(..., parts=3)` calls the function once per `ctx.part`: `explore`'s three walks); the
+results are printed in scenario order, the same whichever unit finishes first.
+
 The scenarios are written for `en` and `ja`; the Polish scripts (`pl`) have none yet and are
 checked by play-review (`lang/README.md`). The SDL3 run takes about 30 minutes per language
 (every snapshot reads the window back).
@@ -28,11 +33,15 @@ Needs Python 3 with numpy and Pillow, `build/host/xenon` (or `build/sdl3/xenon`)
 ## How a run works
 
 1. `run.py` starts `xenon --control` for every scenario (`xe2e/engine.py`). The backend
-   (`backends/control/control.c`, built into the null and SDL3 backends) writes every engine
+   (`lrvne/backends/control/control.c`, built into the null and SDL3 backends) writes every engine
    event as a JSON line and stops at the end of any tick in which the engine is blocked waiting
    for a key, at a breakpoint event, or after a tick budget. The driver answers with `press`,
-   `run`, `snap`, `record`, `break`.
-2. The engine reports its events through `hal->trace` (`hal/xe_hal.h`, `enum xe_trace_kind`):
+   `run`, `snap`, `record`, `break`. The scenarios press the engine's commands (`ok`, `cancel`,
+   `help`, `f1`..`f5`, `other`) and hold its levels (`ctrl`, `instant`); `xe2e/engine.py` sends
+   them as the host keys the engine reads them from (`KEY_NAMES`: Return, Esc, F1, F2..F6, A;
+   Ctrl and the kana lock), which is also how `amiga.py` and `aros.py` write the replays.
+2. The engine reports its events through `hal->trace` (`engine/xe.h`, `enum xe_trace_kind`, from
+   lrvne's `LRV_TR_ENGINE`; waits, script errors and the quit are lrvne's own kinds):
    script and page entered, every opcode with its operands, message start and end, menus with
    their options, title menu, image loads, G_DISP, effect and fade bounds, ADT frames, blink
    copies, waits entered and left, keys consumed, save/load, progress, boxes, sequences. Each
@@ -110,13 +119,14 @@ def my_scene(ctx):
     g.choose('Tracy')                      # substring of the option text, or an index
 ```
 
-`ctx.game()` accepts `saves={'save1': path}` fixtures. Problems from `g.expect()`, the oracles
-and goldens are collected and printed per scenario; the raw event log of every game is in
-`build/host/e2e/logs/`.
+`ctx.game()` accepts `saves={'save1': path}` fixtures. Scenarios run in parallel, so a game
+keeps its files to itself: its storage is `build/host/e2e/storage/<lang>/<game>/`, and golden
+and game names are unique. Problems from `g.expect()`, the oracles and goldens are collected
+and printed per scenario; the raw event log of every game is in `build/host/e2e/logs/<lang>/`.
 
 ## SDL3 backend
 
-`xenon --control` on the SDL3 build (`backends/sdl3/main.c`) renders into an offscreen window
+`xenon --control` on the SDL3 build (`lrvne/backends/sdl3/main.c`) renders into an offscreen window
 (SDL's `offscreen` video driver; `SDL_VIDEO_DRIVER` in the environment overrides it, and
 `SDL_RENDER_DRIVER=software` picks the software renderer), opens no audio device and runs as
 fast as the driver lets it. `--window WxH` sets the drawable size (default 1280x800),
@@ -129,8 +139,9 @@ difference between the two builds, and a presentation failure is the backend.
 ## Amiga in WinUAE
 
 `tests/e2e/amiga.py` checks what the Amiga build (`build/amiga/xenon`) really puts on the
-screen of an emulated Amiga (plan §10). It needs the WinUAE rig of `tests/amiga/README.md`
-(its machine settings in `tests/rig.conf`) and `build/host/xenon` for the reference frames.
+screen of an emulated Amiga (plan §10). It runs on lrvne's WinUAE rig
+(`lrvne/rigs/README.md`; the machine settings in `tests/rig.conf`) and needs `build/host/xenon`
+for the reference frames.
 
     make TARGET=amiga e2e                                            # stage A, all configurations
     make TARGET=amiga e2e E2E_ARGS="game --scenario prologue"        # stage B, native only
@@ -141,24 +152,30 @@ Configurations (each its own emulator, work dir and gdb port, in parallel): `nat
 no Picasso96), `rtg` (Picasso96 loaded, native mode), `promote` (the default mode promoted to a
 uaegfx screen with `FAKENATIVEMODES`), `uaegfx` (`MODE=0x50031000`, a 640x480x8 board mode).
 Not in the default set (`--configs scaled`, `--configs window`, or by name), the options of
-`backends/amiga/README.md` "Window, scale, aspect": `native-aspect` (`ASPECT` on PAL HiRes
+`lrvne/backends/amiga/README.md` "Window, scale, aspect": `native-aspect` (`ASPECT` on PAL HiRes
 Laced: 640x480), `promote-aspect`, `uaegfx-x2` (`SCALE=2`: a 1280x1024 board mode found by the
 game), `uaegfx-x2a` (`SCALE=2 ASPECT`: 1280x960); `wb-rtg8`, `wb-rtg16` (`ASPECT`), `wb-rtg32x2`
 (`SCALE=2`, borderless) and `wb-aga256` (borderless) put the game in a window on a Workbench
-of that mode (`run-game.sh WB=MODEID:DEPTH`), `wb-aga8` checks the fall back to the own screen
+of that mode (`run-program.sh WB=MODEID:DEPTH`), `wb-aga8` checks the fall back to the own screen
 on an 8-colour Workbench. The expected image of a scaled screen is the reference expanded
-through the same row map (`amiga_oracle.expand`); a window is found at the screen's position
+through the same row map (lrvne's `lrvrig/oracle.py` `expand`); a window is found at the screen's position
 plus the window's inside from the request (no registration image on a Workbench), its bitmap
 read through its pens (`pens=`), its surroundings not checked, and 15/16-bit screens compared
 within 8 per channel.
 
 * **Snapshots.** At each snapshot the game (or the present test) waits four vertical blanks
-  and writes `snap_<name>.req` (`backends/amiga/snap.c`) with the displayed buffer's address,
-  layout and the frame hash (`backends/common/ptest.h`). `amiga_snapd.py`, started by
-  `tests/amiga/run-game.sh SNAPD=1`, attaches to the WinUAE gdbserver (the CPU stops), takes
-  a screenshot, reads the displayed bitmap from guest memory (planar chip RAM, or the
-  graphics card memory via `p96GetBitMapAttr`), detaches and acknowledges.
-* **Oracles** (`xe2e/amiga_oracle.py`): the frame hash must equal the null backend's (else
+  and writes `snap_<name>.req` (`lrvne/backends/amiga/core/snap.c`) with the displayed buffer's address,
+  layout and the frame hash (`lrvne/backends/common/ptest.h`). lrvne's `rigs/snapd.py`, started for
+  every run by `rigs/winuae/run-lib.sh`, attaches to the WinUAE gdbserver, waits for the stop
+  reply (the CPU has stopped), takes a screenshot, reads the displayed bitmap from guest
+  memory (planar chip RAM, or the graphics card memory via `p96GetBitMapAttr`), detaches and
+  acknowledges. The game waits for the ack as long as it takes.
+* **Time.** The runs go in warp (`--real-time` to throttle them): FAST and PRESENTTEST step
+  by ticks, so nothing in them counts real time and the results are the same; a busy host
+  only makes a run longer. `--timeout` (600 s per run) is the one backstop, and a run it
+  ended is reported as `emulator timeout` (`emu.rc`). One `amiga.py` at a time: a second
+  waits for the first (a lock in the work directory).
+* **Oracles** (lrvne's `rigs/lrvrig/oracle.py`): the frame hash must equal the null backend's (else
   the 68k build computed a different frame); the screenshot, cropped where the registration
   image says the 640x400 picture is, must equal palette x 17 (black with graphics off) and be
   black everywhere else (overscan border, board rows below the screen); the bitmap must hold
@@ -180,7 +197,7 @@ within 8 per channel.
 Results: `FAIL`/`PASS` per configuration; diffs (`*.expected.png`, `*.screenshot.png`,
 `*.diff.png`, `*.bitmapdiff.png`) under `build/amiga/e2e/diff/<config>/` (stage A) or
 `build/amiga/e2e/game/<game>/diff/<config>/` (stage B); emulator work dirs under
-`$EMU/aos/work/xenon/{present,game-<game>}-<config>/` (`EMU` from `tests/rig.conf`, default `~/amiga-emu`).
+`$RIG_WORKTOP/{present-xenon,game-<game>}-<config>/` (lrvne's rigs: default `$EMU/aos/work/rig`).
 
 What it found when it was built (2026-11-08): the native overscan border showed colour 0;
 dirty updates while scrolled went to unrotated rows (latent: no scenario redraws during a
@@ -194,12 +211,12 @@ object when a header changes), which made the game quit at the title.
 ## AROS
 
 `tests/e2e/aros.py` runs the same two stages on the AROS build (`build/aros/xenon`) in hosted
-AROS (`tests/aros/aros.sh`, headless; `tests/aros/README.md`). There is no emulator debugger
-to read the screen: the guest reads its shown page back itself (`backends/amiga/aros/snap_aros.c`,
+AROS (lrvne's `rigs/aros/aros.sh`, headless; `tests/aros/README.md`). There is no emulator debugger
+to read the screen: the guest reads its shown page back itself (`lrvne/backends/amiga/aros/snap_aros.c`,
 `ReadPixelArray` of the true colour bitmap) and writes a 640x400 PPM next to each snapshot
 request in SNAPDIR, a host directory in hosted AROS, and carries on. Each snapshot is checked
 for the frame hash and, pixel by pixel, the colours read back against the reference frame
-(`xe2e/amiga_oracle.py`; the spec and the reference come from `amiga.py`). FAST runs take
+(lrvne's `lrvrig/oracle.py`; the spec and the reference come from `amiga.py`). FAST runs take
 seconds.
 
     make TARGET=aros e2e                                          # stage A, the present test
@@ -208,16 +225,21 @@ seconds.
 
 Results 2026-11-11: present 25/25, prologue 40/40, save-load (both games) 40/40 each.
 
-The window, scale and aspect modes (`backends/amiga/README.md` "Window, scale, aspect"):
+The window, scale and aspect modes (`lrvne/backends/amiga/README.md` "Window, scale, aspect"):
 `aros.py present --guest-args "WINDOW" --name e2e-present-window` adds program options (the
 run name keeps runs apart); the guest then reads back the window's inside or the scaled page
-(`sx=`/`dsth=` in the request, expanded by `amiga_oracle.expand`). Results 2026-11-12, 25/25
+(`sx=`/`dsth=` in the request, expanded by the oracle's `expand`). Results 2026-11-12, 25/25
 each: `WINDOW` (1024x768 true colour Wanderer screen), `WINDOW ASPECT` (640x480), `SCALE=2`
 (a 1280x800 screen), `SCALE=auto ASPECT` (1920x1440).
 
-WarpOS: no driver of its own; `tests/warpos/run-wos.sh` with `SNAPD=1` (and `WOS_WB=`,
-`WOS_RTG=1`) runs the present test on the PPC build and `amiga.py check` checks it
-(`probes/warpos/README.md` "Window, scale, aspect").
+A hosted AROS run ends when its commands are done (a marker the host waits for); `--timeout`
+is the backstop, and a run that did not finish (AROS ended early, the X server failed, the
+backstop) is a failure saying so (`aros.sh` exit status).
+
+WarpOS: `make TARGET=warpos lrvne-present` runs the presentation test on the PPC build
+(lrvne's `present.py warpos`: `run-wos.sh`, one configuration at a time, real time;
+`LRVNE_PRESENT_ARGS="--configs native,wb-aga256"` for more; `probes/warpos/README.md` "Window,
+scale, aspect").
 
 ## Protocol reference
 

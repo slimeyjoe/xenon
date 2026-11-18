@@ -4,7 +4,7 @@
 #ifndef XE_VERSION_H
 #define XE_VERSION_H
 
-#define XE_VERSION      "1.4"
-#define XE_VERSION_DATE "13.11.2026"
+#define XE_VERSION      "1.5"
+#define XE_VERSION_DATE "18.11.2026"
 
 #endif

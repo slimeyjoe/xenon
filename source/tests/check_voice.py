@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Decode voice clips with the engine's decoder (test_voice) and compare them with a reference.
 usage: check_voice.py BIN VOICEPAK [N]
 
@@ -19,7 +20,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', 'tools'))
-import xpak   # noqa: E402
+sys.path.insert(0, os.path.join(HERE, '..', 'lrvne', 'tools'))
+from lrvne import xpak   # noqa: E402
 import ldp    # noqa: E402
 
 
@@ -68,8 +70,9 @@ def main():
     binary, pak = sys.argv[1:3]
     count = int(sys.argv[3]) if len(sys.argv) > 3 else 60
     data = open(pak, 'rb').read()
-    clips = sorted((e for e in xpak.read(data) if e['type'] == xpak.T_VOICE), key=lambda e: e['size'])
-    opus = clips and clips[0]['data'][:4] == b'opus'
+    clips = sorted((e for e in xpak.read_pack(data).entries if e.type == xpak.T_VOICE),
+                   key=lambda e: e.size)
+    opus = clips and clips[0].data[:4] == b'opus'
     ref = None
     if opus:
         try:
@@ -77,29 +80,29 @@ def main():
         except OSError:
             print('check_voice: skipped (an opus pack, and no system libopus to compare with)')
             return 0
-    pick = clips[:5] + clips[-5:] + [e for e in clips if e['name'][-1] in 'ABC'][:10]
+    pick = clips[:5] + clips[-5:] + [e for e in clips if e.name[-1] in 'ABC'][:10]
     step = max(1, len(clips) // max(1, count - len(pick)))
     pick += clips[::step]
     seen, fails, worst = set(), 0, 99.0
     for e in pick:
-        if e['name'] in seen:
+        if e.name in seen:
             continue
-        seen.add(e['name'])
+        seen.add(e.name)
         if opus:
-            want = ref.decode(e['data'])
+            want = ref.decode(e.data)
         else:
-            _, want = ldp.decode(e['data'])
+            _, want = ldp.decode(e.data)
         wantb = struct.pack('<%dh' % len(want), *want)
         for chunk in (1, 7, 512) if e in clips[:5] else (7, 512):
-            got = subprocess.run([binary, pak, e['name'], str(chunk)], capture_output=True).stdout
+            got = subprocess.run([binary, pak, e.name, str(chunk)], capture_output=True).stdout
             if opus and len(got) == len(wantb):
                 s = snr(want, struct.unpack('<%dh' % (len(got) // 2), got))
                 worst = min(worst, s)
                 if s >= 40:
                     continue
-                print('FAIL %s (chunk %d): %.1f dB SNR against libopus' % (e['name'], chunk, s))
+                print('FAIL %s (chunk %d): %.1f dB SNR against libopus' % (e.name, chunk, s))
             elif got != wantb:
-                print('FAIL %s (chunk %d): %d bytes, expected %d' % (e['name'], chunk, len(got), len(wantb)))
+                print('FAIL %s (chunk %d): %d bytes, expected %d' % (e.name, chunk, len(got), len(wantb)))
             else:
                 continue
             fails += 1

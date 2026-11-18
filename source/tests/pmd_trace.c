@@ -1,15 +1,16 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Sequencer trace tool, driven by tests/check_pmd.py.
  *
  *   pmd_trace song FILE.M SAMPLES [EFC PMDCOM] [fade:AT:SPEED] [vol:AT:V] [se:AT:N]
  *   pmd_trace se   XEN_SE.EFC PMD.COM N SAMPLES
  *
- * Runs the PMD sequencer at 44 100 Hz for SAMPLES samples (events at AT samples) and prints
+ * Runs lrvne's PMD module at 44 100 Hz for SAMPLES samples (events at AT samples) and prints
  * one line per register write: "sample reg val" (hex reg/val). Timer registers are printed
  * too; the checker ignores them like vgmverify does. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "snd/pmd.h"
+#include "lrvne/pmd.h"
 
 #define SR 44100u
 
@@ -52,16 +53,18 @@ struct event { uint64_t at; char kind; int arg; };
 
 int main(int argc, char **argv)
 {
-    struct pmd p;
+    struct lrv_pmd p;
     uint32_t mlen, elen = 0, clen = 0;
-    uint8_t *m, *efc = 0, *com = 0;
+    uint8_t *m = 0, *efc = 0, *com = 0;
     uint64_t samples;
     struct event ev[16];
     int nev = 0, i;
 
     if (argc < 4)
         return 2;
-    pmd_init(&p, log_write, 0, SR);
+    lrv_pmd_init(&p, log_write, 0, SR);
+    lrv_pmd_set_options(&p, 16, 0, 0);  /* as the recordings were made: PMD /F */
+    p.stop_after_fade = 0;              /* /F, as the reference recordings run the driver */
     if (strcmp(argv[1], "song") == 0) {
         m = read_file(argv[2], &mlen);
         samples = strtoull(argv[3], 0, 10);
@@ -80,19 +83,19 @@ int main(int argc, char **argv)
             }
         }
         if (efc)
-            pmd_set_efc(&p, efc, elen);
+            lrv_pmd_set_efc(&p, efc, elen);
         if (com && clen > 0x3096 - 0x100)
-            pmd_set_ssgtab(&p, com + 0x2CE9 - 0x100, 0x3096 - 0x2CE9);
-        pmd_load_music(&p, m + 1, mlen - 1);
-        pmd_mstart(&p);
+            lrv_pmd_set_ssgtab(&p, com + 0x2CE9 - 0x100, 0x3096 - 0x2CE9);
+        lrv_pmd_load_music(&p, m + 1, mlen - 1);
+        lrv_pmd_mstart(&p);
     } else if (strcmp(argv[1], "se") == 0 && argc >= 6) {
         efc = read_file(argv[2], &elen);
         com = read_file(argv[3], &clen);
-        pmd_set_efc(&p, efc, elen);
+        lrv_pmd_set_efc(&p, efc, elen);
         if (clen > 0x3096 - 0x100)
-            pmd_set_ssgtab(&p, com + 0x2CE9 - 0x100, 0x3096 - 0x2CE9);
+            lrv_pmd_set_ssgtab(&p, com + 0x2CE9 - 0x100, 0x3096 - 0x2CE9);
         samples = strtoull(argv[5], 0, 10);
-        pmd_fm_effect_on(&p, atoi(argv[4]));
+        lrv_pmd_fm_effect_on(&p, atoi(argv[4]));
     } else {
         return 2;
     }
@@ -105,16 +108,19 @@ int main(int argc, char **argv)
                 next = ev[i].at;
         for (i = 0; i < nev; i++) {
             if (ev[i].at == g_pos) {
-                if (ev[i].kind == 'f') pmd_fade(&p, (uint8_t)ev[i].arg);
-                else if (ev[i].kind == 'v') pmd_set_fadevol(&p, (uint8_t)ev[i].arg);
-                else if (ev[i].kind == 's') pmd_fm_effect_on(&p, ev[i].arg);
+                if (ev[i].kind == 'f') lrv_pmd_fade(&p, (uint8_t)ev[i].arg);
+                else if (ev[i].kind == 'v') lrv_pmd_set_fadevol(&p, (uint8_t)ev[i].arg);
+                else if (ev[i].kind == 's') lrv_pmd_fm_effect_on(&p, ev[i].arg);
                 ev[i].at = (uint64_t)-1;
             }
         }
         n = (int)(next - g_pos);
         if (n > 4096)
             n = 4096;
-        pmd_advance(&p, n, render, 0);
+        lrv_pmd_advance(&p, n, render, 0);
     }
+    free(m);
+    free(efc);
+    free(com);
     return 0;
 }

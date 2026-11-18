@@ -9,6 +9,23 @@ voice are not. Build and play:
                                                        # (Opus, 48 MB; CODEC=ldp6: 261 MB)
     ../build/sdl3/xenon --pak ../build/xenon.pak       # finds xenon_voice.pak next to the pack
 
+**Since the move to lrvne** (the platform layer, `source/lrvne`) the generic half of this plan is
+lrvne's and the names below are history where they say otherwise:
+
+| here | now |
+|---|---|
+| the XPAK container, `XPAK_T_VOICECUE` (11), `XPAK_T_VOICE` (12), `XPAK_T_META` | lrvne's pack format 2 (`lrvne/pack.h`): `LRV_PT_VOICECUE` (5), `LRV_PT_VOICE` (6), `LRV_PT_META` (1); languages by tag |
+| `engine/voice/vdec*.c`, `third_party/opus` | lrvne's decoders (`lrvne/vdec.h`: pcm8, ldp4/ldp6, Opus with `LRVNE_OPUS=1`) and its vendored libopus |
+| the ring, the resampler, `voice_pump`, `voice_mix` | lrvne's player (`lrvne/voice.h`: `lrv_voice_play`, `_stop`, `_pump`, `_mix`) |
+| `hal->voice_mode` `XE_VOICE_NONE/MIX/CHANNEL`, `voice_open` ... | `hal->aux_mode` `LRV_AUX_NONE/MIX/CHANNEL`, `aux_open` ... (`lrvne/hal.h`) |
+| `--music-volume`, `MUSICVOL`, `VOICEVOL` | `--volume`, `VOLUME`, `VOICEVOLUME` |
+| `mkvoice.py` writing the pack itself | `mkvoice.py` reading `XENON.DAT` and giving the clips to `lrvne.voicepack` |
+
+What stays the engine's is the cue table and when a clip plays, waits and is cut
+(`engine/voice/voice.c`, §4); the music's default volume while the voice is on (§6) is the
+game's profile key `voice_music_volume` (docs/profile.md); the tools that read the Windows
+release (`arc3.py`, `ldp.py`) are the game's.
+
 Goal: play the voice acting of the Windows 95 release (docs/re/other-versions.md §2.4, §4) in
 every language, from an optional second pack `xenon_voice.pak`, on any backend that chooses to
 support it, without changing anything for builds or users without it.

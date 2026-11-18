@@ -47,8 +47,8 @@ def walk(ctx, seed, progress, max_steps=20000):
     return g
 
 
-@scenario('explore', tags=('slow',))
+@scenario('explore', tags=('slow',), parts=3)
 def explore(ctx):
-    for i in range(3):
-        seed = ctx.seed * 100 + i
-        walk(ctx, seed, STARTS[(seed + i) % len(STARTS)])
+    i = ctx.part                                 # the three walks run in parallel
+    seed = ctx.seed * 100 + i
+    walk(ctx, seed, STARTS[(seed + i) % len(STARTS)])

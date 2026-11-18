@@ -12,17 +12,17 @@ import struct
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools'))          # source/tools (xpak)
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools'))          # source/tools (mkpack)
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'lrvne', 'tools'))  # lrvne's tools
 sys.path.insert(0, os.path.join(HERE, '..', '..', '..', '..', 're-tools'))  # re-tools (ccdis)
 import ccdis   # noqa: E402
-import xpak    # noqa: E402
+import mkpack  # noqa: E402
+from lrvne import xpak   # noqa: E402
 from . import textenc   # noqa: E402
 
-LANG_IDS = {'ja': xpak.L_JA, 'en': xpak.L_EN, 'pl': xpak.L_PL}
-
 OP_MSG = 0xFD
-OP_ASSET = {0x0C: xpak.T_GDT, 0x16: xpak.T_GDT, 0x28: xpak.T_GDT, 0x33: xpak.T_GDT,
-            0x34: xpak.T_GDT, 0x0E: xpak.T_MUSIC, 0x2A: xpak.T_ADT, 0x07: xpak.T_SCRIPT}
+OP_ASSET = {0x0C: mkpack.T_GDT, 0x16: mkpack.T_GDT, 0x28: mkpack.T_GDT, 0x33: mkpack.T_GDT,
+            0x34: mkpack.T_GDT, 0x0E: mkpack.T_MUSIC, 0x2A: mkpack.T_ADT, 0x07: mkpack.T_SCRIPT}
 OP_NAMES = {op: v[0] for op, v in ccdis.OPS.items()}
 
 # Data bugs of the original game files (docs/re/sound.md §4.2, scripts.md §6): the engine
@@ -93,17 +93,17 @@ class Script:
 
 class ScriptOracle:
     def __init__(self, pak_path, lang, storage_dir):
-        self.lang = LANG_IDS[lang]
+        self.lang = lang
         self.storage = storage_dir
-        entries = xpak.read(open(pak_path, 'rb').read())
+        entries = xpak.read_pack(open(pak_path, 'rb').read()).entries
         self.scripts = {}
         for e in entries:
-            if e['type'] == xpak.T_SCRIPT and e['lang'] in (self.lang, xpak.L_ANY):
-                if e['name'].upper() not in self.scripts or e['lang'] == self.lang:
-                    self.scripts[e['name'].upper()] = e['data']
+            if e.type == mkpack.T_SCRIPT and e.lang_tag in (lang, ''):
+                if e.name.upper() not in self.scripts or e.lang_tag == lang:
+                    self.scripts[e.name.upper()] = e.data
         self.assets = {}
         for e in entries:
-            self.assets.setdefault(e['type'], set()).add(e['name'].upper())
+            self.assets.setdefault(e.type, set()).add(e.name.upper())
         self.cache = {}
         self.reset()
 
@@ -273,7 +273,7 @@ class ScriptOracle:
     def ev_load(self, ev):
         if not ev.a[0]:
             return
-        path = os.path.join(self.storage, ev.name + '.dat')
+        path = os.path.join(self.storage, ev.name)
         try:
             buf = open(path, 'rb').read()
         except OSError:

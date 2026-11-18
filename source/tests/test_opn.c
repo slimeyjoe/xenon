@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* OPN core driver for tests/check_opn.py.
  *
  *   test_opn lite|lite2|ymfm RATE FILE.vgm OUT.raw [MAX_SECONDS [all|fm|ssg]]
@@ -11,7 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "snd/opn_core.h"
+#include "lrvne/opn.h"
+#include "test_hal.h"
 
 #define CLOCK 3993600u
 #define BUF 4096
@@ -43,8 +45,10 @@ static uint32_t rd32(const uint8_t *p)
 
 int main(int argc, char **argv)
 {
-    const struct opn_core_ops *ops;
-    struct opn_core *core;
+    const struct lrv_opn_ops *ops;
+    struct lrv_opn *core;
+    struct lrv_hal hal;
+    unsigned flags = 0;
     uint32_t rate = 0;
     uint8_t *vgm;
     size_t len, pos;
@@ -59,18 +63,19 @@ int main(int argc, char **argv)
     if (argc < 5)
         return 2;
     if (!strcmp(argv[1], "ymfm")) {
-#ifdef XE_HAVE_YMFM
-        ops = &opn_ymfm_ops;
+#ifdef LRV_HAVE_YMFM
+        ops = &lrv_opn_ymfm_ops;
 #else
         fprintf(stderr, "ymfm not built\n");
         return 2;
 #endif
     } else {
-        ops = &opn_lite_ops;
+        ops = &lrv_opn_lite_ops;
         if (!strcmp(argv[1], "lite2"))
-            opn_lite_fm_oversample = 2;
+            flags = LRV_OPN_OVERSAMPLE;
     }
-    core = ops->create(CLOCK, (uint32_t)atoi(argv[2]), &rate);
+    th_hal(&hal, 0);
+    core = ops->create(&hal, CLOCK, (uint32_t)atoi(argv[2]), flags, &rate);
     if (!core)
         return 2;
     vgm = read_file(argv[3], &len);
@@ -153,6 +158,7 @@ int main(int argc, char **argv)
     }
     fclose(out);
     ops->destroy(core);
+    free(vgm);
     printf("%lu %lu\n", (unsigned long)rate, (unsigned long)done);
     return 0;
 }

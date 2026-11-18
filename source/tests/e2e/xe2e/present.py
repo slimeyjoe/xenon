@@ -1,10 +1,10 @@
 """Presentation oracle (SDL3 backend): what the renderer put on the screen versus the engine's
-planes. The backend's `readback` command (backends/control/control.h) returns one RGB sample per
+planes. The backend's `readback` command (lrvne/backends/control/control.h) returns one RGB sample per
 source pixel, taken at the centre of that pixel's destination block, the destination rectangle it
 drew, and two counters it computed over the whole drawable: destination pixels that differ from
 their source pixel's sample (nonuniform) and lit pixels outside the rectangle (border_lit).
 
-Rules (plan §4.1, backends/sdl3/main.c dest_rect):
+Rules (plan §4.1, lrvne/backends/sdl3/main.c dest_rect):
   * the rectangle is the one the scale mode prescribes for the drawable size, centred;
   * everything outside it is black;
   * integer and integer-aspect modes (nearest filtering) reproduce every pixel exactly, so the

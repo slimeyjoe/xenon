@@ -12,7 +12,7 @@ void save_write(const char *name, struct cc_vm *vm);
  * 0 when there is no data (the "no data saved" box was shown). */
 int  save_read(const char *name, struct cc_vm *vm);
 
-uint8_t progress_read(void);                /* XEN.GDT byte */
+uint8_t progress_read(void);                /* the progress byte */
 void    progress_set_bit(int n);            /* COMPLETE n */
 
 #endif

@@ -1,0 +1,124 @@
+5. TOOL TYPES AND OPTIONS
+=========================
+
+The same options work as tool types of the program's icon (select the icon,
+then Information from the Icons menu) and as Shell arguments. A tool type
+in parentheses, such as (LANG=en), is switched off; remove the parentheses
+to use it. The icon comes with every option at its default.
+
+  LANG=en | pl | ja
+      Language of the text. Default: en. LANG=pl plays the Polish
+      translation. LANG=ja plays the original Japanese text; no Japanese
+      system software is needed, the game brings its own font.
+
+  MODE=<screen mode id>
+      The screen mode, as a hexadecimal mode id. Default: 0x8004, PAL
+      HiRes Laced. Any mode that can show 640x400 works. 0x19004 is NTSC
+      HiRes Laced. On a graphics card, the simplest way is to keep the
+      default and let Picasso96 promote it to a card mode.
+
+  AUDIO=paula | ahi | none
+      Sound output. Default: paula. "ahi" plays through ahi.device,
+      "none" plays silently.
+
+  AHIUNIT=<n>
+      The AHI unit to use with AUDIO=ahi. Default: 0.
+
+  RATE=<Hz>
+      The sample rate of the music and sound. Default: 11025. 22050
+      sounds better but needs a faster processor than a 68040 at
+      25 MHz, which plays it with gaps.
+
+  AUDIOCPU=<percent>
+      How much of the processor the sound may use, from 10 to 100.
+      Default: 75. If the sound needs more, short gaps of silence are
+      inserted instead, so that the game and the Workbench stay
+      responsive. Raise it on a fast machine if you hear gaps.
+
+  AUDIOBUF=<samples>
+      Size of each sound buffer. Default: 1024 at 11025 Hz, 2048 at
+      22050 Hz, about a tenth of a second. Larger buffers survive
+      disk activity better but delay sound effects.
+
+  PAULA14
+      Plays Paula in 14-bit mode on all four channels for less noise.
+      Default: off (8-bit on two channels). The voices then have no
+      channels of their own: the game mixes them into the music, at the
+      music's rate.
+
+  VOICEPAK=<file>
+      Where the voice data is (section 3, "Voices"). Default:
+      xenon_voice.pak in the program's drawer, or next to the PAK= file.
+      The characters speak whenever this file is found.
+
+  NOVOICE
+      No voices, even when the voice data is there.
+
+  VOICEVOLUME=<percent>
+      Volume of the voices, 1 to 100. Default: 100.
+
+  VOLUME=<percent>
+      Volume of the music and the sound effects, 1 to 100. Default: 50
+      while the voices play (the music would cover them), 100 without
+      them.
+
+  VOICESTRICT
+      A click during a voice does not cut it short: the line waits until
+      the voice has finished, as in the Windows version. Default: off (OK
+      or a click cuts the voice; Cancel always does).
+
+  VOICEMIX
+      With AUDIO=ahi: the game mixes the voices into the music itself
+      instead of playing them on a second AHI channel. Needed when the AHI
+      unit is set to a single channel in the AHI preferences (the voices
+      are silent otherwise). The voices then play at the music's rate.
+
+  OPN=lite | lite2
+      The FM sound emulation. Default: lite. lite2 renders the FM part
+      at double rate for a cleaner sound and needs about 1.6 times the
+      processor time; for a 68060.
+
+  WINDOW
+      Play in a window on the Workbench instead of on the game's own
+      screen. Default: off. The Workbench needs 256 colours or a graphics
+      card (16 free colours for the game) and room for 640x400 pixels; on
+      a native 640-pixel-wide Workbench the window has no border. If the
+      Workbench cannot take the window, the game opens its own screen as
+      usual. In a window F10 changes its size (section 4). On a 68040
+      the game's own screen is faster: a window redraws more, and on a
+      true colour Workbench fades show fewer steps.
+
+  PUBSCREEN=<name>
+      With WINDOW: the public screen to open the window on. Default: the
+      default public screen, normally the Workbench.
+
+  SCALE=1 | 2 | 3 | auto
+      Show each pixel of the game 1, 2 or 3 times as large. Default: 1.
+      "auto" takes the largest that fits. On the game's own screen this
+      needs a graphics card: the game picks a card mode large enough
+      (MODE= insists on one mode). Larger pictures cost more time; on a
+      68040 keep 1.
+
+  ASPECT
+      Show the picture with the proportions of the PC-98's 4:3 monitor,
+      by repeating every fifth line (640x400 becomes 640x480). Default:
+      off. On the native PAL HiRes Laced screen it costs about a fifth
+      more drawing; NTSC HiRes Laced (MODE=0x19004) already has these
+      proportions.
+
+  PRELOAD=auto | yes | no
+      Load all game data into memory at start-up. Default: auto, which
+      preloads when the data fits in fast RAM with 1.5 MB to spare.
+      "yes" preloads whenever it fits, "no" never preloads.
+
+  PAK=<file>
+      Where the data file is. Default: xenon.pak in the program's drawer.
+
+  QUIET
+      No messages in the Shell window.
+
+The program also understands AUTOPLAY, MAXTICKS, FAST, SNAPDIR and
+PRESENTTEST. They exist for automated testing and are of no use for
+playing.
+
+

@@ -5,7 +5,7 @@
 # BIN = the voicebench binary, PAKS = the packs to decode (mkbenchpak.py), copied to DH0:T/.
 # SETPATCH=0: no SetPatch (68060). FAST=1: the probe's default fast CPU instead (a functional check, timings meaningless).
 set -eu
-RIG=$(cd "$(dirname "$0")/../../tests/amiga" && pwd)
+RIG=$(cd "$(dirname "$0")/../../lrvne/rigs/winuae" && pwd)
 . "$RIG/run-lib.sh"
 MHZ=${1:-25}
 CPUM=${2:-68040}

@@ -9,11 +9,8 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools'))          # source/tools (xpak, xfont)
-import xfont   # noqa: E402
-import xpak    # noqa: E402
-
-LANG_IDS = {'ja': xpak.L_JA, 'en': xpak.L_EN, 'pl': xpak.L_PL}
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'lrvne', 'tools'))   # lrvne's tools
+from lrvne import xfont, xpak   # noqa: E402
 
 _enc = 'cp932'
 _narrow = frozenset()
@@ -21,21 +18,12 @@ _narrow = frozenset()
 
 def configure(pak_path, lang):
     global _enc, _narrow
-    lid = LANG_IDS[lang]
-    entries = xpak.read(open(pak_path, 'rb').read())
-
-    def find(name, typ):
-        for want in (lid, xpak.L_ANY):
-            for e in entries:
-                if e['name'] == name and e['type'] == typ and e['lang'] == want:
-                    return e
-        return None
-
+    pack = xpak.read_pack(open(pak_path, 'rb').read())
     _enc, _narrow = 'cp932', frozenset()
-    meta = find('lang', xpak.T_META)
-    if meta and b'encoding=utf-8' in meta['data'].split(b'\n'):
+    meta = pack.find('lang', xpak.T_META, lang)
+    if meta and b'encoding=utf-8' in meta.data.split(b'\n'):
         _enc = 'utf-8'
-        _, _, _, table = xfont.read_xfnt(find('font8', xpak.T_FONT)['data'])
+        _, _, _, table = xfont.read_xfnt(pack.find('font8', xpak.T_FONT, lang).data)
         _narrow = frozenset(table)
 
 

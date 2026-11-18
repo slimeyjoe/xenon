@@ -40,6 +40,7 @@ class Manifest:
         return self.rows.get((lang, name))
 
     def set(self, lang, name, h):
+        _changes.append((self.path, lang, name, h))
         if self.rows.get((lang, name)) != h:
             self.rows[(lang, name)] = h
             self.dirty = True
@@ -55,12 +56,20 @@ class Manifest:
 
 
 _manifests = {}
+_changes = []       # the goldens recorded in this process (run.py takes them from each unit)
 
 
 def manifest(path):
     if path not in _manifests:
         _manifests[path] = Manifest(path)
     return _manifests[path]
+
+
+def take_changes():
+    """The (manifest path, lang, name, sha256) recorded since the last call."""
+    out = list(_changes)
+    del _changes[:]
+    return out
 
 
 def save_manifests():
@@ -79,7 +88,9 @@ def save(path, frame):
     info.add_text('xe_pal', frame.pal.hex())
     info.add_text('xe_gon', str(frame.gon))
     info.add_text('xe_scroll', str(frame.scroll))
-    img.save(path, bits=4, pnginfo=info, optimize=True)
+    tmp = '%s.%d.tmp' % (path, os.getpid())
+    img.save(tmp, format='PNG', bits=4, pnginfo=info, optimize=True)
+    os.replace(tmp, path)               # a reader never sees half a picture
 
 
 def load(path):

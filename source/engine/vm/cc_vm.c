@@ -1,8 +1,8 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Scenario script interpreter - port of AGS.EXE segment 088D (docs/re/scripts.md §4).
  * Function names follow the listing (names.tsv). Positions are byte offsets into vm->buf. */
 #include <string.h>
 #include "vm/cc.h"
-#include "xe_hal.h"
 
 /* The dispatch table 088D:094C. Structural bytes have an empty spec and are handled in
  * cc_exec itself; everything else is a generic opcode with parsed operands. */
@@ -73,6 +73,14 @@ static const struct cc_opinfo *op_lookup(uint8_t op)
 }
 
 /* ---- helpers ------------------------------------------------------------------------------ */
+
+/* the statement being executed (for the host's trace) */
+static void set_pos(struct cc_vm *vm, uint32_t pos)
+{
+    vm->pos = pos;
+    if (vm->host && vm->host->at)
+        vm->host->at(vm->host->ctx, pos);
+}
 
 static uint8_t at(const struct cc_vm *vm, uint32_t pos)
 {
@@ -312,7 +320,7 @@ static uint32_t cc_exec(struct cc_vm *vm, uint32_t pos, uint8_t term)
         if (b == term)
             return pos + 1;
 
-        vm->pos = pos;
+        set_pos(vm, pos);
         switch (b) {
         case CC_T_STR:
             if (vm->host && vm->host->message)
@@ -329,7 +337,7 @@ static uint32_t cc_exec(struct cc_vm *vm, uint32_t pos, uint8_t term)
             }
             cc_flag_set(vm, f, rd_s16(vm, pos + 5) != 0);
             if (vm->host && vm->host->trace)
-                vm->host->trace(vm->host->ctx, XE_TR_FLAG, f, rd_s16(vm, pos + 5) != 0);
+                vm->host->trace(vm->host->ctx, CC_TRACE_FLAG, f, rd_s16(vm, pos + 5) != 0);
             pos += 7;
             continue;
         }
@@ -533,7 +541,7 @@ static uint32_t cc_menu(struct cc_vm *vm, uint32_t pos, int depth, int parent)
         int count, sel, id;
         int32_t lpos;
 
-        vm->pos = pos;
+        set_pos(vm, pos);
         count = cc_build_options(vm, pos, &senend);
         if (FAILED(vm))
             return pos;
@@ -560,7 +568,7 @@ static uint32_t cc_menu(struct cc_vm *vm, uint32_t pos, int depth, int parent)
         id = vm->menu_ids[sel];
         vm->cur_label = id;
         if (vm->host && vm->host->trace)
-            vm->host->trace(vm->host->ctx, XE_TR_LABEL, id, sel);
+            vm->host->trace(vm->host->ctx, CC_TRACE_LABEL, id, sel);
         lpos = cc_find_label(vm, senend, id);
         if (lpos < 0)
             return pos;
@@ -592,11 +600,11 @@ static uint32_t cc_run_page(struct cc_vm *vm, uint32_t pos)
         cc_error(vm, CC_E_PAGENUM);             /* debug2 */
         return pos;
     }
-    vm->pos = pos;
+    set_pos(vm, pos);
     vm->cur_page = rd_s16(vm, pos + 2);
     vm->cur_label = -1;
     if (vm->host && vm->host->trace)
-        vm->host->trace(vm->host->ctx, XE_TR_PAGE, vm->cur_page, 0);
+        vm->host->trace(vm->host->ctx, CC_TRACE_PAGE, vm->cur_page, 0);
     pos += 4;
 
     if (at(vm, pos) == CC_SENMARK)

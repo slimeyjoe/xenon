@@ -1,10 +1,16 @@
 # WarpOS probes (WinUAE, Blizzard PPC)
 
+> These probes were written while the platform layer was this engine's own (before the move to
+> lrvne, `source/lrvne`); what they measured is lrvne's Amiga backend now
+> (`source/lrvne/backends/amiga`, its README). Paths into the old tree (`engine/snd/opn_lite.c`,
+> `config/*.mk`) name files that are in git history only: rebuild such a probe from a checkout
+> of that history. The results stay valid as records.
+
 What the PowerPC (WarpOS) build of the Amiga backend relies on, checked in WinUAE's Blizzard
 PPC emulation (qemu-uae). Tested 2026-11-11 with WarpUP 5.1 (`powerpc.library` 16.1).
 There is no PowerPC hardware to test on: everything here is emulator evidence, see
-[Emulator limits](#emulator-limits). The runner (`run-wos.sh`) and its environment are the test
-rig's: `../../tests/warpos/README.md`.
+[Emulator limits](#emulator-limits). The runner (`run-wos.sh`) and its environment are lrvne's
+rigs (`../../lrvne/rigs/README.md`); the game's WarpOS notes: `../../tests/warpos/README.md`.
 
 ## wosprobe
 
@@ -14,7 +20,7 @@ so a hang still shows how far it got. Results (`out-probe.txt`):
 
 1. **Structure layout.** vbccppc aligns `int` and pointers to 4 bytes; the NDK and WarpOS
    headers don't ask for 68k alignment. Of 65 sizes/offsets of the structures the backend
-   uses (`backends/amiga/oslayout.h`; 74 entries with the backend's own shared structures),
+   uses (`lrvne/backends/amiga/oslayout.h`; 74 entries with the backend's own shared structures),
    **51 differ** from the 68k compiler without
    `#pragma amiga-align` (`ln_Name` at 12 instead of 10, `struct IOStdReq` 52 bytes instead of
    48, ...), **0 differ** with the OS headers wrapped in `wos_osbegin.h`/`wos_osend.h` (now `core/os_begin.h`/`os_end.h`). The
@@ -45,7 +51,7 @@ so a hang still shows how far it got. Results (`out-probe.txt`):
      `GetInfo`'s bus clock is WarpOS's own measurement at boot and varies here: 678 MHz in
      every run before the stall fixes (`GetSysTimePPC` 10x slow), 310 MHz in this one
      (`GetSysTimePPC` 216 ms for 1 s). The game's profile clock calibrates the time base
-     against the E-clock instead (`backends/amiga/timer.c`).
+     against the E-clock instead (`lrvne/backends/amiga/timer.c`).
    - `DoIO(TR_ADDREQUEST 1 ms)` from PPC: 60 ms each, including two E-clock reads (20 ms
      each).
    - A 68k VERTB server signalling **the shell's own process** (the main program's 68k
@@ -73,7 +79,8 @@ so a hang still shows how far it got. Results (`out-probe.txt`):
 ## The game
 
 `printf 'DH0:xenon LANG=en MAXTICKS=40\n' | WOS_FILES="../build/warpos/xenon ../build/xenon.pak" tests/warpos/run-wos.sh game`
-(paths relative to `source/`; `WOS_SHOTS="40 80"` for screenshots). Results 2026-11-11:
+(paths relative to `source/`; screenshots: `AUTOPLAY="snap:2000,4000"`, into `snaps/`;
+the timed `WOS_SHOTS` of these runs is gone). Results 2026-11-11:
 
 - Starts, passes the layout check, preloads the pack, opens the PAL HiRes Laced screen
   (planar CPU copy) and draws the opening logo correctly; the PPC audio task opens Paula
@@ -111,19 +118,16 @@ so a hang still shows how far it got. Results (`out-probe.txt`):
 
 ## Window, scale, aspect (2026-11-12)
 
-`tests/warpos/run-wos.sh` takes `WOS_WB=MODEID:DEPTH` (a Workbench in that mode, for `WINDOW`),
-`WOS_RTG=1` (a uaegfx Zorro III board next to the Blizzard PPC) and `SNAPD=1` (the 68k
-harness's snapshot server, `tests/e2e/amiga_snapd.py`), so the presentation test of the
-window, scale and aspect modes (`backends/amiga/README.md` "Window, scale, aspect") runs
+`run-wos.sh` takes `WOS_WB=MODEID:DEPTH` (a Workbench in that mode, for `WINDOW`),
+`WOS_RTG=1` (a uaegfx Zorro III board next to the Blizzard PPC), and the 68k harness's
+snapshot server answers (lrvne's `rigs/snapd.py`, for every run), so the presentation test of the
+window, scale and aspect modes (`lrvne/backends/amiga/README.md` "Window, scale, aspect") runs
 on the PPC build and is checked against the same reference as the 68k one:
 
-    printf 'DH0:xenon PRESENTTEST WINDOW\n' | WOS_FILES="../build/warpos/xenon ../build/xenon.pak" \
-        WOS_WB=0x29004:8 SNAPD=1 EMU_TIMEOUT=1800 tests/warpos/run-wos.sh present-wb-aga256 wb
-    python3 -I tests/e2e/amiga.py check --kind present --ref ../build/amiga/e2e/present-ref.jsonl \
-        $EMU/aos/work/xenon/wos-present-wb-aga256/snaps
+    make TARGET=warpos lrvne-present LRVNE_PRESENT_ARGS="--configs wb-aga256"
 
-(the run name's ending picks the configuration's image position: `-wb-aga256`, `-wb-rtg16`,
-`-uaegfx-x2a`, `-native`, ...). Results, 25 snapshots each, all PASS: `WINDOW` on an AGA
+(`--configs` names lrvne's configurations: `wb-aga256`, `wb-rtg16`, `uaegfx-x2a`, `native`, ...;
+then run with `run-wos.sh` and `amiga.py check`). Results, 25 snapshots each, all PASS: `WINDOW` on an AGA
 256-colour Workbench (borderless), `WINDOW ASPECT` on a 16-bit uaegfx Workbench (640x480),
 `SCALE=2 ASPECT` on the own screen (a 1280x1024 board mode, 1280x960 shown), and the default
 screen. One run at a time: parallel qemu-uae runs starve each other.

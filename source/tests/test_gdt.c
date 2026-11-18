@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Conformance tool for the GDT/ADT decoder, driven by tests/check_gdt.py.
  *
  *   test_gdt FILL SPEC...
@@ -10,7 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gfx/gdt.h"
-#include "util/endian.h"
+
+#define PLANE_BYTES (GDT_STRIDE * 400)
+#include "lrvne/endian.h"
 
 static uint8_t *read_file(const char *path, size_t *len)
 {
@@ -36,9 +39,9 @@ static uint8_t *read_file(const char *path, size_t *len)
 
 int main(int argc, char **argv)
 {
-    static uint8_t planes[4][XE_PLANE_BYTES];
-    struct xe_planes pl;
-    struct xe_rect rect;
+    static uint8_t planes[4][PLANE_BYTES];
+    struct lrv_surface pl;
+    struct lrv_rect rect;
     int i, fill;
 
     if (argc < 3) {
@@ -47,10 +50,14 @@ int main(int argc, char **argv)
     }
     fill = strcmp(argv[1], "ff") == 0 ? 0xFF : 0x00;
     for (i = 0; i < 4; i++) {
-        memset(planes[i], fill, XE_PLANE_BYTES);
-        pl.p[i] = planes[i];
+        memset(planes[i], fill, PLANE_BYTES);
+        pl.plane[i] = planes[i];
     }
-    xe_rect_clear(&rect);
+    lrv_rect_clear(&rect);
+    pl.format = LRV_FMT_PLANAR4;
+    pl.w = 640;
+    pl.h = 400;
+    pl.stride = GDT_STRIDE;
 
     for (i = 2; i < argc; i++) {
         char path[1024];
@@ -69,9 +76,9 @@ int main(int argc, char **argv)
             *at = 0;
             data = read_file(path, &len);
             for (k = 0; k < frame; k++)
-                off += rd16le(data + 5 + 2 * k);
+                off += lrv_rd16le(data + 5 + 2 * k);
             blob = data + off;
-            bloblen = rd16le(data + 5 + 2 * frame);
+            bloblen = lrv_rd16le(data + 5 + 2 * frame);
         } else {
             data = read_file(path, &len);
             blob = data;
@@ -88,7 +95,7 @@ int main(int argc, char **argv)
         free(data);
     }
     for (i = 0; i < 4; i++)
-        fwrite(planes[i], 1, XE_PLANE_BYTES, stdout);
+        fwrite(planes[i], 1, PLANE_BYTES, stdout);
     fprintf(stderr, "rect %d %d %d %d\n", rect.x0, rect.y0, rect.x1, rect.y1);
     return 0;
 }

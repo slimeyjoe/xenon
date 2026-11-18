@@ -33,7 +33,7 @@ keyprobe: keyprobe.c
 # voicebench (probe 5): the engine's voice decoders built like the game, plus libopus as the
 # WarpOS build has it (pseudo-stack: vbcc has no alloca). Not in PROGS: libopus takes a while.
 VB_SRC	= ../..
-VB_OPUS	= $(VB_SRC)/third_party/opus
+VB_OPUS	= $(VB_SRC)/lrvne/third_party/opus
 VB_CF	= -c99 -cpu=68040 -O2 -speed
 VB_OPUSDEF = -DOPUS_BUILD -DFIXED_POINT -DDISABLE_FLOAT_API -DNONTHREADSAFE_PSEUDOSTACK \
 	  -I$(VB_OPUS)/include -I$(VB_OPUS)/celt -I$(VB_OPUS)/silk -I$(VB_OPUS)/src

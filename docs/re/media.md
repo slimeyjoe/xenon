@@ -6,7 +6,8 @@ from. They are the five original 2HD floppies (D88 images) and the hard-disk ima
 handling (drive mapping, volume-label checks, disk-change opcode) is described in
 [engine.md §5](engine.md).
 
-**verified** means decoded from the actual bytes with `source/tools/d88.py` or mtools.
+**verified** means decoded from the actual bytes with `source/tools/d88.py` (since replaced by
+lrvne's `diskimg`, `source/lrvne/tools`; the commands below are kept as they were run) or mtools.
 **inferred** means it follows the usual PC-98 or D88 conventions but was not checked against a
 specification.
 

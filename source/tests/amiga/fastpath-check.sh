@@ -1,6 +1,6 @@
 #!/bin/sh
 # Guards the fullscreen fast path while the window / scale / aspect modes are added
-# (backends/amiga/README.md "Window, scale, aspect"): the objects that draw the default
+# (lrvne/backends/amiga/README.md "Window, scale, aspect"): the objects that draw the default
 # custom screen, and the whole engine, must stay byte for byte what they were.
 #
 #   tests/amiga/fastpath-check.sh record      build, write ../build/<target>/fastpath.sha
@@ -19,9 +19,9 @@ B=../build/$TARGET
 # the protected objects, relative to the build directory
 protected() {
     (cd "$1" && {
-        find engine backends/common -name '*.o' 2>/dev/null
-        for f in backends/amiga/chipset/upload_planar.o backends/amiga/core/upload_rtg.o \
-                 backends/amiga/core/upload_chunky.o backends/amiga/core/frameos.o; do
+        find engine lrvne/backends/common -name '*.o' 2>/dev/null
+        for f in lrvne/backends/amiga/chipset/upload_planar.o lrvne/backends/amiga/core/upload_rtg.o \
+                 lrvne/backends/amiga/core/upload_chunky.o lrvne/backends/amiga/core/frameos.o; do
             [ -f "$f" ] && echo "$f"
         done
     } | LC_ALL=C sort)

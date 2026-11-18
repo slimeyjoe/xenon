@@ -14,7 +14,7 @@ def save_load(ctx):
     # the rotation policy takes "save" then slot 1 at the first save menu
     g.play_until(lambda g: g.last('save') is not None)
     ev = g.last('save')
-    path = os.path.join(g.storage, ev.name + '.dat')
+    path = os.path.join(g.storage, ev.name)
     g.expect(os.path.exists(path), 'save file %s written' % path)
     g.play_until(lambda g: g.ok_wait)               # the game goes on after saving
     sv = read_save(path)

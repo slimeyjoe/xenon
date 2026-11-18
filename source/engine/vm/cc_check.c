@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Static script checker: the grammar of scripts.md §3 as a recursive-descent parse over the
  * token stream, with byte coverage accounting (the C counterpart of re-tools/ccdis.py --check).
  * Used by the tests (every shipped script must parse with 0 unknown opcodes and 100 % byte

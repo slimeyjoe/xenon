@@ -1,5 +1,5 @@
-"""Client side of the control protocol (backends/control/control.c), spoken by the null
-backend and by the SDL3 backend rendering offscreen."""
+"""Client side of the control protocol (lrvne's lrvne/backends/control/control.c), spoken by the
+null backend and by the SDL3 backend rendering offscreen."""
 import base64
 import hashlib
 import json
@@ -10,10 +10,16 @@ import numpy as np
 
 from . import textenc
 
-KEYS = ('ok', 'cancel', 'up', 'down', 'left', 'right', 'help', 'f1', 'f2', 'f3', 'f4', 'f5',
-        'other', 'quit', 'emergency', 'mouse_l', 'mouse_r')
+# The driver presses the engine's commands (engine/input.c); the protocol names host keys by
+# position (lrvne/input.h). A command's key, and the key a held level is:
+KEY_NAMES = {'cancel': 'esc', 'up': 'up', 'down': 'down', 'left': 'left', 'right': 'right',
+             'ok': 'return', 'help': 'f1', 'f1': 'f2', 'f2': 'f3', 'f3': 'f4', 'f4': 'f5',
+             'f5': 'f6', 'other': 'a', 'quit': 'quit', 'emergency': 'emergency',
+             'mouse_l': 'mouse_l', 'mouse_r': 'mouse_r'}
+KEYS = tuple(KEY_NAMES)
+HOLD_NAMES = {'ctrl': 'ctrl', 'instant': 'kana'}     # instant text: the kana lock
 
-# XE_TR_WAIT a0
+# LRV_TR_WAIT a0
 WAIT_TICKS, WAIT_KEY, WAIT_OK, WAIT_MUSIC = 0, 1, 2, 3
 # leave reasons (a2 of the leave event)
 LEAVE_KEY, LEAVE_CTRL, LEAVE_TIMEOUT, LEAVE_QUIT = 0, 1, 2, 3
@@ -122,7 +128,7 @@ class Engine:
         self.initial_storage = {}
         for fn in sorted(os.listdir(storage)):
             path = os.path.join(storage, fn)
-            if os.path.isfile(path) and fn.endswith('.dat'):
+            if os.path.isfile(path) and not fn.endswith('.tmp'):
                 with open(path, 'rb') as f:
                     self.initial_storage[fn] = f.read().hex()
         self.backend = backend
@@ -197,17 +203,17 @@ class Engine:
         for k in keys:
             if k not in KEYS:
                 raise ValueError('unknown key %r' % k)
-        self._send('press ' + ','.join(keys))
+        self._send('press ' + ','.join(KEY_NAMES[k] for k in keys))
         self._expect_ok()
         self.transcript.append(['press', self.last_stop.t, list(keys)])
 
     def hold(self, level, on):
-        self._send('hold %s %d' % (level, 1 if on else 0))
+        self._send('hold %s %d' % (HOLD_NAMES[level], 1 if on else 0))
         self._expect_ok()
         self.transcript.append(['hold', self.last_stop.t, level, 1 if on else 0])
 
     def mouse(self, dx, dy):
-        self._send('mouse %d %d' % (dx, dy))
+        self._send('mouse_rel %d %d' % (dx, dy))
         self._expect_ok()
         self.transcript.append(['mouse', self.last_stop.t, dx, dy])
 

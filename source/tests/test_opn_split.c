@@ -1,4 +1,5 @@
-/* opn_lite render_split check (opn_core.h): the sum of the split streams must equal the mono
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/* The light OPN core's render_split check (lrvne/opn.h): the sum of the split streams must equal the mono
  * render up to the rounding of the per-stream filters.
  *
  *   test_opn_split FILE.vgm RATE
@@ -11,7 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "snd/opn_core.h"
+#include "lrvne/opn.h"
+#include "test_hal.h"
 
 #define CLOCK 3993600u
 #define BUF 1024
@@ -43,24 +45,26 @@ static uint32_t rd32(const uint8_t *p)
     return (uint32_t)p[0] | ((uint32_t)p[1] << 8) | ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
 }
 
-static int16_t mono[BUF], sp[OPN_SPLIT_STREAMS][BUF];
+static int16_t mono[BUF], sp[LRV_OPN_SPLIT_STREAMS][BUF];
 
 static int run(const uint8_t *vgm, size_t len, uint32_t want_rate, int os, int *peak_out, double *rms_out,
                double *level_out)
 {
-    const struct opn_core_ops *ops = &opn_lite_ops;
-    struct opn_core *a, *b;
+    const struct lrv_opn_ops *ops = &lrv_opn_lite_ops;
+    struct lrv_opn *a, *b;
     uint32_t rate, rate2;
     uint64_t t44 = 0, done = 0, limit;
     size_t pos;
     int peak = 0;
     double sq = 0, lv = 0;
     uint64_t count = 0;
-    int16_t *streams[OPN_SPLIT_STREAMS] = { sp[0], sp[1], sp[2], sp[3] };
+    int16_t *streams[LRV_OPN_SPLIT_STREAMS] = { sp[0], sp[1], sp[2], sp[3] };
 
-    opn_lite_fm_oversample = os;
-    a = ops->create(CLOCK, want_rate, &rate);
-    b = ops->create(CLOCK, want_rate, &rate2);
+    unsigned flags = os == 2 ? LRV_OPN_OVERSAMPLE : 0u;
+    struct lrv_hal hal;
+    th_hal(&hal, 0);
+    a = ops->create(&hal, CLOCK, want_rate, flags, &rate);
+    b = ops->create(&hal, CLOCK, want_rate, flags, &rate2);
     if (!a || !b || rate != rate2 || !ops->render_split)
         return -1;
     limit = (uint64_t)(MAX_SECONDS * rate);

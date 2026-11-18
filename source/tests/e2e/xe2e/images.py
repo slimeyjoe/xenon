@@ -17,17 +17,19 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'tools'))
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'lrvne', 'tools'))
 sys.path.insert(0, os.path.join(HERE, '..', '..', '..', '..', 're-tools'))
 import gdt     # noqa: E402
-import xpak    # noqa: E402
+import mkpack  # noqa: E402
+from lrvne import xpak   # noqa: E402
 
 CG_RECT = (5, 4, 70, 296)        # xb, y, wb, h of the window's CG area (waku2 close)
 
 
 class ImageOracle:
     def __init__(self, pak_path):
-        entries = xpak.read(open(pak_path, 'rb').read())
-        self.gdts = {e['name'].upper(): e['data'] for e in entries if e['type'] == xpak.T_GDT}
+        entries = xpak.read_pack(open(pak_path, 'rb').read()).entries
+        self.gdts = {e.name.upper(): e.data for e in entries if e.type == mkpack.T_GDT}
         self.problems = []
         self.checks = 0
         self.reset()

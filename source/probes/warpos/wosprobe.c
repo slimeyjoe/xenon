@@ -4,7 +4,7 @@
  *   wosprobe        (WarpOS, from a shell; prints to stdout)
  *
  * 1 struct layout: the OS structures under #pragma amiga-align vs. the 68k compiler, and
- *   without the pragma (wosprobe_nat.c), see backends/amiga/core/os_begin.h
+ *   without the pragma (wosprobe_nat.c), see lrvne/backends/amiga/core/os_begin.h
  * 2 the tasks: FindTask/FindTaskPPC of the main program, stack sizes
  * 3 Run68K: a 68k function with register arguments, an OS call by base + LVO
  * 4 a variadic stub (CreateNewProcTags) starting a 68k process entry

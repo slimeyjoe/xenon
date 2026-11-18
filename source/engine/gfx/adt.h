@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* ADT frame animations (graphics.md §3.6): ADT_LOAD / ADT_PLAY / ADT_FREE. */
 #ifndef XE_GFX_ADT_H
 #define XE_GFX_ADT_H

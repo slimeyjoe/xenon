@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Script VM conformance tool.
  *
  *   test_cc check FILE.bin...    static check of decompressed scripts: one line per file
@@ -123,6 +124,7 @@ int main(int argc, char **argv)
         cc_run(&vm);
         printf("END file_jump=%d script=%s leave=%d quit=%d err=%d page=%d\n",
                vm.file_jump, vm.script, vm.leave, vm.quit, vm.err, vm.cur_page);
+        free(buf);
         return vm.err == CC_E_NONE ? 0 : 1;
     }
     return 2;

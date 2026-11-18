@@ -1,12 +1,18 @@
 # AmigaOS 3.1 probes (WinUAE, headless)
 
+> These probes were written while the platform layer was this engine's own (before the move to
+> lrvne, `source/lrvne`); what they measured is lrvne's Amiga backend now
+> (`source/lrvne/backends/amiga`, its README). Paths into the old tree (`engine/snd/opn_lite.c`,
+> `config/*.mk`) name files that are in git history only: rebuild such a probe from a checkout
+> of that history. The results stay valid as records.
+
 Small programs that de-risk the Xenon port's display, packaging and audio
 plans, built with vbcc and run under the Linux WinUAE fork with no video
 output.  Results are read back from `DH0:out.txt` and from PNG screenshots
 taken through WinUAE's gdbserver (`monitor screenshot`).  The emulator
-plumbing they run on, the game's own runs (`run-game.sh`, the release archive,
-the real A1200) and the machine settings are the test rig's:
-`../../tests/amiga/README.md`.
+plumbing they run on and the machine settings are lrvne's rigs
+(`../../lrvne/rigs/README.md`); the game's own runs (lrvne's `run-program.sh`, the release
+archive, the real A1200) are in `../../tests/amiga/README.md`.
 
 Files:
 
@@ -17,10 +23,10 @@ Files:
 | `opnbench.c`, `mkopnlog.py` | probe 3: CPU cost of the engine's `opn_lite` YM2203 core on a 68040 (register log of XENON_24, 20 s, generated into `opnbench_log.h`) |
 | `iconprobe.c`, `run-icon.sh` | the Workbench icon (`tools/mkicon.py`): reads `xenon.info` with icon.library 40, lists the tool types, shows the image on an 8- or 4-colour Workbench 3.1 screen (`DEPTH=3|2`) and as an AppIcon drawn by Workbench; see "The Workbench icon" |
 | `winprobe.c`, `run-win.sh` | the Workbench window (plan: window, scale, aspect): display modes and their `Resolution`, free pens on Workbench screens of each depth, drawing into a partly covered window (`WriteChunkyPixels`, Picasso96 and cybergraphics ARGB), the activating click and `IDCMP_DELTAMOVE` under injected mouse input; see "The Workbench window" |
-| `keyprobe.c` | keyboard input injected through `input.device` from a background program while the game runs (`PRE_CMD` of `tests/amiga/run-game.sh`): Ctrl down/up, mouse floods, and the events Poseidon's USB boot keyboard class sends; see "Keyboard input" |
+| `keyprobe.c` | keyboard input injected through `input.device` from a background program while the game runs (`PRE_CMD` of lrvne's `rigs/winuae/run-program.sh`): Ctrl down/up, mouse floods, and the events Poseidon's USB boot keyboard class sends; see "Keyboard input" |
 | `voicebench.c`, `mkbenchpak.py`, `run-voicebench.sh` | probe 5: CPU cost and correctness of the voice decoders (ldp6, Opus) on an emulated 68040; see "Probe 5" |
 | `Makefile` | `make` (vbcc's `vc` on `PATH`) builds `sbprobe`, `trailerprobe{,.hunk,.raw}`, `seekprobe`, `iconprobe`, `winprobe`, `opnbench`; `make voicebench` the voice probe |
-| `run-native.sh`, `run-rtg.sh`, `run-bench.sh` | emulator runs on the rig's `tests/amiga/run-lib.sh` (it needs `make -C ../../tests/amiga` for `uaequit`); work dirs under `$EMU/aos/work/xenon/<name>/` |
+| `run-native.sh`, `run-rtg.sh`, `run-bench.sh` | emulator runs on lrvne's `rigs/winuae/run-lib.sh` (it needs `make TARGET=amiga lrvne-rig-tools` for `uaequit`); work dirs under `$RIG_WORKTOP/<name>/` |
 | `out-*.txt` | verbatim `DH0:out.txt` of each run |
 | `shots/*.png` | screenshots (`<tag>_<n>.png`; n=1 after BltBitMap from fast RAM, 2 after CPU copy / second blit, 3 after BltBitMap from chip RAM, 4 end state) |
 
@@ -96,7 +102,7 @@ benchmark).
 ## The Workbench icon (`iconprobe.c`, `run-icon.sh`, 2026-11-08)
 
 `tools/mkicon.py` writes `xenon.info` (now made at build time into
-`build/amiga/`, no longer committed as `backends/amiga/xenon.info`): the red XENON
+`build/amiga/`, no longer committed as `lrvne/backends/amiga/xenon.info`): the red XENON
 lettering of the last frame of the opening's logo zoom
 (`resources/anim/0100B/28.png`) cut out by colour, scaled to 64 px wide
 (64x21 with its one-pixel drop shadow), on a transparent background - a
@@ -154,7 +160,7 @@ as they show the game's lettering. Findings:
 ## The Workbench window (`winprobe.c`, `run-win.sh`, 2026-11-11)
 
 What a game window on the Workbench screen can count on, for the window,
-scale and aspect modes (`backends/amiga/README.md` "Window, scale,
+scale and aspect modes (`lrvne/backends/amiga/README.md` "Window, scale,
 aspect"). `run-win.sh modes native|rtg` lists the display modes;
 `run-win.sh wb MODEID DEPTH native|rtg` starts a Workbench 3.1 in that mode
 (screenmode.prefs written into the tree, mousehack removed) and runs
@@ -656,7 +662,7 @@ its day.
 Why: the game's first runs on the real A1200 (ACA1240 68040/25, SanDisk CF on
 Gayle, pack on `Stuff:` = FFS `DOS\3`, 512-byte blocks, default 30 buffers)
 had two stalls per run that WinUAE (host directory as disk) never showed. The
-stall log (`backends/amiga/timer.c`) put them in pack reads, and in those in
+stall log (`lrvne/backends/amiga/timer.c`) put them in pack reads, and in those in
 `Seek`, not in the transfer:
 
     stall at frame 1: 74 ticks late, 1 frames behind in 1318 ms: pack 9 reads 258715 bytes
@@ -735,14 +741,14 @@ file, not the console (a write to the shell's window activates it and takes
 the keys from the game). A run:
 
     PRE_CMD="Run >NIL: DH0:Xenon/keyprobe oDH0:keys.txt w900 d w100 b w200 d w100 s w200 d w100 u w200" \
-        RUN=keys GDB_PORT=2352 WB=0x29004:8 GUEST_FILES=probes/amiga/keyprobe \
-        XENON_ARGS="LANG=en WINDOW MAXTICKS=3000" tests/amiga/run-game.sh native
+        RUN=keys GDB_PORT=2352 WB=0x29004:8 DRAWER=Xenon GUEST_FILES="probes/amiga/keyprobe ../build/xenon.pak" \
+        PROGRAM_ARGS="LANG=en WINDOW MAXTICKS=3000" lrvne/rigs/winuae/run-program.sh ../build/amiga/xenon native
 
 What the game saw was logged by a temporary line in `am_input_poll`.
 
 * With proper key-up events, the game in a window sees every Ctrl release at
   the next poll: on the 68k, in 709 polls held for 709 polls of injected
-  holds; on WarpOS (`tests/warpos/run-wos.sh`, AGA Workbench) 18-37 ms after the
+  holds; on WarpOS (lrvne's `rigs/winuae/run-wos.sh`, AGA Workbench) 18-37 ms after the
   injection, also with 200 mouse moves queued around it.
 * The cause is virt68k's USB keyboard: Poseidon's boot keyboard class
   (`third_party/aros/rom/usb/classes/bootkeyboard`, `nParseKeys`) sends a

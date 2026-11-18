@@ -65,11 +65,11 @@ def play_route(ctx, name):
         if e.a[0] == -1 and (not order or order[-1] != e.name.upper()):
             order.append(e.name.upper())
     g.expect(order == chain, 'script chain %s (expected %s)' % (order, chain))
-    p = open(os.path.join(g.storage, 'progress.dat'), 'rb').read()
+    p = open(os.path.join(g.storage, 'progress'), 'rb').read()
     g.expect(p == bytes([progress | (1 << (bit - 1))]), 'progress byte %r after the ending' % p)
     saves = [e for e in g.events_of('save')]
     for e in saves:
-        path = os.path.join(g.storage, e.name + '.dat')
+        path = os.path.join(g.storage, e.name)
         g.expect(os.path.exists(path), 'save %s written' % e.name)
     return g
 

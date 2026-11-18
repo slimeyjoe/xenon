@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare the C PMD sequencer with the real-driver VGM recordings.
+"""Compare lrvne's PMD module (as this engine sets it up) with the real-driver VGM recordings.
 
 usage: check_pmd.py PMD_TRACE_BIN GAMEDIR MUSIC_VGM_DIR SFX_VGM_DIR
 

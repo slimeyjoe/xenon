@@ -1,8 +1,9 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Language string table: the engine's own messages (system menu, error boxes, omake notice).
  * The pack entry "strings" of the current language holds `key\0value\0` pairs in the
  * language's encoding (enc.c), built by mkpack.py from lang/<lang>/strings.txt. */
 #include <string.h>
-#include "xe_internal.h"
+#include "xe.h"
 #include "text/text.h"
 
 static const char *const keys[LS_COUNT] = {
@@ -16,16 +17,16 @@ static const uint8_t *values[LS_COUNT];
 
 static void lang_init(void)
 {
-    const struct xpak_entry *e = xpak_find(&xe.pak, "strings", XPAK_T_STRINGS);
+    const struct lrv_pack_entry *e = lrv_pack_find(&xe.pack, "strings", LRV_PT_STRINGS);
     uint32_t i = 0;
     int k;
     for (k = 0; k < LS_COUNT; k++)
         values[k] = (const uint8_t *)"?";
     if (!e) {
-        sys_log(XE_LOG_WARN, "lang: no strings table for language %d", xe.lang);
+        lrv_log(xe.hal, LRV_LOG_WARN, "lang: no strings table for the language");
         return;
     }
-    xe.strings_blob = xpak_load(&xe.pak, e, &xe.strings_size);
+    xe.strings_blob = lrv_pack_load(&xe.pack, e, &xe.strings_size);
     if (!xe.strings_blob)
         return;
     while (i < xe.strings_size) {
@@ -45,7 +46,7 @@ static void lang_init(void)
 static void lang_shutdown(void)
 {
     if (xe.strings_blob)
-        xpak_free(&xe.pak, xe.strings_blob, xe.strings_size);
+        lrv_pack_free(&xe.pack, xe.strings_blob, xe.strings_size);
     xe.strings_blob = 0;
 }
 
@@ -56,7 +57,10 @@ const uint8_t *lang_str(int id)
 
 void text_init(void)
 {
-    font_init();
+    if (lrv_font_load(&xe.font16, &xe.pack, "font16", 16, LRV_GLYPH_ROWS) != LRV_OK)
+        lrv_fatal(xe.hal, "font16 missing from the pack");
+    if (lrv_font_load(&xe.font8, &xe.pack, "font8", 8, LRV_GLYPH_ROWS) != LRV_OK)
+        lrv_fatal(xe.hal, "font8 missing from the pack");
     text_enc_init();
     lang_init();
     xe.text_x = 10;
@@ -71,5 +75,6 @@ void text_init(void)
 void text_shutdown(void)
 {
     lang_shutdown();
-    font_shutdown();
+    lrv_font_free(&xe.font16);
+    lrv_font_free(&xe.font8);
 }

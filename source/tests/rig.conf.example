@@ -1,32 +1,11 @@
-# Where the outside pieces of the emulator and hardware test rigs live on this machine
-# (tests/amiga, tests/warpos, tests/aros, tests/morphos; their README.md say what each is).
-# Copy this file to tests/rig.conf, which git ignores, and set what you have. One KEY=value per
-# line, no quotes, no comments after a value; a leading ~/ is your home. Variables set in the
-# environment win over the file. RIG_CONF=path (in the environment) reads another file instead,
-# e.g. one per machine.
-
-# --- Amiga in WinUAE (tests/amiga/README.md) ---
-# The emulator's tree: WinUAE builds (obj-winuae/, obj-winuae-sdl3/, obj-winuae-ppc/), the
-# Kickstart ROM (rom/kick40068.A1200), AHI (aos/ahi/), the run work dirs (aos/work/xenon/).
-#EMU=~/amiga-emu
-# A Workbench 3.1 tree with Picasso96 installed (read only; runs copy what they need).
-#WBDISK=/path/to/AmigaDisk
-# Other WinUAE binary, Kickstart image:
-#WINUAE=~/amiga-emu/obj-winuae-sdl3/winuae
-#KICKSTART=~/amiga-emu/rom/kick40068.A1200
-
-# --- WarpOS in WinUAE's Blizzard PPC (tests/warpos/README.md) ---
-#WARPUP=~/amiga-sdk/WarpUP-5.1
-#BPPC_ROM=~/amiga-emu/rom/blizzardppc_060_44.71.rom
-
-# --- AROS (tests/aros/README.md) ---
-# hosted/, native/ and contrib/ hold the unpacked 2026.09 releases, run/ the run dirs.
-#AROS_DIR=/path/to/aros
-# Single paths, if they are elsewhere (the defaults below AROS_DIR):
-#AROS_HOSTED=/path/to/aros/hosted/AROS-202609-linux-x86_64-system
-#AROS_ISO=/path/to/aros/native/AROS-202609-pc-x86_64-boot-iso/aros-pc-x86_64.iso
-#AROS_RUNS=/path/to/aros/run
-#CONTRIB=/path/to/aros/contrib/AROS-202609-any-x86_64-contrib
+# Where the outside pieces of the test rigs live on this machine. Copy this file to
+# tests/rig.conf, which git ignores, and set what you have. One KEY=value per line, no quotes,
+# no comments after a value; a leading ~/ is your home. Variables set in the environment win
+# over the file. RIG_CONF=path (in the environment) reads another file instead.
+#
+# The emulator rigs (WinUAE, WarpOS, hosted AROS) are lrvne's: their keys (EMU, WINUAE,
+# WINUAE_PPC, KICKSTART, WBDISK, WARPUP, BPPC_ROM, AROS_DIR, ...) are in
+# lrvne/rigs/rig.conf.example; copy them into the same tests/rig.conf. Below are xenon's own.
 
 # --- MorphOS in QEMU pegasos2 (tests/morphos/README.md) ---
 #MOS_DIR=/path/to/morphos

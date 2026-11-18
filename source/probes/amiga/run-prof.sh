@@ -4,7 +4,7 @@
 # Needs opnprof-SONG (make opnprof-SONG); writes bench-SONG/prof-RATE[-os2].txt, then
 # python3 symprof.py bench-SONG/opn_lite_prof.lst bench-SONG/prof-RATE.txt reads it.
 set -eu
-RIG=$(cd "$(dirname "$0")/../../tests/amiga" && pwd)
+RIG=$(cd "$(dirname "$0")/../../lrvne/rigs/winuae" && pwd)
 . "$RIG/run-lib.sh"
 SONG=${1:-XENON_24}
 RATE=${2:-11025}

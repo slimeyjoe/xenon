@@ -14,7 +14,7 @@ someone else built for this version of the engine.
 ```sh
 cd source
 make data SRC=~/xenon/disks            # a directory with the five floppy images, for example
-make pack                              # build/xenon.pak
+make pack                              # build/xenon.pak, with source/games/xenon/profile.txt
 ```
 
 `SRC` can be any mix of these (several are combined; quote paths with spaces):
@@ -22,12 +22,15 @@ make pack                              # build/xenon.pak
 | Source | Notes |
 |---|---|
 | D88 floppy images (`*.d88`) | the usual dump of the five 2HD disks; also Anex86 FDI and raw images (`*.fdi`, `*.hdm`, `*.xdf`, `*.dup`) |
-| hard-disk images (`*.hdi`, `*.nhd`) | Anex86 HDI, T98-Next NHD: the DOS partitions are found through the PC-98 partition table; the game may be in any directory. For any other image, `tools/gamedata.py import IMAGE --offset N` reads the FAT volume at byte N |
+| hard-disk images (`*.hdi`, `*.nhd`) | Anex86 HDI, T98-Next NHD: the DOS partitions are found through the PC-98 partition table; the game may be in any directory |
 | a zip of such images | only its image members are read; one member: `ZIP::path/in/zip.d88` |
 | a directory | the game's files anywhere below it, in any letter case (an installed copy, an emulator's host drive), and the images and zips in it |
 
-The file systems (FAT12/16, the PC-98's 1024-byte sectors included) are read by
-`source/tools/gamedata.py` itself, so you need Python 3 and nothing else. A file is taken only when its
+The file systems (FAT12/16, the PC-98's 1024-byte sectors included) and the archives are read by
+lrvne's import framework (`source/lrvne/tools`, which `source/tools/gamedata.py` uses with this
+game's inventory), so you need Python 3 and nothing else (`bsdtar` or `7z` only for archives
+other than zip). Without `SRC` the directories in the environment variable `LRVNE_MEDIA` are
+searched. A file is taken only when its
 name and md5 are in `resources/inventory.tsv`. It goes to `resources/original/game/` (or
 `floppy_only/` for the boot files and saves of disk A) with the release's date. Files of other
 releases or patched copies are named in the report and left out. The report:
@@ -35,16 +38,18 @@ releases or patched copies are named in the report and left out. The report:
 ```
   pack inputs       283/283
   other game files   13/13
-  HDD install only    0/3  missing: AUTOEXEC.BAT CONFIG.SYS XEN.GDT
-  floppy only         7/7
-gamedata: .../resources/original: every file the pack is built from is there
+  HDD install only    0/3  missing: AUTOEXEC.BAT (optional) CONFIG.SYS (optional) XEN.GDT (optional)
+  floppy only     7/7
+  other game files   13/13
+  pack inputs   283/283
+gamedata: .../resources/original: every required file is there
 ```
 
 **pack inputs** must all be there: the pictures, animations, scripts, music, effects,
 `AGS.EXE` (its font) and `PMD.COM` (its effect table). **HDD install only** are files of
 the hard-disk install the inventory was made from that no disk has. No tool needs them.
 `make data` exits with an error unless the pack inputs are complete. `make data-check` (and
-`make pack`, before it builds) verifies `GAMEDIR`, default `resources/original/game`.
+`make pack`, before it builds) verifies `resources/original/`.
 `make data-clean` removes everything made from the game outside `build/` (the imported
 files, the derived resources, `text/view/`, the e2e goldens' local pictures); `make distclean`
 also does `make clean`, which leaves only the committed files.
@@ -124,7 +129,9 @@ Elsewhere:
 * Importing the five D88s (as a directory, a zip, or member by member) gave 303 files,
   byte-identical to the mtools extraction of `docs/re/media.md` §3.2.
 * Importing `xenon_j.hdi` gave the 299 files of the HDD install. The same data in an NHD
-  header, and read with `--offset`, gave the same files.
+  header gave the same files.
+* 2026-11-15, on lrvne's import framework: importing the five D88s gave the same 303 files,
+  byte for byte, as the importer before it.
 * The main pack, the ldp6 voice pack and the Opus voice pack were built from the import. With
   the former cue table, each is byte-identical to the one built from the formerly committed
   files. With the current table they differ only in the cue table's md5 in their `meta`

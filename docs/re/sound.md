@@ -386,7 +386,9 @@ Their use is as golden test data and listening reference.
 **Sequencer.**
 1. A port of `re-tools/pmdmodel.py` — the only implementation verified against this exact PMD 4.7g build
    (0 differing clocks, §11.2 of pmd-sequencer.md), including its defaults and quirks (/DF 16 FM
-   volume-down, FM3 `C5` rotation quirk, TB=C8h first period, the XENON.BAT options).
+   volume-down, FM3 `C5` rotation quirk, TB=C8h first period, the XENON.BAT options). This is what
+   was done: first in the engine, now as lrvne's PMD module (`source/lrvne/docs/pmd.md`), which
+   also has rhythm part K and the measure counter for other games of the driver.
 2. A third-party PMD reimplementation (PMDWin, pmdmini, …): mostly based on later PMD versions with
    different behaviour, and their licences need checking; would have to pass the same register-log tests.
 3. PMD.COM itself in an 8086 interpreter (as `pmdemu.py` does under unicorn): exact by construction, but

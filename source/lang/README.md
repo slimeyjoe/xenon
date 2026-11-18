@@ -1,14 +1,18 @@
 # Languages
 
 The pack carries every language; the player picks one at start (`--lang ja|en|pl` on the host
-backends, `LANG=ja|en|pl` on the Amiga, default `en`). Saves and `progress.dat` are shared by
-all languages.
+backends, `LANG=ja|en|pl` on the Amiga, default `en`: the profile's `lang`). Saves and the
+`progress` record are shared by all languages.
 
-| id | pack id | encoding | wrap | story scripts from | engine strings | K/L/M.CC |
-|----|---------|----------|------|--------------------|----------------|----------|
-| `ja` | `XPAK_L_JA` 1 | cp932 | kinsoku | the original game, unchanged | `ja/strings.txt` | original |
-| `en` | `XPAK_L_EN` 2 | UTF-8 | word | `text/translation/script_en.txt` | `en/strings.txt` | `en/klm.txt` |
-| `pl` | `XPAK_L_PL` 3 | UTF-8 | word | `text/translation/script_pl.txt` | `pl/strings.txt` | `pl/klm.txt` |
+| tag | pack id | encoding | wrap | story scripts from | engine strings | K/L/M.CC |
+|-----|---------|----------|------|--------------------|----------------|----------|
+| `ja` | 1 | cp932 | kinsoku | the original game, unchanged | `ja/strings.txt` | original |
+| `en` | 2 | UTF-8 | word | `text/translation/script_en.txt` | `en/strings.txt` | `en/klm.txt` |
+| `pl` | 3 | UTF-8 | word | `text/translation/script_pl.txt` | `pl/strings.txt` | `pl/klm.txt` |
+
+The engine knows no language: the pack names them (its `langs` entry, written by lrvne's pack
+writer; the ids are given in the order of `LANG_ORDER` in `tools/mkpack.py`, and a save records
+the id it was made in).
 
 Encoding and wrap are defined once in `tools/langs.py` and written into each language's `lang`
 meta entry of the pack, which `engine/text/enc.c` reads (`text_next()` is the only place that
@@ -45,7 +49,7 @@ Then read `build/<lang>/lint.txt` (below). JA output must not change, nor the ot
 `tools/tl_extract.py` builds each translated language from its dictionary (semantics of the
 project's PC-98 build, see its docstring) into `build/<lang>/scripts/*.U.CC`, and
 `tools/mkpack.py` packs them with the fonts and the strings. Variables: `GAMEDIR` (original
-game, filled by `make data`, `../docs/game-data.md`; `make pack` checks it first), `X11FONTS` (default `fonts/x11`, the bundled BDFs), `TL_DICT_EN`, `TL_DICT_PL`,
+game, filled by `make data`, `../docs/game-data.md`; `make pack` checks it first), `X11FONTS` (default `lrvne/fonts/x11`, the BDFs lrvne carries), `TL_DICT_EN`, `TL_DICT_PL`,
 `TL_COMPARE=DIR` (diff the English against the project's PC-98 build output).
 
 `build/<lang>/lint.txt` lists every decision worth a human look:
@@ -89,17 +93,17 @@ L.CC (load) and M.CC (music mode), which the PC-98 translation patch never built
 
 ## Testing
 
-`tests/test_text.c` covers the decoder and the column rules. The e2e scenarios run in `en`
+`tests/test_text.c` covers the column rules (the decoders are lrvne's, tested there). The e2e scenarios run in `en`
 and `ja` only; Polish is checked by play-review. The routes to each dream are in
 `../../docs/re/script-catalog.md` §2-3.
 
 ## Adding a language
 
 1. `tools/langs.py`: `SETTINGS` (encoding, wrap) and its narrow letters.
-2. Pack id: `engine/pack/pack.h` (`XPAK_L_*`, `xpak_lang_id()`), `tools/xpak.py`,
-   `tests/e2e/xe2e/textenc.py` `LANG_IDS`; the backends' usage strings and the Amiga README /
+2. `LANG_ORDER` in `tools/mkpack.py` (append: the ids of the others must not change); the
    player ReadMe.
-3. Missing narrow glyphs: draw them in a `fonts/*.txt` art file and add it to the `lat8` rule.
+3. Missing narrow glyphs: draw them in a glyph art file (as lrvne's `fonts/latin8-pl.txt`) and
+   add it to the `lat8` rule of the Makefile.
 4. `lang/<id>/strings.txt` and `klm.txt`; the dictionary `text/translation/script_<id>.txt`
    (a copy of `script_en.txt` to start from, as Polish did: the same keys on the same lines, the
    English as placeholder text, which `check_text.py` keeps aligned), its rules in

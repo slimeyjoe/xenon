@@ -22,7 +22,8 @@ set -u
 here=$(cd "$(dirname "$0")" && pwd)
 src=$(cd "$here/../.." && pwd)
 RIG_TESTS=$(cd "$here/.." && pwd)
-. "$RIG_TESTS/rig.sh"
+export RIG_CONF=${RIG_CONF:-$RIG_TESTS/rig.conf}
+. "$RIG_TESTS/../lrvne/rigs/rig.sh"
 DEST=${DEST:-Stuff:xenon}
 
 tel() { WAIT=2 TMO=${TMO:-150} python3 -I "$here/aostelnet.py" "$A1200" 2323 "$@" | tr -d '\r'; }

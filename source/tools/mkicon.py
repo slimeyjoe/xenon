@@ -24,7 +24,7 @@ The file carries two renderings of the same glyphs:
     bottom, a brighter copy for the selected state. icon.library 44 and later (OS 3.5/3.9,
     3.2, 4.x, AROS, MorphOS) shows this one and 3.1 ignores it, so one file serves every
     Workbench.
-Tool types are the game's options (backends/amiga/README.md) at their defaults; the ones
+Tool types are the options (lrvne/backends/amiga/README.md "Options") at their defaults; the ones
 in parentheses are switched off, the way the Information window does it.
 --squash halves the height for a Workbench on a non-interlaced HiRes screen (tall pixels);
 --preview writes enlarged PNGs of every rendering; --check decodes an existing .info file
@@ -40,8 +40,8 @@ from PIL import Image
 FRAME = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'resources', 'anim',
                      '0100B', '28.png')
 
-# the options the Amiga backend reads from the icon (parse_tooltypes in backends/amiga/core/main.c)
-# at their defaults, per flavour (backends/amiga/README.md "Layout"; --flavour)
+# the options the Amiga backend reads from the icon (lrvne/backends/amiga/README.md "Options")
+# at their defaults, per flavour (--flavour)
 DEFAULT_TOOLTYPES = [
     'AUDIO=paula',
     'RATE=11025',
@@ -56,8 +56,8 @@ DEFAULT_TOOLTYPES = [
     '(PAULA14)',
     '(VOICEPAK=PROGDIR:xenon_voice.pak)',
     '(NOVOICE)',
-    '(VOICEVOL=100)',
-    '(MUSICVOL=50)',
+    '(VOICEVOLUME=100)',
+    '(VOLUME=50)',
     '(VOICESTRICT)',
     '(VOICEMIX)',
     '(QUIET)',
@@ -67,7 +67,7 @@ DEFAULT_TOOLTYPES = [
 ]
 # AROS: AHI, 44.1 kHz, the best 640x400 mode (no MODE), the chunky upload; 256 KB of stack, like
 # the shell's (hosted AROS's X11 driver crashed with 64 KB; the program also swaps itself onto
-# 256 KB, backends/amiga/aros/stack_aros.c)
+# 256 KB, lrvne/backends/amiga/aros/stack_aros.c)
 AROS_TOOLTYPES = [
     'AUDIO=ahi',
     'RATE=44100',
@@ -82,8 +82,8 @@ AROS_TOOLTYPES = [
     '(AHIUNIT=0)',
     '(VOICEPAK=PROGDIR:xenon_voice.pak)',
     '(NOVOICE)',
-    '(VOICEVOL=100)',
-    '(MUSICVOL=50)',
+    '(VOICEVOLUME=100)',
+    '(VOLUME=50)',
     '(VOICESTRICT)',
     '(VOICEMIX)',
     '(QUIET)',

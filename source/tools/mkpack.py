@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Build the Xenon asset pack (xenon.pak) from the original game files.
 
-usage: mkpack.py --game GAMEDIR [--lang-ja] [--scripts LANG=DIR ...] [--fonts FONTDIR]
-                 [--strings LANGDIR] [--fix-data-bugs] -o xenon.pak
+usage: mkpack.py --game GAMEDIR --profile PROFILE --game-def PACK.PY [--lang-ja]
+                 [--scripts LANG=DIR ...] [--fonts FONTDIR] [--strings LANGDIR] [--fix-data-bugs]
+                 -o xenon.pak
 
 GAMEDIR holds the original HDD install (AGS.EXE, PMD.COM, *.GDT, *.ADT, *.M, XEN_SE.EFC, *.CC).
+The pack is lrvne's (include/lrvne/pack.h, written by lrvne.xpak): the engine's entry types
+are TYPES below, the game profile is the entry "profile" (docs/profile.md).
 Language-neutral assets are stored byte for byte. Scripts are decompressed (LZSS removed).
 Every language gets a "lang" meta entry with its text settings (tools/langs.py SETTINGS:
 encoding=cp932|utf-8, wrap=kinsoku|word; engine/text/enc.c); its scripts must be in that
 encoding (tl_extract.py takes it from tools/langs.py) and its strings table is stored in it.
 
-Fonts: cp932 languages share the neutral font16/font8 (JIS X 0208 / JIS X 0201 keyed). Each
+Fonts: cp932 languages share the neutral font16/font8 (JIS X 0208 / JIS X 0201 keyed); font16
+gets the engine's user-defined character JIS 7621h (the page-overflow "return" glyph), which
+AGS.EXE defines at DS:09B2 and the font file does not have. Each
 UTF-8 language gets its own font8/font16, keyed by Unicode code point:
   font8   ASCII plus langs.narrow(lang), from lat8.xfnt (the Sony 8x16 ISO 8859-1 design)
   font16  every other character the language's texts use, plus the prompt glyphs (U+25BC and
@@ -21,8 +27,12 @@ character has no glyph in either table.
   --scripts L=DIR  include the scripts of language L (en, pl: decompressed .CC bytecode produced
                    by tl_extract.py); repeatable
   --strings DIR    language string tables: DIR/<lang>/strings.txt (engine messages)
-  --fonts DIR      font tables produced by xfont.py: DIR/k16.xfnt, DIR/ank8.xfnt, DIR/lat8.xfnt
-  --fix-data-bugs  patch known data bugs (M.CC xenon_102 -> xenon_10; K.CC duplicate PAGE 23)
+  --fonts DIR      font tables made by lrvne's xfont: DIR/k16.xfnt, DIR/ank8.xfnt, DIR/lat8.xfnt
+  --profile FILE   the game's profile (games/<game>/profile.txt, docs/profile.md): the entry
+                   "profile"
+  --game-def FILE  the game's pack.py: its languages, where its user-defined glyph is, its
+                   data fixes
+  --fix-data-bugs  patch the game's known data bugs (pack.py fix_data_bugs)
   --voicemap FILE  voice cue table (resources/voice/voicemap.tsv, re-tools/voicemap.py): one
                    VOICECUE entry per script and packed language (docs/voice.md §2.1)
 
@@ -39,18 +49,23 @@ import collections
 import csv
 import glob
 import hashlib
+import importlib.util
 import os
 import struct
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(HERE, '..', 'lrvne', 'tools'))
 import cctok  # noqa: E402
 import langs  # noqa: E402
 import lzss   # noqa: E402
-import xfont  # noqa: E402
-import xpak   # noqa: E402
+from lrvne import pmd, profile, xfont, xpak   # noqa: E402
 
+# the engine's entry types (engine/xe.h enum xe_pack_type)
+T_GDT, T_ADT, T_MUSIC, T_EFC, T_SSGEFC, T_SCRIPT = range(xpak.T_ENGINE, xpak.T_ENGINE + 6)
+TYPES = xpak.TypeRegistry({T_GDT: 'gdt', T_ADT: 'adt', T_MUSIC: 'music', T_EFC: 'efc',
+                           T_SSGEFC: 'ssgefc', T_SCRIPT: 'script'})
 
 LANG_SETTINGS = langs.SETTINGS
 PY_CODEC = {'cp932': 'cp932', 'utf-8': 'utf-8'}
@@ -60,7 +75,7 @@ U_RETURN, JIS_RETURN = 0xE000, 0x7621
 
 
 def sjis_to_jis(hi, lo):
-    """engine/util/sjis.h sjis_to_jis"""
+    """lrvne/sjis.h lrv_sjis_to_jis"""
     hi -= 0x71 if hi <= 0x9F else 0xB1
     hi = hi * 2 + 1
     if lo > 0x7F:
@@ -73,11 +88,11 @@ def sjis_to_jis(hi, lo):
     return ((hi & 0xFF) << 8) | (lo & 0xFF)
 
 
-def script_texts(pk, lang, codec):
+def script_texts(scripts, lang, codec):
     """All string tokens of the language's scripts, decoded strictly."""
     out = []
-    for name, typ, l, data in pk.entries:
-        if typ != xpak.T_SCRIPT or l != lang:
+    for (name, l), data in sorted(scripts.items()):
+        if l != lang:
             continue
         for t in cctok.tokenize(data):
             if t.kind == 'str':
@@ -88,9 +103,10 @@ def script_texts(pk, lang, codec):
     return out
 
 
-def utf8_fonts(lang_name, texts, fontdir):
-    """font8 and font16 XFNT blobs for a UTF-8 language (see the module docstring)."""
-    _, _, _, k16 = xfont.read_xfnt(open(os.path.join(fontdir, 'k16.xfnt'), 'rb').read())
+def utf8_fonts(lang_name, texts, fontdir, k16_data):
+    """font8 and font16 XFNT blobs for a UTF-8 language (see the module docstring); k16_data
+    is the cp932 languages' font16."""
+    _, _, _, k16 = xfont.read_xfnt(k16_data)
     _, _, _, lat8 = xfont.read_xfnt(open(os.path.join(fontdir, 'lat8.xfnt'), 'rb').read())
     narrow = set(chr(c) for c in range(0x20, 0x7F)) | set(langs.narrow(lang_name))
     used = set(''.join(texts)) | set(PROMPT_CHARS)
@@ -128,31 +144,37 @@ def add_dir_files(pk, gamedir, pattern, typ):
     files = sorted(glob.glob(os.path.join(gamedir, pattern)))
     for f in files:
         data = open(f, 'rb').read()
-        if typ == xpak.T_GDT and len(data) < 24:
+        if typ == T_GDT and len(data) < 24:
             continue                           # XEN.GDT is the progress byte, not an image
-        pk.add(base(f), typ, xpak.L_ANY, data)
+        pk.add(base(f), typ, data)
     return len(files)
 
 
-def fix_data_bugs(name, data):
-    data = bytearray(data)
-    if name.upper() == 'M':
-        # music mode "Ago" loads the nonexistent xenon_102 (sound.md §4.2): the intended file is
-        # XENON_10. Rewrite the FD string in place (length byte + text + NUL).
-        i = data.find(b'\xfd\x09xenon_102\x00')
-        if i >= 0:
-            data[i:i + 12] = b'\xfd\x08xenon_10\x00'
-            # the string got one byte shorter; nothing references absolute offsets except
-            # page searches, which scan tokens, so the shorter stream is fine.
-    if name.upper() == 'K':
-        # second PAGE 23 (shows r&m03) is unreachable (scripts.md §6): renumber it 123 and make
-        # the first PAGE 23's "forward" target lead there? Too invasive for a data patch; we only
-        # renumber so the gallery page becomes reachable via fall-through from the first PAGE 23.
-        pass
-    return bytes(data)
+def user_glyph(exe_path, off):
+    """JIS 7621h as the program file defines it at `off`: 16 rows of two bytes, left byte
+    first, emboldened the engine's way (to the left, as the PC-98 does a ROM glyph)."""
+    exe = open(exe_path, 'rb').read()
+    rows = [struct.unpack_from('<H', exe, off + 2 * r)[0] for r in range(16)]
+    return [xfont.bold16(((v & 0xFF) << 8) | (v >> 8)) for v in rows]
 
 
-def add_scripts(pk, scripts, lang, fix):
+def font16_with_user_glyph(path, gamedir, game):
+    cell_w, cell_h, bold, table = xfont.read_xfnt(open(path, 'rb').read())
+    exe, off = game.USER_GLYPH
+    table[JIS_RETURN] = user_glyph(os.path.join(gamedir, exe), off)
+    return xfont.write_xfnt(cell_w, cell_h, bold, table)
+
+
+def load_game_def(path):
+    """The game's pack definition (games/<game>/pack.py): LANGS, USER_GLYPH, fix_data_bugs."""
+    spec = importlib.util.spec_from_file_location('game_pack', path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def add_scripts(pk, packed, scripts, lang, fix):
+    """fix: the game's fix_data_bugs, or None"""
     n = 0
     for f in sorted(scripts):
         raw = open(f, 'rb').read()
@@ -163,8 +185,9 @@ def add_scripts(pk, scripts, lang, fix):
         else:
             data = lzss.unpack_file(raw)
         if fix:
-            data = fix_data_bugs(name, data)
-        pk.add(name, xpak.T_SCRIPT, lang, data)
+            data = fix(name, data)
+        pk.add(name, T_SCRIPT, data, lang=lang)
+        packed[(name, lang)] = data
         n += 1
     return n
 
@@ -176,12 +199,11 @@ def token_shape(data):
             [x.pos for x in toks if x.kind == 'str'])
 
 
-def add_voice_cues(pk, voicemap, gamedir, langs):
+def add_voice_cues(pk, scripts, voicemap, gamedir, langs):
     cues = collections.defaultdict(list)          # script -> [(ja offset, part, clip)]
     with open(voicemap, encoding='utf-8') as f:
         for r in csv.DictReader(f, delimiter='\t'):
             cues[r['script'].upper()].append((int(r['offset'], 16), int(r['part']), r['clip']))
-    scripts = {(n, l): d for n, typ, l, d in pk.entries if typ == xpak.T_SCRIPT}
     n = 0
     for name in sorted(cues):
         path = os.path.join(gamedir, name + '.CC')
@@ -190,8 +212,7 @@ def add_voice_cues(pk, voicemap, gamedir, langs):
         ref_shape, ref_str = token_shape(lzss.unpack_file(open(path, 'rb').read()))
         ordinal = {off: k for k, off in enumerate(ref_str)}
         for lang_name in langs:
-            lang = xpak.LANG_IDS[lang_name]
-            data = scripts.get((name, lang))
+            data = scripts.get((name, lang_name))
             if data is None:
                 continue
             shape, strs = token_shape(data)
@@ -209,7 +230,7 @@ def add_voice_cues(pk, voicemap, gamedir, langs):
             blob = bytearray(b'VCUE' + struct.pack('<HH', 1, len(recs)))
             for off, part, clip in recs:
                 blob += struct.pack('<IB3x12s', off, part, clip.encode('ascii'))
-            pk.add(name, xpak.T_VOICECUE, lang, bytes(blob))
+            pk.add(name, xpak.T_VOICECUE, bytes(blob), lang=lang_name, upper=True)
             n += 1
     return n
 
@@ -217,6 +238,8 @@ def add_voice_cues(pk, voicemap, gamedir, langs):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--game', required=True)
+    ap.add_argument('--profile', required=True, help='the game\'s profile (games/<game>/profile.txt)')
+    ap.add_argument('--game-def', required=True, help='the game\'s pack.py (games/<game>/pack.py)')
     ap.add_argument('--lang-ja', action='store_true')
     ap.add_argument('--scripts', action='append', default=[], metavar='LANG=DIR')
     ap.add_argument('--strings')
@@ -226,40 +249,41 @@ def main():
     ap.add_argument('-o', '--output', required=True)
     a = ap.parse_args()
 
-    pk = xpak.Pack()
+    game = load_game_def(a.game_def)
+    fix = game.fix_data_bugs if a.fix_data_bugs else None
+    pk = xpak.PackWriter(TYPES, langs=game.LANGS)
+    scripts = {}                                # (name, lang) -> bytecode
     counts = {}
-    counts['gdt'] = add_dir_files(pk, a.game, '*.GDT', xpak.T_GDT)
-    counts['adt'] = add_dir_files(pk, a.game, '*.ADT', xpak.T_ADT)
-    counts['music'] = add_dir_files(pk, a.game, '*.M', xpak.T_MUSIC)
-    counts['efc'] = add_dir_files(pk, a.game, '*.EFC', xpak.T_EFC)
-    # PMD's built-in SSG effect table: PMD.COM 2CE9h..3095h (pmd-driver.md §7.2), CS offsets
-    # with ORG 100h -> file offset = address - 100h. Entries {priority, u16 offset from 2CE9h}.
+    counts['gdt'] = add_dir_files(pk, a.game, '*.GDT', T_GDT)
+    counts['adt'] = add_dir_files(pk, a.game, '*.ADT', T_ADT)
+    counts['music'] = add_dir_files(pk, a.game, '*.M', T_MUSIC)
+    counts['efc'] = add_dir_files(pk, a.game, '*.EFC', T_EFC)
+    # PMD's built-in SSG effect table (pmd-driver.md §7.2), for lrvne's PMD module
     pmdcom = os.path.join(a.game, 'PMD.COM')
     if os.path.exists(pmdcom):
-        com = open(pmdcom, 'rb').read()
-        pk.add('ssgefc', xpak.T_SSGEFC, xpak.L_ANY, com[0x2CE9 - 0x100:0x3096 - 0x100])
+        with open(pmdcom, 'rb') as f:
+            pk.add('ssgefc', T_SSGEFC, pmd.ssg_effect_table(f.read()))
         counts['ssgefc'] = 1
     langs = []
     if a.lang_ja:
-        counts['ja'] = add_scripts(pk, glob.glob(os.path.join(a.game, '*.CC')), xpak.L_JA, a.fix_data_bugs)
+        counts['ja'] = add_scripts(pk, scripts, glob.glob(os.path.join(a.game, '*.CC')), 'ja', fix)
         langs.append('ja')
     for spec in a.scripts:
         lang_name, _, d = spec.partition('=')
         if lang_name not in LANG_SETTINGS or lang_name == 'ja' or not d:
             sys.exit('mkpack: --scripts %r: want LANG=DIR with LANG one of %s'
                      % (spec, ', '.join(k for k in LANG_SETTINGS if k != 'ja')))
-        counts[lang_name] = add_scripts(pk, glob.glob(os.path.join(d, '*.CC')), xpak.LANG_IDS[lang_name],
-                                        a.fix_data_bugs)
+        counts[lang_name] = add_scripts(pk, scripts, glob.glob(os.path.join(d, '*.CC')),
+                                        lang_name, fix)
         langs.append(lang_name)
     for lang_name in langs:
         enc, wrap = LANG_SETTINGS[lang_name]
-        pk.add('lang', xpak.T_META, xpak.LANG_IDS[lang_name],
-               ('encoding=%s\nwrap=%s\n' % (enc, wrap)).encode('ascii'))
+        pk.add('lang', xpak.T_META, ('encoding=%s\nwrap=%s\n' % (enc, wrap)).encode('ascii'),
+               lang=lang_name)
     texts = {}
     for lang_name in langs:
-        lang = xpak.LANG_IDS[lang_name]
         codec = PY_CODEC[LANG_SETTINGS[lang_name][0]]
-        texts[lang_name] = script_texts(pk, lang, codec)
+        texts[lang_name] = script_texts(scripts, lang_name, codec)
         f = os.path.join(a.strings, lang_name, 'strings.txt') if a.strings else ''
         if not os.path.exists(f):
             continue
@@ -271,32 +295,35 @@ def main():
             key, _, val = line.partition('=')
             blob += key.encode('ascii') + b'\0' + val.encode(codec) + b'\0'
             texts[lang_name].append(val)
-        pk.add('strings', xpak.T_STRINGS, lang, bytes(blob))
+        pk.add('strings', xpak.T_STRINGS, bytes(blob), lang=lang_name)
         counts['strings_' + lang_name] = 1
     if a.fonts:
-        for name, fname in (('font16', 'k16.xfnt'), ('font8', 'ank8.xfnt')):
-            f = os.path.join(a.fonts, fname)
-            if os.path.exists(f):
-                pk.add(name, xpak.T_FONT, xpak.L_ANY, open(f, 'rb').read())
-                counts[name] = 1
+        k16 = font16_with_user_glyph(os.path.join(a.fonts, 'k16.xfnt'), a.game, game)
+        pk.add('font16', xpak.T_FONT, k16)
+        counts['font16'] = 1
+        f = os.path.join(a.fonts, 'ank8.xfnt')
+        if os.path.exists(f):
+            pk.add('font8', xpak.T_FONT, open(f, 'rb').read())
+            counts['font8'] = 1
         for lang_name in langs:
             if LANG_SETTINGS[lang_name][0] != 'utf-8':
                 continue
-            f8, f16 = utf8_fonts(lang_name, texts[lang_name], a.fonts)
-            pk.add('font8', xpak.T_FONT, xpak.LANG_IDS[lang_name], f8)
-            pk.add('font16', xpak.T_FONT, xpak.LANG_IDS[lang_name], f16)
+            f8, f16 = utf8_fonts(lang_name, texts[lang_name], a.fonts, k16)
+            pk.add('font8', xpak.T_FONT, f8, lang=lang_name)
+            pk.add('font16', xpak.T_FONT, f16, lang=lang_name)
             counts['fonts_' + lang_name] = (len(f8) + len(f16))
     meta = 'format=1\nfix_data_bugs=%d\n' % a.fix_data_bugs
     if a.voicemap:
-        counts['voicecue'] = add_voice_cues(pk, a.voicemap, a.game, langs)
+        counts['voicecue'] = add_voice_cues(pk, scripts, a.voicemap, a.game, langs)
         # the voice pack records the same digest (mkvoice.py); the engine warns on a mismatch
         meta += 'voicemap=%s\n' % hashlib.md5(open(a.voicemap, 'rb').read()).hexdigest()
-    pk.add('meta', xpak.T_META, xpak.L_ANY, meta.encode('ascii'))
+    pk.add('meta', xpak.T_META, meta.encode('ascii'))
+    text = open(a.profile, encoding='utf-8').read()
+    profile.loads(text)                         # a well-formed key=value text
+    pk.add('profile', xpak.T_META, text.encode('utf-8'))
 
-    data = pk.build()
-    with open(a.output, 'wb') as fo:
-        fo.write(data)
-    print('%s: %d entries, %d bytes (%s)' % (a.output, len(pk.entries), len(data),
+    size = pk.write(a.output)
+    print('%s: %d entries, %d bytes (%s)' % (a.output, len(pk.names()), size,
                                            ', '.join('%s=%d' % kv for kv in counts.items())))
 
 

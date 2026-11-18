@@ -67,6 +67,7 @@ The research tools. Four decoders the port's build uses too live with the build 
 | `pmdemu.py` | runs the real PMD.COM (installer + driver) under unicorn with a fake 26K board, loads songs like AGS.EXE, writes VGM + register TSV (needs `pip install unicorn`) | timer periods and loop lengths cross-checked with pmdinfo |
 | `vgmverify.py` | expands each VGM by its loop and compares it with an uncut real-driver recording (effective register-state changes) | all 50 effects and 28 songs identical over 3 extra passes; the other 3 songs (01 07 17) vary pass to pass in the real driver too (pmd-sequencer.md §11.1a) |
 | `pmdmodel.py` | clean-room Python re-implementation of the PMD sequencer from pmd-sequencer.md; `--check` compares with pmdemu | 0 differing clocks: 31 songs × 9000 clocks (1.65 M register writes), fades, all 50 effects, synthetic tests |
+| `pmd_capture.py` | runs a song on the real PMD.COM (`pmdemu.py`) and writes it interrupt by interrupt: each interrupt's clock, kind, status and register writes, and INT 60h calls at chosen interrupts; optionally with another SSG-effect table in place of PMD's | the reference logs of lrvne's PMD module (`source/lrvne/tests/data/pmd`), which it matches exactly |
 | `pmdcore_emu.py` | runs PMD.COM's installer, INT 60h API and IRQ handler under unicorn and logs OPN register writes (needs `pip install unicorn`) | installer/API/fade/effect/hot-key scenarios on YM2203 and YM2608 models |
 | `pmdinfo.py` | `.M` / `.EFC` structure dump | every part ends where the next begins in all 31 songs |
 | `savedump.py` | save slot / XEN.GDT decoder | original floppy saves and engine-written HDD saves |
@@ -185,7 +186,7 @@ recreatable with the scripts in `re-tools/ghidra/`).
 # media -> files (read-only on the images; see media.md), then everything below that make data
 # derives (images anim scripts sfx music saves vgm; DATA_PY = the unicorn venv for vgm)
 (cd source && make data SRC=path/to/the/images DATA_PY=~/.venvs/xenon-re/bin/python)
-python3 -I source/tools/d88.py --help
+python3 -I source/lrvne/tools/lrvne diskimg --help    # the disk image reader (formerly d88.py)
 # scripts
 python3 -I source/tools/lzss.py --check resources/original/game/*.CC
 python3 -I re-tools/ccdis.py --check resources/original/game/*.CC

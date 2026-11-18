@@ -1,0 +1,26 @@
+# The profile of Xenon ～夢幻の肢体～ (C's Ware, 1994): what the AGS engine needs to know of the
+# game (docs/profile.md). make pack writes it into the pack's "profile" entry.
+id=xenon
+title=Xenon
+lang=en
+modules=xenon_logo,xenon_opening,xenon_staff_roll,xenon_frame_close
+# the title menu: MENU1 with three bars of 28 bytes x 32 lines at byte column 26 (0ABA:0056,
+# DS:06F7)
+title_image=menu1
+title_rows=176,224,272
+title_bar=26,28,32
+# a new game: S00 until ending 1 is seen, then S00B until ending 2 and one of 3-6 are, then
+# S00C (0ABA)
+start=s00c
+start_if_clear=0x01:s00,0x02:s00b,0x3C:s00b
+load_script=l
+# the extras: MENU2, the CG gallery and the music mode, open once all seven endings are seen
+omake_image=menu2
+omake_scripts=k,m
+omake_unlock=0x7F
+# PMD as XENON.BAT installs it: /M10 /F, the FM effects of XEN_SE.EFC
+se_bank=xen_se
+music_buffer=10240
+music_keep_after_fade=yes
+# the music under the voice of the Windows release, chosen by listening (2026-11-13)
+voice_music_volume=50

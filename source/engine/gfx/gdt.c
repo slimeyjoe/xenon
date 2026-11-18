@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* GDT ("DA1") decoder - see gdt.h and docs/re/graphics.md §2.3-2.5.
  *
  * Structure follows re-tools/gdt.py (which is byte-exact against the x86 original on all 292
@@ -6,9 +7,9 @@
  * stride 80, terminated by 0xFF. Planes are decoded in order 0..3 for each column, so a plane
  * may copy from lower planes already decoded for that column. */
 #include "gfx/gdt.h"
-#include "util/endian.h"
+#include "lrvne/endian.h"
 
-#define STRIDE XE_PLANE_STRIDE
+#define STRIDE GDT_STRIDE
 
 /* 1-byte codec, opcodes A0..EF: copy from (di - offset) in the same plane, by high nibble. */
 static const uint16_t rel1[16] = {
@@ -337,9 +338,9 @@ int gdt_parse(const uint8_t *data, size_t len, struct gdt_header *h)
         return -1;
     h->xb = data[8];
     h->wb = data[9];
-    h->y = rd16le(data + 10);
-    h->h = rd16le(data + 12);
-    h->flags = rd16le(data + 14);
+    h->y = lrv_rd16le(data + 10);
+    h->h = lrv_rd16le(data + 12);
+    h->flags = lrv_rd16le(data + 14);
     p = 16;
     if (h->flags & GDT_FLAG_PALETTE) {
         if (len < 48)
@@ -350,7 +351,7 @@ int gdt_parse(const uint8_t *data, size_t len, struct gdt_header *h)
     if (p + 8 > len)
         return -1;
     for (i = 0; i < 4; i++) {
-        h->plane_size[i] = rd16le(data + p + 2 * i);
+        h->plane_size[i] = lrv_rd16le(data + p + 2 * i);
     }
     p += 8;
     for (i = 0; i < 4; i++) {
@@ -394,7 +395,7 @@ static int pairs(struct dec *s, size_t *ptr, int c, int npairs, unsigned flags)
 }
 
 int gdt_decode(const uint8_t *data, size_t len, const struct gdt_header *h,
-               struct xe_planes *dst, struct xe_rect *written)
+               struct lrv_surface *dst, struct lrv_rect *written)
 {
     struct dec s;
     size_t ptr[4];
@@ -403,7 +404,7 @@ int gdt_decode(const uint8_t *data, size_t len, const struct gdt_header *h,
     s.d = data;
     s.len = len;
     for (pl = 0; pl < 4; pl++) {
-        s.pl[pl] = dst->p[pl];
+        s.pl[pl] = dst->plane[pl];
         ptr[pl] = h->plane_off[pl];
     }
     s.lo = 0x7fffffff;
@@ -426,7 +427,7 @@ int gdt_decode(const uint8_t *data, size_t len, const struct gdt_header *h,
     }
 
     if (written) {
-        xe_rect_clear(written);
+        lrv_rect_clear(written);
         if (s.hi >= 0) {
             written->x0 = h->xb;
             written->x1 = h->xb + h->wb;

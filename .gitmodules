@@ -1,0 +1,3 @@
+[submodule "source/lrvne"]
+	path = source/lrvne
+	url = https://github.com/slimeyjoe/lrvne.git

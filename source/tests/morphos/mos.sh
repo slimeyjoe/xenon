@@ -9,7 +9,8 @@
 # "-d unimp,guest_errors" (into run/NAME/qemu.log).
 set -u
 RIG_TESTS=$(cd "$(dirname "$0")/.." && pwd)
-. "$RIG_TESTS/rig.sh"
+export RIG_CONF=${RIG_CONF:-$RIG_TESTS/rig.conf}
+. "$RIG_TESTS/../lrvne/rigs/rig.sh"
 rig_need MOS_DIR "the MorphOS tree: boot/boot.img, run/"
 M=$MOS_DIR
 cmd=$1; name=$2; shift 2

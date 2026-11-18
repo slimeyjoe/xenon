@@ -1,27 +1,20 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Text: fonts, glyph drawing (seg 0F16), the message printer and menus (seg 0B7D) and the
  * text-layer overlay (prompts, error box). docs/re/font.md, engine.md §5.4, §6, §7. */
 #ifndef XE_TEXT_TEXT_H
 #define XE_TEXT_TEXT_H
 
 #include <stdint.h>
+#include "lrvne/font.h"
 
-void text_init(void);                     /* load fonts and language strings from the pack */
-void font_init(void);
-void font_shutdown(void);
-const uint8_t *font_lookup16(unsigned code);
-const uint8_t *font_lookup8(unsigned code);
+void text_init(void);                     /* fonts, settings and strings of the language */
 void text_shutdown(void);
 
 /* The character stream of the language's encoding (enc.c). Strings everywhere in the engine
- * are bytes in that encoding: cp932 or UTF-8. */
-struct text_ch {
-    unsigned code;          /* glyph code: font16 key if cols == 2, else font8 key */
-    int len;                /* bytes consumed */
-    int cols;               /* 1 (8-wide glyph) or 2 (16-wide glyph) */
-};
+ * are bytes in that encoding: cp932 or UTF-8 (lrv_text_next_sjis / _utf8). */
 #define XE_U_RETURN 0xE000u                /* UTF-8 fonts: the return glyph (JIS 7621h) */
 void text_enc_init(void);                 /* the language's encoding and wrap mode */
-int text_next(const uint8_t *s, struct text_ch *ch);   /* s[0] != 0; returns ch->len */
+int text_next(const uint8_t *s, struct lrv_text_ch *ch);    /* s[0] != 0; returns ch->len */
 int text_cols(const uint8_t *s);          /* display width in columns */
 const uint8_t *text_prompt_str(int overflow);          /* ▼ (0) or the return glyph (1) */
 
@@ -39,14 +32,12 @@ void text_window_clear(void);             /* 0B7D:0783 */
 /* choice menu (engine.md §7): returns index, -1 cancel, -2 HELP */
 int select_menu(const uint8_t *const *items, int count, int initial);
 
-/* text layer overlay (80x25 cells over the graphics) */
+/* text layer (80x25 cells over the graphics): an overlay of the screen (lrvne/gfx.h) */
+void text_layer_init(void);               /* adds the overlay and its blink to the frame */
 void text_layer_clear(void);
 void text_overlay_put(int col, int row, const uint8_t *s, int colour, int attr);
 /* same, with the original's 1-based ESC[row;colH coordinates */
 void text_locate_put(int col1, int row1, const uint8_t *s, int colour, int attr);
-void text_overlay_apply(int page);
-void text_overlay_restore(int page);
-void text_overlay_tick(void);
 
 /* boxes on the text layer */
 void error_box(const uint8_t *msg);       /* 088D:13DF: beep, red reverse on row 10, key */

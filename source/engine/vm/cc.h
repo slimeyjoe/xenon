@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
 /* Scenario script VM - docs/re/scripts.md, opcodes.md.
  *
  * A 1:1 port of the interpreter in AGS.EXE segment 088D: the token encoding, page/IF/SEN
@@ -94,9 +95,18 @@ struct cc_host {
     /* Script error: the message (cp932) with the engine's "%s page=%d, LABEL=D%d, %s" context
      * already formatted; fatal in the original. The VM also stops itself. */
     void (*error)(void *ctx, int code, const char *script, int page, int label);
-    /* Test automation: structural events. what = XE_TR_PAGE (a = page), XE_TR_LABEL
-     * (a = label id), XE_TR_FLAG (a = flag, b = value). May be NULL. */
+    /* Test automation: structural events (enum cc_trace). May be NULL. */
     void (*trace)(void *ctx, int what, int a, int b);
+    /* Test automation: the statement at offset `pos` of the script is being executed. May be
+     * NULL. */
+    void (*at)(void *ctx, uint32_t pos);
+};
+
+/* what of cc_host.trace */
+enum cc_trace {
+    CC_TRACE_PAGE,          /* a = page */
+    CC_TRACE_LABEL,         /* a = label id, b = the option selected */
+    CC_TRACE_FLAG           /* a = flag, b = value */
 };
 
 struct cc_vm {
